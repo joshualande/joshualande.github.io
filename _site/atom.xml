@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
- <title>Joshua Lande</title>
+ <title>Poole</title>
  <link href="http://getpoole.com/atom.xml" rel="self"/>
  <link href="http://getpoole.com/"/>
- <updated>2014-01-23T20:22:20-08:00</updated>
+ <updated>2014-01-23T20:25:20-08:00</updated>
  <id>http://getpoole.com</id>
  <author>
    <name>Mark Otto</name>
