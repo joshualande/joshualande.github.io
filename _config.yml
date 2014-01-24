@@ -6,8 +6,8 @@ pygments:         true
 permalink:        pretty
 
 # Setup
-title:            Poole
-tagline:          'The Jekyll Butler'
+title:            Joshua Lande
+tagline:          'The personal website'
 description:      'Base theme for Jekyll themes by @mdo.'
 url:              http://getpoole.com
 
