@@ -1,0 +1,24 @@
+# Dependencies
+markdown:         redcarpet
+pygments:         true
+
+# Permalinks
+permalink:        pretty
+
+# Setup
+title:            Joshua Lande
+tagline:          'The personal website'
+description:      'Base theme for Jekyll themes by @mdo.'
+url:              joshualande.github.io
+
+author:
+  name:           'Mark Otto'
+  url:            https://twitter.com/mdo
+
+paginate:         1
+
+# Custom vars
+version:          1.0.0
+
+github:
+  repo:           https://github.com/poole/poole
