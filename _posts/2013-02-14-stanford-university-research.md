@@ -9,17 +9,18 @@ title: Stanford University Research
 
 ![An artists rendering of the Fermi Gamma-ray Space Telescope. The image is from http://www.nasa.gov/mission_pages/GLAST/multimedia/glast_rendering3.html](http://joshualande.com/wp-content/uploads/fermi_gamma_ray_space_telescope-580x773.jpg)
 
-In graduate school at [Stanford University](http://www.stanford.edu),
-I studied the Gamma-ray emission
-from [pulsar wind nebulae](http://en.wikipedia.org/wiki/Pulsar_wind_nebula).  
-A [pulsar](http://en.wikipedia.org/wiki/Pulsar) is
-a rapidly rotating neutron star. Pulsars were first discovered in
-1967 by [Jocelyn Bell Burnell](http://en.wikipedia.org/wiki/Jocelyn_Bell_Burnell). 
-Pulsars are typically powered by the energy
-released when a neutron star slows down. Much of this energy is
-released as a wind of electrons, which interacts with the interstellar
-medium. This forms a diffuse cloud called a pulsar wind nebulae
-that can be observed in gamma-rays.
+I got a PhD from [Stanford University](http://www.stanford.edu) in
+Physics. In graduate school I studied the Gamma-ray emission
+from [pulsar wind
+nebulae](http://en.wikipedia.org/wiki/Pulsar_wind_nebula). 
+A [pulsar](http://en.wikipedia.org/wiki/Pulsar) is a rapidly rotating
+neutron star. Pulsars were first discovered in 1967 by [Jocelyn
+Bell Burnell](http://en.wikipedia.org/wiki/Jocelyn_Bell_Burnell).
+Pulsars are typically powered by the energy released when a neutron
+star slows down. Much of this energy is released as a wind of
+electrons, which interacts with the interstellar medium. This forms
+a diffuse cloud called a pulsar wind nebulae that can be observed
+in gamma-rays.
 
 # The Fermi Gamma-ray Space Telescope
 

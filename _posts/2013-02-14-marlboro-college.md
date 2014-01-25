@@ -7,13 +7,13 @@ title: Marlboro College Research
 three rows from the
 bottom.](http://joshualande.com/wp-content/uploads/marlboro_community_photo_2008-940x626.jpg)
 
-I went to [Marlboro College](http://www.marlboro.edu). Marlboro is
-a liberal arts school in the beautiful hills of [Marlboro,
-Vermont](http://marlboro.vt.us) with a very small student body of
-300 students. I loved my experience at Marlboro and excelled in the
-environment, majoring in Physics and minoring in Computer Science.
-I participated in three summer physics internships and wrote a
-senior thesis (described below).
+I went to [Marlboro College](http://www.marlboro.edu) and graduated
+in 2008.  Marlboro is a liberal arts school in the beautiful hills
+of [Marlboro, Vermont](http://marlboro.vt.us) with a very small
+student body of 300 students. I loved my experience at Marlboro
+and excelled in the environment, majoring in Physics and minoring
+in Computer Science.  I participated in three summer physics
+internships and wrote a senior thesis (described below).
 
 # Undergraduate Research
 
