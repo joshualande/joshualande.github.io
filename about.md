@@ -3,28 +3,33 @@ layout: page
 title: About
 ---
 
-<p class="message">
-  Hey there! This page is included as an example. Feel free to customize it for your own use upon downloading. Carry on!
-</p>
+I am a Physics PhD Candidate at Stanford University. I have a strong background in data analysis, computer programming, and modeling.
 
-In the novel, *The Strange Case of Dr. Jeykll and Mr. Hyde*, Mr. Poole is Dr. Jekyll's virtuous and loyal butler. Similarly, Poole is an upstanding and effective butler that helps you build Jekyll themes. It's made by [@mdo](https://twitter.com/mdo).
+![Here I am at the 2013 Rose Bowl.](http://joshualande.com/wp-content/uploads/stanford_rosebowl_photo_2013-e1361222975696-940x689.jpg)
 
-There are currently two themes built on Poole:
+After finishing, I want to apply these skills as a data scientist.  I am excited to apply my skills to challenging problems facing industry.
 
-* [Hyde](http://hyde.getpoole.com)
-* [Lanyon](http://lanyon.getpoole.com)
+# Connect With Me
 
-Learn more and contribute on [GitHub](https://github.com/poole).
+<a href="https://plus.google.com/110027857211432852415/"><img src="http://joshualande.com/wp-content/uploads/googleplus.png" /></a> 
+<a href="http://www.linkedin.com/in/joshualande"><img src="http://joshualande.com/wp-content/uploads/linkedin.png" /></a> 
+<a href="https://www.facebook.com/joshualande"><img src="http://joshualande.com/wp-content/uploads/facebook.png" /></a> 
+<a href="mailto:joshualande@gmail.com"><img src="http://joshualande.com/wp-content/uploads/email.png" /></a></h1>
 
-## Setup
+<h1><a href="http://joshualande.com/wp-content/uploads/lande_resume_web.pdf"><img src="http://joshualande.com/wp-content/uploads/lande_resume_web-e1361389688925-940x635.jpg" /></a></h1>
 
-Some fun facts about the setup of this project include:
+# Coding Experiences
 
-* Built for [Jekyll](http://jekyllrb.com)
-* Developed on GitHub and hosted for free on [GitHub Pages](https://pages.github.com)
-* Coded with [Sublime Text 2](http://sublimetext.org), an amazing code editor
-* Designed and developed while listening to music like [Blood Bros Trilogy](https://soundcloud.com/maddecent/sets/blood-bros-series)
+<a href="http://joshualande.com/coding/"><img src="http://joshualande.com/wp-content/uploads/print_summary-580x167.jpg" /></a> <a href="http://joshualande.com/coding/">Read about my coding experiences.</a>
 
-Have questions or suggestions? Feel free to [open an issue on GitHub](https://github.com/poole/issues/new) or [ask me on Twitter](https://twitter.com/mdo).
+# Academics
 
-Thanks for reading!
+<a href="http://joshualande.com/academics/stanford-university/">
+<img src="http://joshualande.com/wp-content/uploads/snr_rx_j1713_small.jpg" /></a> 
+
+<a href="http://joshualande.com/academics/stanford-university/">Graduate</a>
+
+<a href="http://joshualande.com/academics/marlboro-college/">
+
+<img src="http://joshualande.com/wp-content/uploads/diffraction_data_small.jpeg" /></a> 
+<a href="http://joshualande.com/academics/marlboro-college/">Undergraduate</a>
