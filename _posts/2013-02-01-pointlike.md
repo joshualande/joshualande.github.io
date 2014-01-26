@@ -4,7 +4,7 @@ title: The pointlike Maximum-likelihood Fitting Package
 comments: true
 ---
 
-![The Gamma-cygni SNR observed by Fermi. This image was created in pointlike and is from http://arxiv.org/abs/1207.0027.](http://joshualande.com/wp-content/uploads/gamma_cygni_pointlike-940x935.jpg)
+![The Gamma-cygni SNR observed by Fermi. This image was created in pointlike and is from http://arxiv.org/abs/1207.0027.](/assets/gamma_cygni_pointlike-940x935.jpg)
 
 During graduate school, I was involved with the development of pointlike, a package for fitting data observed by the [Fermi Gamma-ray space telescope](http://fermi.gsfc.nasa.gov).
 
@@ -182,7 +182,7 @@ To plot the spectral energy distribution:
 roi.plot_sed(which="name",filename='sed.pdf')
 {% endhighlight %}
 
-![An SED computed using pointlike.](http://joshualande.com/wp-content/uploads/pointlike_sed.png)
+![An SED computed using pointlike.](/assets/pointlike_sed.png)
 
 To make a residual test statistic map:
 
@@ -190,7 +190,7 @@ To make a residual test statistic map:
 roi.plot_tsmap(filename='tsmap.pdf')
 {% endhighlight %}
 
-![A TSmap computed using pointlike.](http://joshualande.com/wp-content/uploads/pointlike_tsmap.png)
+![A TSmap computed using pointlike.](/assets/pointlike_tsmap.png)
 
 To plot a model counts map, counts map, and residual counts map:
 
@@ -198,7 +198,7 @@ To plot a model counts map, counts map, and residual counts map:
 roi.plot_counts_map(filename='counts.pdf')
 {% endhighlight %}
 
-![A counts map computed using pointlike.](http://joshualande.com/wp-content/uploads/pointlike_counts_map.png)
+![A counts map computed using pointlike.](/assets/pointlike_counts_map.png)
 
 To plot a smoothed diffuse-emission-subtracted counts map:
 
@@ -208,7 +208,7 @@ roi.plot_sources(which='name',
                  kernel_rad=0.1)
 {% endhighlight %}
 
-![A smoothed counts map computing using pointlike.](http://joshualande.com/wp-content/uploads/pointlike_smoothed_counts_map.png)
+![A smoothed counts map computing using pointlike.](/assets/pointlike_smoothed_counts_map.png)
 
 # Pointlike without XML
 

@@ -4,10 +4,10 @@ title: SLAC SULI Internship
 ---
 
 ![Here I am at the end of the 2007 SULI internship with my adviser
-Sam Webb.](http://joshualande.com/wp-content/uploads/IMG_1524b.jpg)
+Sam Webb.](/assets/IMG_1524b.jpg)
 
 ![The participants of the 2007 SLAC SULI
-internship.](http://joshualande.com/wp-content/uploads/IMG_1738b-580x386.jpg)
+internship.](/assets/IMG_1738b-580x386.jpg)
 
 During the summer of 2007, I participated in a [Science Undergraduate
 Laboratory Internship](http://www-group.slac.stanford.edu/aao/suli.asp) at
@@ -21,7 +21,7 @@ diffraction](http://en.wikipedia.org/wiki/Powder_diffraction) data.
 
 ![A typical diffraction pattern. This image is being viewed with
 the Area Diffraction
-Machine.](http://joshualande.com/wp-content/uploads/diffraction-data-window.jpeg)
+Machine.](/assets/diffraction-data-window.jpeg)
 
 X-ray powder diffraction is a method of imagining crystals with
 x-rays. The diffraction pattern that comes from the crystal are
@@ -42,7 +42,7 @@ calibrations to perform a radial integral of the sample data which
 can be used to measure the diffraction peaks.
 
 ![A screenshot of the calibration tab of the Area Diffraction
-Machine.](http://joshualande.com/wp-content/uploads/area_diffraction_machine_screenshot.jpeg)
+Machine.](/assets/area_diffraction_machine_screenshot.jpeg)
 
 I continued working on this project during my senior year of college
 as a senior project. I added many features to the code such as an
@@ -59,7 +59,7 @@ is hosted on [Google
 Code](http://code.google.com/p/areadiffractionmachine). At the end
 of my SULI internship, I wrote a research paper describing my work
 that you can
-read [here](http://joshualande.com/wp-content/uploads/2013/01/lande_SULI_paper_2007.pdf).
+read [here](/assets/lande_SULI_paper_2007.pdf).
 
 For my work, I was awarded at the end of the summer the [Ernest
 Coleman Award for Scholarship and
@@ -69,4 +69,4 @@ Citizenship](http://today.slac.stanford.edu/a/2007/08-20.htm):
 > "He's been fantastic," beamed SLAC beamline scientist Sam Webb, who mentored Lande's summer project. "He's accomplished twice as much as we expected [[from here](http://today.slac.stanford.edu/a/2007/08-20.htm)]
 
 ![A picture of me receiving the Ernest Coleman Award for Scholarship
-and Citizenship.](http://joshualande.com/wp-content/uploads/IMG_1680b.jpg)
+and Citizenship.](/assets/IMG_1680b.jpg)

@@ -16,4 +16,4 @@ The program is open source and is hosted on [Google
 Code](http://code.google.com/p/areadiffractionmachine).
 
 ![A screenshot of the calibration tab of the Area Diffraction
-Machine.](http://joshualande.com/wp-content/uploads/area_diffraction_machine_screenshot.jpeg)
+Machine.](/assets/area_diffraction_machine_screenshot.jpeg)

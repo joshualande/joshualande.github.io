@@ -5,7 +5,7 @@ title: Marlboro College Research
 
 ![The Marlboro College 2008 Community Photo. I am on the very right
 three rows from the
-bottom.](http://joshualande.com/wp-content/uploads/marlboro_community_photo_2008-940x626.jpg)
+bottom.](/assets/marlboro_community_photo_2008-940x626.jpg)
 
 I went to [Marlboro College](http://www.marlboro.edu) and graduated
 in 2008.  Marlboro is a liberal arts school in the beautiful hills
@@ -19,7 +19,7 @@ internships and wrote a senior thesis (described below).
 
 ![I am excited to successfully defended my plan of concentration.
 I am next to my college physics professor Travis
-Norsen.](http://joshualande.com/wp-content/uploads/josh_marlboro_orals-580x832.jpg)
+Norsen.](/assets/josh_marlboro_orals-580x832.jpg)
 
 During the summer after my senior year of high school (2005) and
 again after my first year of college (2006), I participated in a
@@ -39,7 +39,7 @@ internship [here](http://joshualande.com/academics/slac-suli-internship).
 
 # Senior Thesis
 
-![The cover page of my senior thesis.](http://joshualande.com/wp-content/uploads/Lande_Marlboro_Plan_Of_Concentration-940x1216.jpg)
+![The cover page of my senior thesis.](/assets/Lande_Marlboro_Plan_Of_Concentration-940x1216.jpg)
 
 Marlboro students are required to write a senior thesis during their
 senior year. My senior thesis involved continuing research I began
@@ -47,5 +47,5 @@ during the SULI internship and an experimental investivation of
 [microwave
 diffraction](http://www.pasco.com/prodCatalog/WA/WA-9316_advanced-microwave-optics-system).
 You can view my senior thesis below.  You can read my senior thesis
-[here](http://joshualande.com/wp-content/uploads/2013/01/Lande_Marlboro_Plan_Of_Concentration_2008.pdf).
+[here](/assets/Lande_Marlboro_Plan_Of_Concentration_2008.pdf).
 
