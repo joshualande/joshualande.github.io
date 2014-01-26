@@ -11,7 +11,7 @@
           <a href="/" title="Home">{{ site.title }}</a>
 
           {% for page_name in site.pages_list %}
-              &nbsp;&nbsp;&nbsp;<small><a href="/{{ page_name }}">{{ page_name }}</a></small>
+              &nbsp;&nbsp;&nbsp;<small><a href="/{{ page_name | downcase }}">{{ page_name }}</a></small>
           {% endfor %}
 
         </h3>
