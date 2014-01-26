@@ -13,16 +13,16 @@ I was a Data Science Fellow at the [Insight Data Science Fellowship](http://insi
 
 Before that, I got a PhD in physics from [Stanford Univeristy](http://stanford.edu) studying
 [pulsar wind Nebulae](http://en.wikipedia.org/wiki/Pulsar_wind_nebula).
-I have written about my PhD research experince [here](http://joshualande.com/2013/02/14/stanford-university-research),
-and some software I helped develope during my PhD [here](http://joshualande.com/2013/02/01/pointlike/).
+I have written about my PhD research experince [here]({% post_url 2013-02-14-stanford-university-research %}),
+and software I helped develope during my PhD [here]({% post_url 2013-02-01-pointlike %}).
 
 
 Before that, I was an undergraduate at [Marlboro
 College](http://www.marlboro.edu/) in Vermont.  I wrote about my
 undergraduate research
-[here](http://joshualande.com/2013/02/14/marlboro-college/), as
+[here]({% post_url 2013-02-14-marlboro-college %}), as
 well as my research during two undergrdaute physics internships
-[here](http://joshualande.com/2013/02/14/seap-internship/), and
-[here](http://joshualande.com/2013/02/12/2006-uc-davis-reu/).
+[here]({% post_url 2013-02-14-seap-internship %}), and
+[here]({% post_url 2013-02-12-2006-uc-davis-reu %}).
 
-If you like my website, you can follow me on twitter <a href="https://twitter.com/joshualande">@joshualande</a>
+If you like my website, you can follow me on twitter [@joshualande](https://twitter.com/joshualande).

@@ -25,17 +25,18 @@ During the summer after my senior year of high school (2005) and
 again after my first year of college (2006), I participated in a
 [SEAP](http://seap.asee.org/program_details) internship at
 [ANSER](http://www.anser.org). I have written about the
-internship [here](http://joshualande.com/academics/seap-internship).
+internship [here]({% post_url 2013-02-14-seap-internship %}).
+
 
 After my sophomore year (2006), I participated in a [physics REU
 at UC Davis](http://london.ucdavis.edu/~reu/REU06/reu06.html). I
 have written about the
-internship [here](http://joshualande.com/academics/2006-uc-davis-reu).
+internship [here]({% post_url 2013-02-12-2006-uc-davis-reu %}).
 
 After my Junior year (2007), I participated in a [SULI Internship
 at SLAC](http://www-group.slac.stanford.edu/aao/suli.asp). I have
 written about the
-internship [here](http://joshualande.com/academics/slac-suli-internship).
+internship [here]({% post_url 2013-02-14-slac-suli-internship %}).
 
 # Senior Thesis
 
