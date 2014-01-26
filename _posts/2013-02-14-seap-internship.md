@@ -1,6 +1,7 @@
 ---
 layout: page
 title: SEAP Internship
+comments: true
 ---
 
 ![My SEAP internship adviser Ron Turner in front of a poster for SStoRM.](/assets/ron_turner_anser_2007-580x872.jpg)

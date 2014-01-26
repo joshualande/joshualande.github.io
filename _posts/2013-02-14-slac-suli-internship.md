@@ -1,6 +1,7 @@
 ---
 layout: page
 title: SLAC SULI Internship
+comments: true
 ---
 
 ![Here I am at the end of the 2007 SULI internship with my adviser

@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Stanford University Research
+comments: true
 ---
 
 ![The Crab Nebula observed by Hubble.](/assets/crab_nebula_hubble-940x940.jpg)

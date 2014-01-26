@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Marlboro College Research
+comments: true
 ---
 
 ![The Marlboro College 2008 Community Photo. I am on the very right
