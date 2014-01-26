@@ -1,6 +1,7 @@
 ---
 layout: page
 title: The pointlike Maximum-likelihood Fitting Package
+comments: true
 ---
 
 ![The Gamma-cygni SNR observed by Fermi. This image was created in pointlike and is from http://arxiv.org/abs/1207.0027.](http://joshualande.com/wp-content/uploads/gamma_cygni_pointlike-940x935.jpg)
