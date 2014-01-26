@@ -3,33 +3,26 @@ layout: page
 title: About
 ---
 
-I am a Physics PhD Candidate at Stanford University. I have a strong background in data analysis, computer programming, and modeling.
-
 ![Here I am at the 2013 Rose Bowl.](/assets/stanford_rosebowl_photo_2013-e1361222975696-940x689.jpg)
 
-After finishing, I want to apply these skills as a data scientist.  I am excited to apply my skills to challenging problems facing industry.
+I am a Data Scientist at [Twitter](http://twitter.com)
+working on their analytics team. Before that, 
+I was a Data Science Fellow at the [Insight Data Science Fellowship](http://insightdatascience.com).
 
-# Connect With Me
 
-<a href="https://plus.google.com/110027857211432852415/"><img src="/assets/googleplus.png" /></a> 
-<a href="http://www.linkedin.com/in/joshualande"><img src="/assets/linkedin.png" /></a> 
-<a href="https://www.facebook.com/joshualande"><img src="/assets/facebook.png" /></a> 
-<a href="mailto:joshualande@gmail.com"><img src="/assets/email.png" /></a></h1>
 
-<h1><a href="/assets/lande_resume_web.pdf"><img src="/assets/lande_resume_web-e1361389688925-940x635.jpg" /></a></h1>
+Before that, I got a PhD in physics from [Stanford Univeristy](http://stanford.edu) studying
+[pulsar wind Nebulae](http://en.wikipedia.org/wiki/Pulsar_wind_nebula).
+I have written about my PhD research experince [here](http://joshualande.com/2013/02/14/stanford-university-research),
+and some software I helped develope during my PhD [here](http://joshualande.com/2013/02/01/pointlike/).
 
-# Coding Experiences
 
-<a href="http://joshualande.com/coding/"><img src="/assets/print_summary-580x167.jpg" /></a> <a href="http://joshualande.com/coding/">Read about my coding experiences.</a>
+Before that, I was an undergraduate at [Marlboro
+College](http://www.marlboro.edu/) in Vermont.  I wrote about my
+undergraduate research
+[here](http://joshualande.com/2013/02/14/marlboro-college/), as
+well as my research during two undergrdaute physics internships
+[here](http://joshualande.com/2013/02/14/seap-internship/), and
+[here](http://joshualande.com/2013/02/12/2006-uc-davis-reu/).
 
-# Academics
-
-<a href="http://joshualande.com/academics/stanford-university/">
-<img src="/assets/snr_rx_j1713_small.jpg" /></a> 
-
-<a href="http://joshualande.com/academics/stanford-university/">Graduate</a>
-
-<a href="http://joshualande.com/academics/marlboro-college/">
-
-<img src="/assets/diffraction_data_small.jpeg" /></a> 
-<a href="http://joshualande.com/academics/marlboro-college/">Undergraduate</a>
+If you like my website, you can follow me on twitter <a href="https://twitter.com/joshualande">@joshualande</a>
