@@ -10,11 +10,8 @@
         <h3 class="masthead-title">
           <a href="/" title="Home">{{ site.title }}</a>
 
-          {% assign pages_list = site.pages %}
-          {% for node in pages_list %}
-            {% if node.title != null and node.layout == "page" %}
-              &nbsp;&nbsp;&nbsp;<small><a href="{{ node.url }}">{{ node.title }}</a></small>
-            {% endif %}
+          {% for page_name in site.pages_list %}
+              &nbsp;&nbsp;&nbsp;<small><a href="/{{ page_name }}">{{ page_name }}</a></small>
           {% endfor %}
 
         </h3>
