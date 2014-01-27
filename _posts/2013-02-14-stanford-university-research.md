@@ -62,3 +62,9 @@ Finally, we took this new method and applied it to two years of Fermi data to se
 # The pointlike maximum-likelihood package
 
 During my PhD, I have been involved with the development of a maximum-likelihood package to fit LAT data. In the process, I have learned about software management, code refactoring, interface design, version control, and issue tracking. I have written about the program [here]({% post_url 2013-02-01-pointlike %}).
+
+# PhD Thesis
+
+You can find my PhD thesis [here](http://purl.stanford.edu/zj578kk6428).
+
+The slides from my PhD talk can be found [here](http://www.slideshare.net/joshualande/neutron-star-powered-nebulae).
