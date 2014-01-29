@@ -12,6 +12,59 @@ The fact that Github provides [free hosting for Jekyll blogs](http://pages.githu
 
 Instead of reading a lot of documentation, I found this really great git repo called [poole](https://github.com/poole/poole). poole provides "a clear and concise foundational setup for any Jekyll site. And it has a super minimal look which I was interested in. It does so by furnishing a full vanilla Jekyll install with example templates, pages, posts, and styles". So to get started with your own blog, all you have to do is great a new Git repo with the name <USERNAME>.github.io, download the poole repository, and push it into your repo. A few minutes later the website <USERNAME>.github.io will be ready. I only had a few posts on my previous website so I jsut copied them over manually, but there is [a package](http://jekyllrb.com/docs/migrations) for migrating blogs to Jekyll.
 
+# Blog Layout
+
+The initial state of the poole repository is:
+
+{% highlight sh %}
+$ ls -1
+404.html
+CNAME
+LICENSE.md
+README.md
+_config.yml
+_includes
+_layouts
+_posts
+about.md
+atom.xml
+index.html
+public
+{% endhighlight %}
+
+When you run Jekyll, it creates a folder called _site with the
+static website. It will copy all of the files and folders into _site except
+for files and folders that begin with an underscore.
+
+_config contains general configuration stuff for the website.
+{% highlight yaml %}
+# Setup
+title:            Poole
+tagline:          'The Jekyll Butler'
+description:      'Base theme for Jekyll themes by @mdo.'
+url:              http://getpoole.com
+...
+{% endhighlight %}
+
+The folder _layouts contains boiler-plate HTML for building the website:
+{% highlight yaml %}
+$ ls -1 _layouts/
+default.html
+page.html
+post.html
+{% endhighlight %}
+
+_posts contains all of the blog posts in markdown format.
+
+{% highlight html %}
+$ ls -1 _posts/
+2013-12-31-whats-jekyll.md
+2014-01-01-example-content.md
+2014-01-02-introducing-poole.md
+{% endhighlight %}
+
+index.html contains the front page of the plog and about.md is a plot post in markdown format.
+
 # Customizations 
 
 To get my blog to its current form, I made a few modifications to the base poole layout. First, I wanted a navigation bar at the top of the website with links to an About and Archive page. To do this, I modified the file [_config.yml](https://github.com/joshualande/joshualande.github.io/blob/5e5ca6389fbc66be06488b9b7803e0278ee1b89f/_config.yml) to define a list of pages to show in my header:
@@ -20,7 +73,7 @@ To get my blog to its current form, I made a few modifications to the base poole
 pages_list:       ['About', 'Archive']
 {% endhighlight %}
 
-I had to modify the file [_layouts/default.html](https://github.com/joshualande/joshualande.github.io/blob/5e5ca6389fbc66be06488b9b7803e0278ee1b89f/_layouts/default.html] to loop over this list and create links to each of the pages on the website:
+I had to modify the file [_layouts/default.html](https://github.com/joshualande/joshualande.github.io/blob/5e5ca6389fbc66be06488b9b7803e0278ee1b89f/_layouts/default.html) to loop over this list and create links to each of the pages on the website:
 {% highlight html %}
 <h3 class="masthead-title">
   <a href="/" title="Home">{{ site.title }}</a>
@@ -31,7 +84,7 @@ I had to modify the file [_layouts/default.html](https://github.com/joshualande/
 {% endhighlight %}
 
 Finally, I created the file [archive.md](https://github.com/joshualande/joshualande.github.io/blob/5e5ca6389fbc66be06488b9b7803e0278ee1b89f/archive.md) to create a dynamic list of blog posts:
-{% highlight jekyll %}
+{% highlight html %}
 {% raw %}
 ---
 layout: page
