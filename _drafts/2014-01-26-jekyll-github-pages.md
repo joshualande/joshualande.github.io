@@ -15,23 +15,24 @@ Instead of reading a lot of documentation, I found this really great git repo ca
 # Customizations 
 
 To get my blog to its current form, I made a few modifications to the base poole layout. First, I wanted a navigation bar at the top of the website with links to an About and Archive page. To do this, I modified the file [_config.yml](https://github.com/joshualande/joshualande.github.io/blob/5e5ca6389fbc66be06488b9b7803e0278ee1b89f/_config.yml) to define a list of pages to show in my header:
-```
+{% highlight yaml %}
 # This is the list of pages to incldue in the header of the website.
 pages_list:       ['About', 'Archive']
-```
+{% endhighlight %}
 
 I had to modify the file [_layouts/default.html](https://github.com/joshualande/joshualande.github.io/blob/5e5ca6389fbc66be06488b9b7803e0278ee1b89f/_layouts/default.html] to loop over this list and create links to each of the pages on the website:
-```
+{% highlight html %}
 <h3 class="masthead-title">
   <a href="/" title="Home">{{ site.title }}</a>
   {% for page_name in site.pages_list %}
     &nbsp;&nbsp;&nbsp;<small><a href="/{{ page_name | downcase }}">{{ page_name }}</a></small>
   {% endfor %}
 </h3>
-```
+{% endhighlight %}
 
 Finally, I created the file [archive.md](https://github.com/joshualande/joshualande.github.io/blob/5e5ca6389fbc66be06488b9b7803e0278ee1b89f/archive.md) to create a dynamic list of blog posts:
-```
+{% highlight jekyll %}
+{% raw %}
 ---
 layout: page
 title: Archive
@@ -42,32 +43,37 @@ title: Archive
 {% for post in site.posts %}
   * {{ post.date | date_to_string }} &raquo; [ {{ post.title }} ]({{ post.url }})
 {% endfor %}
-```
+{% endraw %}
+{% endhighlight %}
 
 And finally, I wanted to enable [disqus.com] comments on the blog. To do that, I modified the file _layouts/default.html to include the line
-```
+{% highlight python %}
+{% raw %}
 {% include comments.html %}
-```
-And then I created a file _includes/comments.html which includes the HTML code given to my by Disqus:
-```
-{% if page.comments %}
-  <!-- Add Disqus comments. -->
-  <div id="disqus_thread"></div>
-  <script type="text/javascript">
-      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-      var disqus_shortname = '<USERNAME>'; // required: replace example with your forum shortname
+{% endraw %}
+{% endhighlight %}
 
-      /* * * DON'T EDIT BELOW THIS LINE * * */
-      (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+And then I created a file _includes/comments.html which includes the HTML code given to my by Disqus:
+
+{% highlight html %}
+{% if page.comments %}
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = '<USERNAME>'; // required: replace example with your forum shortname
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 {% endif %}
-```
+{% endhighlight %}
 This allows comments to be enabled on a post-by-post basis by including the line "comments: True" in the header of a post.
 
 If you have any questions about my implementation, you can view my website [on github](https://github.com/joshualande/joshualande.github.io)
