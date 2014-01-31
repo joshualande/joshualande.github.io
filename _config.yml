@@ -25,3 +25,10 @@ github:
 
 # This is the list of pages to incldue in the header of the website.
 pages_list:       ['About', 'Archive']
+
+# Google Analytics tracking
+analytics :
+  provider : google
+  google : 
+      tracking_id : 'UA-47674613-1'
+
