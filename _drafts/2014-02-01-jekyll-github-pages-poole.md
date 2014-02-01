@@ -149,5 +149,8 @@ Once I got the blog up to speed with the URL joshualande.github.io, it was easy 
 
 # Links:
 
-* https://github.com/poole/poole
+Here are some links which helped me along the way:
+* The official [Jekyll](http://jekyllrb.com) website, along with detailed [documentation](http://jekyllrb.com/docs/home).
+* Documentation by GitHub about hosting static webpages with [GitHub pages](http://pages.github.com).
+* The [poole](https://github.com/poole/poole) GitHub repository.
 ...
