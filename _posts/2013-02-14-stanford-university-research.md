@@ -67,4 +67,4 @@ During my PhD, I have been involved with the development of a maximum-likelihood
 
 You can find my PhD thesis through the [Stanford Library](http://purl.stanford.edu/zj578kk6428) or on the [ArXiV](http://arxiv.org/abs/1401.6718).
 
-The slides from my PhD talk are on [SlideShare](http://www.slideshare.net/joshualande/neutron-star-powered-nebulae).
+The slides from my PhD talk are on [slideshare](http://www.slideshare.net/joshualande/neutron-star-powered-nebulae).
