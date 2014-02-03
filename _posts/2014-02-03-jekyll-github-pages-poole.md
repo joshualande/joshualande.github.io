@@ -204,6 +204,8 @@ Once I got my blog up to speed on GitHub with the URL [joshualande.github.io](ht
 I hope this blog will help you get up to speed quickly with GitHub Pages, Jekyll, and poole.
 If you have any questions about my implementation, you can view my entire website on [GitHub](https://github.com/joshualande/joshualande.github.io) or leave a question below.
 
+If you like this post you can follow me on Twitter [@joshualande](https://twitter.com/joshualande).
+
 # Links:
 
 Here are some links which helped me along the way:
