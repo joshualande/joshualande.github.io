@@ -10,7 +10,7 @@ using [Jekyll](http://jekyllrb.com) and [poole](https://github.com/poole/poole).
 The process of backing up Wordpress is a huge pain. I was annoyed constantly installing security updates. I hated having to keep an opaque database in order to keep all of my content. And whenever I went in to edit my website, I was always afraid that I would fat-finger change something and have no idea what happened. 
 
 
-So when I learned about [Jekyll](http://jekyllrb.com/), it seemed like a great alternative. I like the idea that my entire blog is a set of static files. Besides its simplicity, it makes backups so much easier and avoids most common security concerns caused by running dynamic websites. I could write my posts in [Markdown](http://en.wikipedia.org/wiki/Markdown) which I know from [Confluence](https://www.atlassian.com/software/confluence) and [GitHub](http://github.com). And  I was really excited that all of my blog posts would be static markdown files and I wouldn't have to deal with configuring a website. Also, Jekyll allows for code examples to be very nicely embedded in the website. Finally, Jekyll is very lightweight and allows for very minimal websites without any bloat.
+So when I learned about [Jekyll](http://jekyllrb.com/), it seemed like a great alternative. I like the idea that my entire blog is a set of static files. Besides its simplicity, it makes backups so much easier and avoids most common security concerns caused by running dynamic websites. I could write my posts in [Markdown](http://en.wikipedia.org/wiki/Markdown) which I know from [Confluence](https://www.atlassian.com/software/confluence) and [GitHub](http://github.com). Also, Jekyll allows for code examples to be very nicely embedded in the website. Finally, Jekyll is very lightweight and allows for very minimal websites without any bloat.
 
 The fact that GitHub provides [free hosting for Jekyll blogs](http://pages.github.com) is just icing on the cake. It will save me ~$50 per year in hosting. GitHub provides automatic version control of my blog. I can use GitHub's web editor to write blog posts online. And I can still connect it to my custom domain ([joshualande.com](http://joshualande.com)).
 
@@ -114,11 +114,14 @@ title: Archive
 {% endfor %}
 {% endraw %}
 {% endhighlight %}
-Note that the syntax like ```{% raw %}{% for post in site.posts %}{% endraw %}``` is from the Liquid templating system.
+Note that the syntax ```{% raw %}{% for post in site.posts %}{% endraw %}``` is from the Liquid templating system.
 
 Next, I wanted to add a navigation bar at the top of the website with links to the [About](/about) page, [Archive](/archive) page, and the feed. To do this, I modified the file [_config.yml](https://github.com/joshualande/joshualande.github.io/blob/64d03b883b64dd8aedf30b903ecaae92a282955a/_config.yml) to define a dictionary of pages to show in my header:
 {% highlight yaml %}
-pages_list: {About:'/about',Archive:'/archive',Feed:'/atom.xml'}
+pages_list:       
+  About: '/about'
+  Archive: '/archive'
+  Feed: '/atom.xml'
 {% endhighlight %}
 I then modify the file [_layouts/default.html](https://github.com/joshualande/joshualande.github.io/blob/64d03b883b64dd8aedf30b903ecaae92a282955a/_layouts/default.html) to loop over this list, creating links to each of the pages:
 {% highlight html %}
@@ -183,7 +186,7 @@ Google Analytics. Google gave me this javascript tracking code to embed on every
 
 </script>
 {% endhighlight %}
-I tput this code in the file
+I put this code in the file
 [\_includes/google\_analytics.html](https://github.com/joshualande/joshualande.github.io/blob/64d03b883b64dd8aedf30b903ecaae92a282955a/_includes/google_analytics)
 Finally, I included this tracking code on all of the pages of my website by modifying the file
 [_layouts/default.html](https://github.com/joshualande/joshualande.github.io/blob/64d03b883b64dd8aedf30b903ecaae92a282955a/_layouts/default.html)
@@ -196,10 +199,10 @@ to include the line:
 
 # Getting a Custom URL
 
-Once I got my blog up to speed on GitHub with the URL joshualande.github.io, it was easy to link my personal domain [joshualande.com](http://joshualande.com) to it. I use Namecheap to host my domain, so I followed the instructions [here](http://davidensinger.com/2013/03/setting-the-dns-for-github-pages-on-namecheap).
+Once I got my blog up to speed on GitHub with the URL [joshualande.github.io](http://joshualande.github.io), it was easy to link my personal domain [joshualande.com](http://joshualande.com) to it. I use Namecheap to host my domain, so I followed the instructions [here](http://davidensinger.com/2013/03/setting-the-dns-for-github-pages-on-namecheap).
 
-I hope this blog will help you getting up to speed quickly with GitHub Pages, Jekyll, and poole.
-If you have any questions about my implementation, you can view my entire website on [GitHub](https://github.com/joshualande/joshualande.github.io) or leave a question on this post.
+I hope this blog will help you get up to speed quickly with GitHub Pages, Jekyll, and poole.
+If you have any questions about my implementation, you can view my entire website on [GitHub](https://github.com/joshualande/joshualande.github.io) or leave a question below.
 
 # Links:
 
