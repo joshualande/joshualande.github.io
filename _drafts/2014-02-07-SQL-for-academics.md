@@ -38,26 +38,68 @@ I was used to
 
 # A Simple Example Of a Database
 
-Create a table of all recepies
-| recipe_id | recipe_name | recipe_description |
-|         0 |       tacos | Mom's famous Tacos |
+As a simple example of a relational database, supposed 
+we want to describe a schema for a recepie book.
+
+The first thing we would like to do is describe a
+list of all the recipies.
+
+| recipe_id |    recipe_name |        recipe_description |
+| --------- | -------------- | ------------------------- |
+|         0 |          Tacos |        Mom's famous Tacos |
+|         1 |   Tomatoe Soup |      Homemade Tomato soup |
+|         2 | Grilled Cheese | Delicious Cheese Sandwich |
+
+But each recipie is built out of ingredients.
 
 | ingredient_id | ingredient_name | ingredient_price |
-|             0 |            beef |                5 |
+| ------------- | --------------- | ---------------- |
+|             0 |            Beef |                5 |
 |             1 |         Lettuce |                1 |
 |             1 |        Tomatoes |                2 |
+|             1 |      Taco Shell |                2 |
 |             1 |          Cheese |                3 |
 |             1 |            Milk |                1 |
 |             1 |           Bread |                2 |
 
   
-A table of ingredients in recepies:
+Findally, we chould create a table to describe all of the ingredients in all of the tables:
+
 | recipe_id | ingredient_id |
-|       ... |           ... |
+| --------- | ------------- |
+|         0 |             0 |
+|         0 |             1 |
+|         0 |             2 |
+|         0 |             3 |
+
+Comming from a python background, my natural tendency is to believe that this
+is totally overengineering the problem. Instead, I would imagine using
+a hashtable to define this data:
+
+```python
+recipies = {
+  "Tacos": { ingredients: ["Beef", "Lettuce", "Tomatoes", 
+                           "Cheese", "Taco Shell" ], 
+             description: "Mom's famous Tacos" },
+  "Tomato Soup": { ingredients: [ "Tomatoes", "Milk" ], 
+                   description: "Homemade Tomato soup" },
+  "Grilled Cheese": { ingredients: [ "Cheese", "Bread" ],
+                      description: "Delicious Cheese Sandwich" }
+```
+But there are several downsides of this approach.
+
+The way to read
 
 Other things you might want:
 * A list of users in the system.
 * A mapping of what users have eaten what recipies...
+
+To get a list of all ingredients for the taco recipie by ingredient name:
+
+```sql
+SELECT ingredient_name 
+FROM 
+```
  
 Some SQL queries
 * How 

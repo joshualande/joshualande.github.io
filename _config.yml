@@ -1,5 +1,8 @@
 # Dependencies
 markdown:         redcarpet
+redcarpet:
+  extensions: ["tables"]
+
 pygments:         true
 
 # Permalinks
