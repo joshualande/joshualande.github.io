@@ -27,7 +27,7 @@ And now that I am on the other side of the table
 helping other academics transition to become become data scientists, I see that
 most of them have very similar confusion about the purpose and benefit of databases.
 
-# Rationality of a Relational Database
+# The Need for Relational Database
 
 Common use cases in business:
 * Data sets which down fit into
@@ -38,12 +38,37 @@ I was used to
 
 # A Simple Example Of a Database
 
+Create a table of all recepies
+| recipe_id | recipe_name | recipe_description |
+|         0 |       tacos | Mom's famous Tacos |
+
+| ingredient_id | ingredient_name | ingredient_price |
+|             0 |            beef |                5 |
+|             1 |         Lettuce |                1 |
+|             1 |        Tomatoes |                2 |
+|             1 |          Cheese |                3 |
+|             1 |            Milk |                1 |
+|             1 |           Bread |                2 |
+
+  
+A table of ingredients in recepies:
+| recipe_id | ingredient_id |
+|       ... |           ... |
+
+Other things you might want:
+* A list of users in the system.
+* A mapping of what users have eaten what recipies...
+ 
+Some SQL queries
+* How 
 
 # Advanced SQL: 
 
 * Indicies
 * Terradata/Vertica for distributed databases.
 * HIVE/Pig to run parallel Map/Reduce queries.
+
+If you liked this post you can follow me on Twitter [@joshualande](http://twitter.com/joshualande).
 
 # Relevant links
 
