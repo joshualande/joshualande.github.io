@@ -1,6 +1,6 @@
 ---
 layout: page
-title: SQL Basics for Data Scientists
+title: An Introduction to SQL for Data Scientists
 comments: true
 ---
 
