@@ -117,6 +117,7 @@ other queries about the data particularly hard.
 For example, it is much more cumbersome to get a list of all recipies 
 which contain tomatoes. You could imagine a similar data structure optimized for that 
 kind of query:
+
 ```python
 recipies = {
     "Beef": [ "Tacos" ],
@@ -161,7 +162,40 @@ To get a list of all ingredients for the taco recipe by ingredient name:
 Some SQL queries
 * How 
 
+The fundamental ideas begind a database are that
+[Database normalization](http://en.wikipedia.org/wiki/Database_normalization),
+which is the process of minimizing the amount of redundant data
+in a database by creating lots of related tables. The next idea is
+
+# SQL Database Design
+
+Moving from the general to the concreate:
+
+```sql
+CREATE TABLE `recipies` (
+  `recipe_id` int(11) NOT NULL, 
+  `recipe_name` varchar(30) NOT NULL,
+  `recipe_description` varchar(30) NOT NULL
+);
+```
+
+And then we can insert data into it.
+
+```sql
+INSERT INTO recipies 
+    (recipe_id, recipe_name, recipe_description) 
+VALUES 
+    (0,"Tacos","Mom's famous Tacos"),
+    (1,"Tomato Soup","Homemade Tomato soup"),
+    (2,"Grilled Cheese","Delicious Cheese Sandwich");
+```
+
+To create and fill up the othe
+
+
 # Advanced SQL: 
+
+How do we actually build these tables:
 
 * Indicies
 * Terradata/Vertica for distributed databases.
@@ -173,18 +207,11 @@ Thats about it. If you can get get you mind around the idea of table normalizati
 as the benefits of joining tables together to produce more complicated queries, everything
 else should be easy.
 
-If you liked this post you can follow me on Twitter [@joshualande](http://twitter.com/joshualande).
-
 # Relevant links
 
+This was of course just a whirlwind tour of what's so great
+about SQL databases. There is tons of topics left to explore:
 * 
-and finally to work out a concrete exmaple which should get at the purpose of
 
-# The Need for Relational Database
+If you liked this post you can follow me on Twitter [@joshualande](http://twitter.com/joshualande).
 
-Common use cases in business:
-* Data sets which down fit into
-
-Denormalized database.
-
-I was used to 
