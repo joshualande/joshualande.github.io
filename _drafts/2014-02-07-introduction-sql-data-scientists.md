@@ -31,14 +31,14 @@ most of them have very similar confusion about the purpose and benefit of these
 databases. So my hope in this post is do describe
 the benefits of an SQL database, go over the basic synax of SQL,
 
-# A Simple Example Of an SQL Database
+# A Simple Example SQL Database
 
-Before generalizing, it would be good to begin with a simple example.
+It is instructive to begin with a simple example.
 The most important takeaway about SQL databases
 is that a database is a collection of two-dimensional tables.
 Each table has a fixed number of rows and columns. This may
-seem limited, but as you will see later this simplification 
-becomes incredibly powerful.
+seem like a very limited design, but as you will see later this simplification,
+along with the necessary opeations, becomes incredibly powerful.
 
 As a simple example of a relational database, supposed 
 we want to describe a schema for a database of recipes.
@@ -51,11 +51,11 @@ we will call recipe_id.
 | recipe_id |    recipe_name |        recipe_description |
 | --------- | -------------- | ------------------------- |
 |         0 |          Tacos |        Mom's famous Tacos |
-|         1 |   Tomatoe Soup |      Homemade Tomato soup |
+|         1 |    Tomato Soup |      Homemade Tomato soup |
 |         2 | Grilled Cheese | Delicious Cheese Sandwich |
 
 But each recipe is built out of ingredients, so 
-we might want a table describing all of the ingredients 
+we might want an ingredients table describing all of the ingredients 
 that we can build food out of. For this simplified example,
 we assume that all ingredients have a price which is stored
 in the ingredient_price column.
@@ -90,9 +90,9 @@ But this simplified exmaple should get the point across.
 
 ## Similar python Implementation
 
-Comming from a python background, my natural tendency is to believe that this
+Comming from a python background, my natural tendency is to feel that this
 is totally overengineering the problem. Instead, I would imagine using
-a hashtable to define this data:
+a nested dictionary to define this data:
 
 ```python
 recipies = {
@@ -104,16 +104,42 @@ recipies = {
   "Grilled Cheese": { ingredients: [ "Cheese", "Bread" ],
                       description: "Delicious Cheese Sandwich" }
 ```
+That way, if I wanted to find, for example, all of the ingredients associated
+with Tomato Soup, I could use the code:
 
-Although this seems simple, there are several similtations of this approach.
-The first is that by organizing our data in this particular,
+```python
+ingredients = recipies["Tomato Soup"]["ingredients"]
+```
 
-FIT DATA INSIDE MEMORY.
+Although this seems works well, there are several issues associated with this approach.
+The first is that organizing our data in this particular way makes
+other queries about the data particularly hard.
+For example, it is much more cumbersome to get a list of all recipies 
+which contain tomatoes. You could imagine a similar data structure optimized for that 
+kind of query:
+```python
+recipies = {
+    "Beef": [ "Tacos" ],
+    "Lettuce": [ "Tacos" ],
+    "Tomatoes": [ "Tacos", "Tomato Soup"],
+    "Taco Shell": [ "Tacos"],
+    "Cheese": [ "Tacos", "Grilled Cheese"]
+    "Milk": [ "Tomato Soup" ]
+    "Bread": [ "Grilled Cheese" ]
+}
+```
+But this data structure makes it cumbersome to find what ingredients are
+required to make a paritcular recipie.
+This may seem like a contrived example, but in real life it is very often
+the case that that you later on have to query your data in ways you did not
+originally intent.
+
+As you will see, SQL solves this problem by dividing up our data into multiple tables.
+
+The second issue with the approach listed above is that there are a lot of duplciate data
+which shows up in mulitple places. 
 
 
-Other things you might want:
-* A list of users in the system.
-* A mapping of what users have eaten what recipies...
 
 
 ## Example SQL Queries
@@ -125,6 +151,11 @@ on this databse.
 SELECT ingredient_name 
 FROM 
 ```
+
+Other things you might want:
+* A list of users in the system.
+* A mapping of what users have eaten what recipies...
+* FIT DATA INSIDE MEMORY.
  
 To get a list of all ingredients for the taco recipe by ingredient name:
 Some SQL queries
