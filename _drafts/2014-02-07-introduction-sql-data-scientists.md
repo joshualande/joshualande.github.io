@@ -4,7 +4,7 @@ title: An Introduction to SQL for Data Scientists
 comments: true
 ---
 
-During my Physics PhD program, I really never understood the purpose of SQL and
+During my Physics PhD program, I never understood the purpose of SQL and
 similar [relational database management systems 
 (RDBMs)](http://en.wikipedia.org/wiki/Relational_database_management_system).
 And so as I prepared to transition to a career as a data scientist, I was
@@ -64,11 +64,11 @@ in the ingredient_price column.
 | ------------- | --------------- | ---------------- |
 |             0 |            Beef |                5 |
 |             1 |         Lettuce |                1 |
-|             1 |        Tomatoes |                2 |
-|             1 |      Taco Shell |                2 |
-|             1 |          Cheese |                3 |
-|             1 |            Milk |                1 |
-|             1 |           Bread |                2 |
+|             2 |        Tomatoes |                2 |
+|             3 |      Taco Shell |                2 |
+|             4 |          Cheese |                3 |
+|             5 |            Milk |                1 |
+|             6 |           Bread |                2 |
 
   
 Finally, we need some way of listing all of the ingredients in each recipe.
@@ -78,10 +78,16 @@ For every recipe
 
 | recipe_id | ingredient_id | amount |
 | --------- | ------------- | ------ |
-|         0 |             0 |      . |
-|         0 |             1 |      . |
-|         0 |             2 |      . |
-|         0 |             3 |      . |
+|         0 |             0 |      1 |
+|         0 |             1 |      2 |
+|         0 |             2 |      2 |
+|         0 |             3 |      3 |
+|         0 |             4 |      1 |
+|         1 |             2 |      2 |
+|         1 |             5 |      1 |
+|         2 |             4 |      1 |
+|         2 |             6 |      2 |
+
 
 Of course, we could imagine that a real database, like the one
 curated by [yummly.com](http://yummly.com), would have lots more information in it.
@@ -96,13 +102,11 @@ a nested dictionary to define this data:
 
 ```python
 recipies = {
-  "Tacos": { ingredients: ["Beef", "Lettuce", "Tomatoes", 
-                           "Cheese", "Taco Shell" ], 
-             description: "Mom's famous Tacos" },
-  "Tomato Soup": { ingredients: [ "Tomatoes", "Milk" ], 
-                   description: "Homemade Tomato soup" },
-  "Grilled Cheese": { ingredients: [ "Cheese", "Bread" ],
-                      description: "Delicious Cheese Sandwich" }
+  "Tacos": ["Beef", "Lettuce", "Tomatoes", 
+            "Taco Shell", "Cheese" ],
+  "Tomato Soup": [ "Tomatoes", "Milk" ],
+  "Grilled Cheese": [ "Cheese", "Bread" ]
+}
 ```
 That way, if I wanted to find, for example, all of the ingredients associated
 with Tomato Soup, I could use the code:
@@ -149,11 +153,45 @@ Given our recipe schema above, there are many kind of calculations we could imag
 on this databse.
 
 ```sql
-SELECT ingredient_name 
-FROM 
+SELECT c.ingredient_name 
+FROM recipies AS a
+JOIN recipe_ingredients AS b
+ON a.recipe_id = b.recipe_id
+JOIN ingredients AS c
+ON b.ingredient_id = c.ingredient_id
+WHERE
+    a.recipe_name = "Tomato Soup"
+```
+
+Which returns the list
+
+```
+Tomatoes
+Milk
+```
+
+Similar, to figure out the list of recipies including
+
+```sql
+SELECT a.recipe_name
+FROM recipies AS a
+JOIN recipe_ingredients AS b
+ON a.recipe_id = b.recipe_id
+JOIN ingredients AS c
+ON b.ingredient_id = c.ingredient_id
+WHERE
+    c.ingredient_name = "tomatoes"
+```
+
+This returns the list
+
+```
+Tacos
+Tomato Soup
 ```
 
 Other things you might want:
+
 * A list of users in the system.
 * A mapping of what users have eaten what recipies...
 * FIT DATA INSIDE MEMORY.
@@ -169,19 +207,17 @@ in a database by creating lots of related tables. The next idea is
 
 # SQL Database Design
 
-Moving from the general to the concreate:
+Moving from the general to the concreate, here is
+the SQL code to create the database we described above:
+
+First, we can create the `recipies` table:
 
 ```sql
-CREATE TABLE `recipies` (
-  `recipe_id` int(11) NOT NULL, 
-  `recipe_name` varchar(30) NOT NULL,
-  `recipe_description` varchar(30) NOT NULL
+CREATE TABLE recipies (
+  recipe_id int(11) NOT NULL, 
+  recipe_name varchar(30) NOT NULL,
+  recipe_description varchar(30) NOT NULL
 );
-```
-
-And then we can insert data into it.
-
-```sql
 INSERT INTO recipies 
     (recipe_id, recipe_name, recipe_description) 
 VALUES 
@@ -190,7 +226,49 @@ VALUES
     (2,"Grilled Cheese","Delicious Cheese Sandwich");
 ```
 
-To create and fill up the othe
+Next we can reate the `ingredients` table:
+
+```sql
+CREATE TABLE ingredients (
+  ingredient_id int(11) NOT NULL, 
+  ingredient_name varchar(30) NOT NULL,
+  ingredient_price int(11) NOT NULL
+);
+INSERT INTO ingredients
+    (ingredient_id, ingredient_name, ingredient_price)
+VALUES 
+    (0, "Beef", 5),
+    (1, "Lettuce", 1),
+    (2, "Tomatoes", 2),
+    (3, "Taco Shell", 2),
+    (4, "Cheese", 3),
+    (5, "Milk", 1),
+    (6, "Bread", 2);
+```
+
+And finally, we can create the recipe-ingredient-mapping table:
+
+```sql
+CREATE TABLE recipe_ingredients (
+  recipe_id int(11) NOT NULL, 
+  ingredient_id int(11) NOT NULL, 
+  amount int(11) NOT NULL
+);
+INSERT INTO recipe_ingredients 
+    (recipe_id, ingredient_id, amount)
+VALUES
+    (0,0,1),
+    (0,1,2),
+    (0,2,2),
+    (0,3,3),
+    (0,4,1),
+    (1,2,2),
+    (1,5,1),
+    (2,4,1),
+    (2,6,2);
+```
+
+
 
 
 # Advanced SQL: 
@@ -211,7 +289,9 @@ else should be easy.
 
 This was of course just a whirlwind tour of what's so great
 about SQL databases. There is tons of topics left to explore:
-* 
+
+* [MySQL](http://www.mysql.com/) is a popular SQL implementation.
+* [Sequel Pro](http://www.sequelpro.com) is a great MySQL client.
 
 If you liked this post you can follow me on Twitter [@joshualande](http://twitter.com/joshualande).
 
