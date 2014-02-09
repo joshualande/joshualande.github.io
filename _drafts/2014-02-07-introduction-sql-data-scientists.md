@@ -115,7 +115,7 @@ is totally overengineering the problem. Instead, I would imagine using
 a nested dictionary to define this data:
 
 ```python
-recipies = {
+recipes = {
   "Tacos": ["Beef", "Lettuce", "Tomatoes", 
             "Taco Shell", "Cheese" ],
   "Tomato Soup": [ "Tomatoes", "Milk" ],
@@ -126,18 +126,18 @@ That way, if I wanted to find, for example, all of the ingredients associated
 with Tomato Soup, I could use the code:
 
 ```python
-ingredients = recipies["Tomato Soup"]["ingredients"]
+ingredients = recipes["Tomato Soup"]["ingredients"]
 ```
 
 Although this seems works well, there are several issues associated with this approach.
 The first is that organizing our data in this particular way makes
 other queries about the data particularly hard.
-For example, it is much more cumbersome to get a list of all recipies 
+For example, it is much more cumbersome to get a list of all recipes 
 which contain tomatoes. You could imagine a similar data structure optimized for that 
 kind of query:
 
 ```python
-recipies = {
+recipes = {
     "Beef": [ "Tacos" ],
     "Lettuce": [ "Tacos" ],
     "Tomatoes": [ "Tacos", "Tomato Soup"],
@@ -163,37 +163,145 @@ which shows up in mulitple places.
 
 
 
-## Example SQL Queries
+# Example SQL Queries
+
+## The SELECT Statement
 
 Given our recipe schema above, there are many kind of calculations we could imagine doing
 on this databse.
 
-Imagine that we wanted to find all the recipies in "Tomato Soup".
+Imagine that we wanted to find all the recipes in "Tomato Soup".
 As a first step, we could figure out the recipe_id for "Tomato Soup"
-with a simple SQL query
+with a simple SQL query using the `SELECT` statement:
 
 ```sql
 SELECT recipe_id 
-FROM recipies
+FROM recipes
 WHERE recipe_name="Tomato Soup"
 ```
 
-This returns the table
+This querie says that we take the the `recipes` table,
+and we filter only on a particular kind of row (where the
+`recipie_name` is "Tomato Soup") and the filter for 
+a particular column (the `recipe_id` column).
+
+This query returns the table
 
 | recipe_id |
 | --------- |
 |         1 |
 
-Markdown | Less | Pretty
---- | --- | ---
-*Still* | `renders` | **nicely**
-1 | 2 | 3
+Now, we can get a list of the `ingredient_id` using a similar query
+on the `recipe_ingredients` table:
+
+```sql
+SELECT ingredient_id
+FROM recipe_ingredients
+WHERE recipe_id = 1
+```
+
+Which returns the table
+
+| ingredient_id |
+| ------------- |
+| 2             |
+| 5             |
 
 
+## The JOIN statement
+
+Having to perform multiple quieries on
+multiple tables is quite cumbersome,
+and would require unnecessary additional
+logic outside of the database.
+
+Instead, if we wanted to directly get the
+`ingredient_id` knowing the `recipie_name`,
+we could `JOIN` together
+
+the way to do this is to join the 
+two tables together when the `recipe_id`
+is equal:
+
+```sql
+SELECT *
+FROM recipes
+JOIN recipe_ingredients
+ON recipes.recipe_id = recipe_ingredients.recipe_id
+```
+
+The `JOIN` command will combine all the rows
+from the one table with all the rows from the other
+table when the condition of the `ON` clause is true,
+there that the recipe_id is equal.
+
+For this example, we get the table:
+
+| recipe_id | recipe_name    | recipe_description        | recipe_id | ingredient_id | amount |
+| --------- | -------------- | ------------------------- | --------- | ------------- | ------ |
+|         0 | Tacos          | Mom's famous Tacos        | 0         |             0 | 1      |
+|         0 | Tacos          | Mom's famous Tacos        | 0         |             1 | 2      |
+|         0 | Tacos          | Mom's famous Tacos        | 0         |             2 | 2      |
+|         0 | Tacos          | Mom's famous Tacos        | 0         |             3 | 3      |
+|         0 | Tacos          | Mom's famous Tacos        | 0         |             4 | 1      |
+|         1 | Tomato Soup    | Homemade Tomato soup      | 1         |             2 | 2      |
+|         1 | Tomato Soup    | Homemade Tomato soup      | 1         |             5 | 1      |
+|         2 | Grilled Cheese | Delicious Cheese Sandwich | 2         |             4 | 1      |
+|         2 | Grilled Cheese | Delicious Cheese Sandwich | 2         |             6 | 2      |
+
+Now, we want to filter this table out by only getting the ingredient_id 
+when the recipie_name is "Tomato Soup":
+
+```sql
+SELECT recipe_ingredients.ingredient_id
+FROM recipes
+JOIN recipe_ingredients
+ON recipes.recipe_id = recipe_ingredients.recipe_id
+WHERE recipes.recipe_name = 'Tomato Soup'
+```
+
+This returns exactly the table we were looking for
+
+| ingredient_id |
+| ------------- |
+| 2             |
+| 5             |
+
+## Tripple Joins of SQL Tables
+
+What's really cool about SQL is all of the commands can e stacked.
+So if we wanted to directly return the name of the ingredients
+in Tomatoe Soup, all we have to do is JOIN the
+ingredients table to the other two tables joined above.
+The query ends up being:
+
+```sql
+SELECT ingredients.ingredient_name 
+FROM recipes AS a
+JOIN recipe_ingredients AS b
+ON a.recipe_id = b.recipe_id
+JOIN ingredients 
+ON b.ingredient_id = ingredients.ingredient_id
+WHERE
+    a.recipe_name = "Tomato Soup"
+```
+
+Which returns the table
+
+| ingredient_name |
+| --------------- |
+| Tomatoes        |
+| Milk            |
+
+Sometimes people find it cumbersome that
+the table name shows up so many times
+in a SQL query, so as a short hand
+you can give your tables nicknames.
+A more conventional query might look something like:
 
 ```sql
 SELECT c.ingredient_name 
-FROM recipies AS a
+FROM recipes AS a
 JOIN recipe_ingredients AS b
 ON a.recipe_id = b.recipe_id
 JOIN ingredients AS c
@@ -202,18 +310,21 @@ WHERE
     a.recipe_name = "Tomato Soup"
 ```
 
-Which returns the list
+Now at this point, you are probably thinking
+that having to join three tables together is way
+too much work compared to the simple data structure
+we wrote in python above.
 
-```
-Tomatoes
-Milk
-```
-
-Similar, to figure out the list of recipies including
+But what's great about SQL is that once we have
+laid out our data in this abstract table representation,
+it becomes no harder to do all sorts of other
+queries against our database. For example,
+to find all the recipies that include tomatoes
+is just as easy as the above query:
 
 ```sql
 SELECT a.recipe_name
-FROM recipies AS a
+FROM recipes AS a
 JOIN recipe_ingredients AS b
 ON a.recipe_id = b.recipe_id
 JOIN ingredients AS c
@@ -222,22 +333,25 @@ WHERE
     c.ingredient_name = "tomatoes"
 ```
 
-This returns the list
+This returns the expected tables
 
-```
-Tacos
-Tomato Soup
-```
+| recipe_name |
+| ----------- |
+| Tacos       |
+| Tomato Soup |
+
+# Advanced SQL queries
 
 Other things you might want:
 
 * A list of users in the system.
-* A mapping of what users have eaten what recipies...
+* A mapping of what users have eaten what recipes...
 * FIT DATA INSIDE MEMORY.
  
-To get a list of all ingredients for the taco recipe by ingredient name:
-Some SQL queries
-* How 
+# Benefits of SQL Over Other Data Structures
+
+* Future proofign yourself against changing business requirements.
+* Letting SQL decide the fastest way to do run the query
 
 The fundamental ideas begind a database are that
 [Database normalization](http://en.wikipedia.org/wiki/Database_normalization),
@@ -249,15 +363,15 @@ in a database by creating lots of related tables. The next idea is
 Moving from the general to the concreate, here is
 the SQL code to create the database we described above:
 
-First, we can create the `recipies` table:
+First, we can create the `recipes` table:
 
 ```sql
-CREATE TABLE recipies (
+CREATE TABLE recipes (
   recipe_id int(11) NOT NULL, 
   recipe_name varchar(30) NOT NULL,
   recipe_description varchar(30) NOT NULL
 );
-INSERT INTO recipies 
+INSERT INTO recipes 
     (recipe_id, recipe_name, recipe_description) 
 VALUES 
     (0,"Tacos","Mom's famous Tacos"),
