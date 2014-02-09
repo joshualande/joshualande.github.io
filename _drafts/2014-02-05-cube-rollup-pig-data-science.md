@@ -6,11 +6,11 @@ comments: true
 
 I recently found two incredible functions in 
 [Apache Pig](https://pig.apache.org) called 
-[CUBE](https://pig.apache.org/docs/r0.11.0/api/org/apache/pig/newplan/logical/relational/LOCube.html)
-and ROLLUP.  These functions allow for computing multi-level
-aggregations of data sets. I found the documentation for these
-examples to be confusing, so I will explain how they work with
-simple examples.
+[CUBE and ROLLUP](https://pig.apache.org/docs/r0.11.0/api/org/apache/pig/newplan/logical/relational/LOCube.html).
+These functions allow for computing multi-level
+aggregations of a data set. I found the documentation for these
+examples to be confusing, so in this post I
+am going to explain how they work with simple examples.
 
 # Aggregating in Pig Using the GROUP Operator
 
@@ -18,11 +18,11 @@ Before we get into CUBE and ROLLUP, I will describe how simple
 aggregations work using the GROUP BY operator in pig.  If this is
 familiar to you, feel free to skip ahead to the next section.
 
-Supposed we have a simple data set of people.  For
+For this post, lets imagine a simple data set of people.  For
 each person, we know their name, the country they live in, their
 gender, the sport they play, and their height.
 
-```bash
+```
 $ cat people.csv
 Steve,US,M,football,6.5
 Alex,US,M,football,5.5
@@ -32,13 +32,13 @@ Ellen,UK,F,football,5.0
 ```
 
 A common task in analytics is to compute the average
-value (or some other aggregate quantity like median or max)
-for people in different groups. 
+value (or some other aggregate quantity like median or maximum)
+for people in different groups.
 For example, we might be interested in computing
 the average height of people in a given country.
 
 We can do this using Apache Pig fairly easily.
-First, we load in the data
+First, we load in the data:
 
 ```
 people = LOAD 'people.csv' USING PigStorage(',') 
@@ -46,7 +46,12 @@ people = LOAD 'people.csv' USING PigStorage(',')
     gender:chararray, sport:chararray, height:float);
 ```
 
-When we dump the `people` table, we get:
+
+You can follow along by running pig in local mode with with command
+`pig -x local`.
+
+First, lets `DUMP` the `people` table to make sure we
+loaded the data correctly:
 
 ```
 (Steve,US,M,football,6.5)
@@ -56,27 +61,26 @@ When we dump the `people` table, we get:
 (Ellen,UK,F,football,5.0)
 ```
 
-Note, you can follow along my example by running pig in local mode with with command
-`pig -x local`.
-
-In order to compute the average height for people in a given gender,
-we have to first group the data by gender and the perform
-the average for each group:
+In order to compute the average height for people of a given gender,
+we have to first group the data by gender:
 
 ```
 grouped = GROUP people BY gender;
 ```
 
-The `GROUP` command returns a list of each gender and, for each gender, a bag 
-containing every row of people with that country:
+In Pig,
+the `GROUP` command returns a table of each gender and
+for each gender a bag 
+containing every row of people with that gender.
+So the `grouped` table is:
 
 ```
 (F,{(Mary,UK,F,baseball,5.5),(Ellen,UK,F,football,5.0)})
 (M,{(Steve,US,M,football,6.5),(Alex,US,M,football,5.5),(Ted,UK,M,football,6.0)})
 ```
 
-Using Pig, it is easy to compute the average height for each bag of
-people:
+To compute the average height as well as number of people,
+we can then use the `FOREACH`, `COUNT`, and `AVG` command:
 
 ```
 heights = FOREACH grouped GENERATE
@@ -85,18 +89,18 @@ heights = FOREACH grouped GENERATE
     AVG(people.height) AS avg_height;
 ```
 
-The `heights` table contains the average height for people in each country:
+The `heights` table is:
 
 ```
 (F,2,5.25)
 (M,3,6.0)
 ```
 
-This shows that there are 3 men with an average height of 6 and two 
+This shows that there are 3 men with an average height of 6.0 and two 
 women with an average height of 5.25.
 
-If we wanted to compute the average height for people in a particular
-of a particular gender, and sport, we could again 
+If we wanted to compute the average height for people 
+of a particular gender and sport, we could again 
 expand upon the `GROUP BY` command from above:
 
 ```
@@ -116,11 +120,11 @@ The `heights` table now contains:
 ```
 
 This says, for example, that there are three men who play football with
-an average height of 6.
+an average height of 6.0.
 
-# Multi-Level Aggregations in Apache Pig
+# Multi-Level Aggregations in Pig the Hard Way
 
-What if both of these aggregations were important, i.e. we wanted
+What if both aggregations were important, i.e. we wanted
 to know both the average height by gender as well as the average
 height by gender and sport.  One way to solve this is to simply
 create two tables, one for each kind of aggregation.
@@ -186,7 +190,6 @@ for gender, and sport, we can use the following code in pig.
 
 ```
 cubed = CUBE people BY CUBE(gender, sport);
-DUMP cubed;
 ```
 
 `CUBED` returns:
@@ -430,7 +433,6 @@ grouped = GROUP flattened_bags BY (country,gender,sport);
 heights = FOREACH grouped GENERATE
     FLATTEN(group) AS (country,gender,sport),
     AVG(flattened_bags.height) AS avg_height;
-DUMP heights;
 ```
 
 This computes the average height for people of a given
