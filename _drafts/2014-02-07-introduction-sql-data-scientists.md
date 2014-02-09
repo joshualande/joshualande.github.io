@@ -4,32 +4,46 @@ title: An Introduction to SQL for Data Scientists
 comments: true
 ---
 
-During my Physics PhD program, I never understood the purpose of SQL and
+During my Physics PhD program, I never understood the purpose of 
+[SQL](http://en.wikipedia.org/wiki/SQL) and
 similar [relational database management systems 
 (RDBMs)](http://en.wikipedia.org/wiki/Relational_database_management_system).
-And so as I prepared to transition to a career as a data scientist, I was
-confused why so much data science was done inside of databases.
+As I prepared to transition to a career as a data scientist, I was
+confused why so much data science was done inside of these databases.
 
 After all, physicists (and scientists more broadly) love to reinvent the wheel. 
-Working in astrophysics, I was used to all sorts of file formats like
+Working in astrophysics, I had used all sorts of file formats like
 [ROOT Trees](http://en.wikipedia.org/wiki/ROOT), 
 [Fits Files](http://en.wikipedia.org/wiki/FITS),
 [HDF5 Files](http://en.wikipedia.org/wiki/Hierarchical_Data_Format),
 and [pandas DataFrames](http://en.wikipedia.org/wiki/Pandas_(software). 
 I wans't sure why I needed to learn SQL.
 
-And besides, SQL seemed so limited. Everything had to be these flat tables, and the syntax
-to deal with theme seemes really archane. I didn't get it.
+And besides, SQL seemed so limited. Everything had to be these flat
+tables, and the syntax to deal with theme seemes archane. 
 
-Now that I have been a data scientist for half a year, I have grown to really love databases.
-What they are designed to do well they do expetionally better than anything else.
-And the use case for them in business and data science applications is almost limitless.
+Now that I have been a data scientist for half a year, I have grown
+to really love databases.  They do what they are designed to do
+well they do better than anything else.  And their use case in
+business and data science applications is almost limitless.
 
 Now that I am on the other side of the table 
 helping other academics transition to become become data scientists, I see that
 most of them have very similar confusion about the purpose and benefit of these
-databases. So my hope in this post is do describe
-the benefits of an SQL database, go over the basic synax of SQL,
+databases. 
+
+In this post, my intention is to go over broadly what the purpose
+of databases are, and how they are different from similar file
+formats. My hope is to touch on the key topics of [Database
+normalization](http://en.wikipedia.org/wiki/Database_normalization), 
+the basic databases operators like joining and aggregating
+over tables, and developing indices on tables to speed up queries.
+
+Of course, databases are an enormous topic for which tehre
+is [an entire profession](http://en.wikipedia.org/wiki/Database_administrator),
+so this will be at most a whirlwind tour of the key concepts, the
+purpose being to convey the value of databases
+and to get you excited about them.
 
 # A Simple Example SQL Database
 
@@ -133,6 +147,8 @@ recipies = {
     "Bread": [ "Grilled Cheese" ]
 }
 ```
+
+I am leaving out some of the other metadata to make my point clear.
 But this data structure makes it cumbersome to find what ingredients are
 required to make a paritcular recipie.
 This may seem like a contrived example, but in real life it is very often
@@ -151,6 +167,29 @@ which shows up in mulitple places.
 
 Given our recipe schema above, there are many kind of calculations we could imagine doing
 on this databse.
+
+Imagine that we wanted to find all the recipies in "Tomato Soup".
+As a first step, we could figure out the recipe_id for "Tomato Soup"
+with a simple SQL query
+
+```sql
+SELECT recipe_id 
+FROM recipies
+WHERE recipe_name="Tomato Soup"
+```
+
+This returns the table
+
+| recipe_id |
+| --------- |
+|         1 |
+
+Markdown | Less | Pretty
+--- | --- | ---
+*Still* | `renders` | **nicely**
+1 | 2 | 3
+
+
 
 ```sql
 SELECT c.ingredient_name 
