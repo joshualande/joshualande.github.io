@@ -163,9 +163,7 @@ which shows up in mulitple places.
 
 
 
-# Example SQL Queries
-
-## The SELECT Statement
+# THE SELECT, FROM, and WHERE Statements in SQL
 
 Given our recipe schema above, there are many kind of calculations we could imagine doing
 on this databse.
@@ -208,7 +206,7 @@ Which returns the table
 | 5             |
 
 
-## The JOIN statement
+# The JOIN statement in SQL
 
 Having to perform multiple quieries on
 multiple tables is quite cumbersome,
@@ -267,7 +265,7 @@ This returns exactly the table we were looking for
 | 2             |
 | 5             |
 
-## Tripple Joins of SQL Tables
+# JOINing Three Tables in SQL
 
 What's really cool about SQL is all of the commands can e stacked.
 So if we wanted to directly return the name of the ingredients
@@ -339,6 +337,18 @@ This returns the expected tables
 | ----------- |
 | Tacos       |
 | Tomato Soup |
+
+# The GROUP BY Operator In SQL
+
+Now, we have seen the `SELECT`, `FROM`, `JOIN`, `ON`, and
+`WHERE` commands in SQL.
+
+There are only a couple more commands.
+
+Supposed we wanted to make a list of the number of ingredients in
+a particular recipie. To do that, we want to count
+the number of 
+
 
 # Advanced SQL queries
 
