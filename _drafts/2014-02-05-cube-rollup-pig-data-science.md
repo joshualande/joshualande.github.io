@@ -6,19 +6,20 @@ comments: true
 
 I recently found two incredible functions in 
 [Apache Pig](https://pig.apache.org) called 
-[CUBE and ROLLUP](https://pig.apache.org/docs/r0.11.0/api/org/apache/pig/newplan/logical/relational/LOCube.html).
-These functions allow for computing multi-level
+[CUBE and ROLLUP](https://pig.apache.org/docs/r0.11.0/api/org/apache/pig/newplan/logical/relational/LOCube.html)
+that every data scientist should know.
+These functions can e used to compute multi-level
 aggregations of a data set. I found the documentation for these
 examples to be confusing, so in this post I
-am going to explain how they work with simple examples.
+will explain how they work with a simple example.
 
 # Aggregating in Pig Using the GROUP Operator
 
-Before we get into CUBE and ROLLUP, I will describe how simple
-aggregations work using the GROUP BY operator in pig.  If this is
+Before we get into `CUBE` and `ROLLUP`, I will describe how to do simple
+aggregations using the `GROUP BY` operator in pig.  If this is
 familiar to you, feel free to skip ahead to the next section.
 
-For this post, lets imagine a simple data set of people.  For
+Lets imagine a simple data set of people.  For
 each person, we know their name, the country they live in, their
 gender, the sport they play, and their height.
 
@@ -37,7 +38,7 @@ for people in different groups.
 For example, we might be interested in computing
 the average height of people in a given country.
 
-We can do this using Apache Pig fairly easily.
+We can do this using Pig fairly easily.
 First, we load in the data:
 
 ```
@@ -47,11 +48,11 @@ people = LOAD 'people.csv' USING PigStorage(',')
 ```
 
 
-You can follow along by running pig in local mode with with command
-`pig -x local`.
+You can follow along by running pig in local mode with with the 
+command `pig -x local`.
 
 First, lets `DUMP` the `people` table to make sure we
-loaded the data correctly:
+loaded it correctly:
 
 ```
 (Steve,US,M,football,6.5)
@@ -69,18 +70,20 @@ grouped = GROUP people BY gender;
 ```
 
 In Pig,
-the `GROUP` command returns a table of each gender and
-for each gender a bag 
-containing every row of people with that gender.
-So the `grouped` table is:
+the `GROUP` command returns, for each gender,
+a bag 
+containing all of the rows for people of that gender.
+For our example, the `grouped` table is:
 
 ```
 (F,{(Mary,UK,F,baseball,5.5),(Ellen,UK,F,football,5.0)})
 (M,{(Steve,US,M,football,6.5),(Alex,US,M,football,5.5),(Ted,UK,M,football,6.0)})
 ```
 
-To compute the average height as well as number of people,
-we can then use the `FOREACH`, `COUNT`, and `AVG` command:
+To compute the average height,
+we can then use the `FOREACH` and `AVG` command.
+While we are at it, we can compute the
+number of people usign teh `COUNT` command:
 
 ```
 heights = FOREACH grouped GENERATE
@@ -100,7 +103,7 @@ This shows that there are 3 men with an average height of 6.0 and two
 women with an average height of 5.25.
 
 If we wanted to compute the average height for people 
-of a particular gender and sport, we could again 
+of a particular gender who played a particular sport, we could again 
 expand upon the `GROUP BY` command from above:
 
 ```
@@ -124,16 +127,18 @@ an average height of 6.0.
 
 # Multi-Level Aggregations in Pig the Hard Way
 
-What if both aggregations were important, i.e. we wanted
+What if both aggregations were important. We wanted
 to know both the average height by gender as well as the average
-height by gender and sport.  One way to solve this is to simply
-create two tables, one for each kind of aggregation.
+height by gender and by sport.  One way to solve this is to simply
+create two tables, one for each aggregation. But
+this is cumbersome, especially if there were many interesting
+aggregations.
 
 Another option would be to create a duplicate set of rows in our
 `people` table where the gender is hard coded to a default value
-(like '*').  Then, when we computed average height by gender and
-sport, we would automatically also compute average height by just
-gender.
+(like '\*').  Then, when we computed the average height by gender and
+by sport, we would automatically also compute average height by just
+gender (where sport is equal to '\*').
 
 To do this, we can create a new table and `UNION` it
 with the original table:
@@ -165,34 +170,30 @@ The `heights` table now contains
 (M,football,3,6.0)
 ```
 
-As you can see, this table nicely combines both tables from above.
-We can compute the average height of people with a certain gender
-and sport as well as the average height for all people with a certain
-gender (where sport is equal to '*').
-
+As you can see, this table nicely combines both data sets from above.
+The average height by gender for people of any sport
+can be found by looking for rows where sport equals '*'.
 
 # CUBE And ROLLUP For Multi Level Aggregations
 
-This `UNION` approach of tables works, but is not very inelegant. It
-suffers from the limitations that it requires a lot of extra code
-to write, does not generalize easily to performing aggregations
-over multiple dimensions, and is not well optimized internally by
-Pig.
+This `UNION` approach above works, but is not very elegant. It
+suffers from the limitations that it requires a lot of extra code, does not 
+generalize easily to performing aggregations
+over multiple dimensions, and is not well optimized by Pig.
 
 Fortunately, as of version 0.11, Apache Pig provides the `CUBE` and
 `ROLLUP` function which can perform this kind of calculation much
 more efficiently and elegantly.
 
-Assuming we would are using the same people data set as above, but
-we want to compute all levels of aggregation 
-for gender, and sport, we can use the following code in pig.
-
+For the same `people` table from before, we
+can compute the different possible aggregations by
+gender and sport using the code:
 
 ```
 cubed = CUBE people BY CUBE(gender, sport);
 ```
 
-`CUBED` returns:
+The `cubed` table is:
 
 ```
 ((F,baseball),{(F,baseball,Mary,UK,5.5)})
@@ -205,19 +206,20 @@ cubed = CUBE people BY CUBE(gender, sport);
 ((,),{(,,Mary,UK,5.5),(,,Alex,US,5.5),(,,Steve,US,6.5),(,,Ellen,UK,5.0),(,,Ted,UK,6.0)})
 ```
 
-Althrough this is hard to look at, you will see that the first entry
-is are the values for all of the columns which are being cubed over,
-and the second column are bags of all the rows.
-This is almost identical to the way `GROUP BY` works, except there
-are additional columns with `NULL` values corresponding to buckets
-which aggregate over that quantity.
+Although this is hard to look at, you will see that the first column
+are the values for the columns that are being cubed over.
+The second column are bags of all the rows matching that
+aggregation.
+This is almost identical to the way `GROUP BY` works, except that there
+are additional columns with `NULL` values (corresponding to to
+aggregations over all of that column).
 
-Now, to compute the average height, we can use thecode:
+Now, to compute the average height, we use the `FOREACH` and `AVG` code as before:
 
 ```
 heights = FOREACH cubed GENERATE 
     FLATTEN(group) AS (gender, sport), 
-    COUNT(cube) AS num_people,
+    COUNT_STAR(cube) AS num_people,
     AVG(cube.height) AS avg_height;  
 ``` 
 
@@ -229,110 +231,125 @@ The `heights` table now contains:
 (F,,2,5.25)
 (M,football,3,6.0)
 (M,,3,6.0)
-(,baseball,0,5.5)
-(,football,0,5.75)
-(,,0,5.7)
+(,baseball,1,5.5)
+(,football,4,5.75)
+(,,5,5.7)
 ```
 
-Note that by default, `CUBE` sets the
-aggregate value to `NULL`. I find this
-confusing and prefer to use a a star 
-('*') to represent the aggregate value.
-We can fix this using one more line of code:
+This table is the same as above, but also
+computes the average per sport for all genders
+and the average over all genders and all sports.
+
+Note that in this example we changed
+from using the `COUNT` to `COUNT_STAR`
+function. The reason is that the
+`COUNT` function in Pig will not include
+rows will `NULL` values in it whereas
+`COUNT_STAR` includes the rows with `NULL` values.
+
+Unlike the example above, `CUBE` sets the
+aggregate value to `NULL` instead of a star.
+I find this annoying and prefer to use the star 
+symbol. We can fix this in Pig:
 
 ```
 heights  = FOREACH heights GENERATE
     (gender is not NULL ? gender : '*') as gender, 
     (sport is not NULL ? sport : '*') as sport,
+    num_people,
     avg_height;
 ```
 
 The `heights` table finally contains:
 
 ```
-(F,baseball,5.5)
-(F,football,5.0)
-(F,*,5.25)
-(M,football,6.0)
-(M,*,6.0)
-(*,baseball,5.5)
-(*,football,5.75)
-(*,*,5.7)
+(F,baseball,1,5.5)
+(F,football,1,5.0)
+(F,*,2,5.25)
+(M,football,3,6.0)
+(M,*,3,6.0)
+(*,baseball,1,5.5)
+(*,football,4,5.75)
+(*,*,5,5.7)
 ```
-
-This computes the average height
-for any gender and any sport, 
-for any sport (with gender equal to '\*'),
-and for any gender (and sport equal to '\*').
-This is super cool!
 
 # CUBE Over Multiple Dimensions
 
-
-Looking again to our example from above, 
-if we `CUBE` on (country, gender, sport),
-we would compute aggregations for all
-(country, gender, and sports) pairs. But we would
-also find the aggregation for all (country, gender) pairs,
-all (country, sports) pairs, and all (gender, sports) pairs.
-We would also compute all aggregations for any
-country, gender, and sport. And we would be able to compute
-the average aggregating over all countries, genders, and sports.
-
-For our example, when we `CUBE` over all pairs:
+What is really great about `CUBE` is
+the ability to cube over multiple dimensions.
+If we wanted all possible aggregations
+of country, gender, and sport, we could
+cube over the three dimensions:
 
 ```
 cubed = CUBE people BY CUBE(country,gender,sport);
 
 heights = FOREACH cubed GENERATE 
     FLATTEN(group) AS (country,gender,sport),
+    COUNT_STAR(cube) As num_people,
     AVG(cube.height) AS avg_height;  
 
 heights = FOREACH heights GENERATE
     (country is not NULL ? country : '*') as country, 
     (gender is not NULL ? gender : '*') as gender, 
     (sport is not NULL ? sport : '*') as sport,
+    num_people,
     avg_height;
 ```
 
-The heights table now contains the average height for all
-possible aggregations
+
+
+The `heights` table now contains the average height for all
+possible aggregations of the three columns:
 
 ```
-(UK,F,baseball,5.5)
-(UK,F,football,5.0)
-(UK,F,*,5.25)
-(UK,M,football,6.0)
-(UK,M,*,6.0)
-(UK,*,baseball,5.5)
-(UK,*,football,5.5)
-(UK,*,*,5.5)
-(US,M,football,6.0)
-(US,M,*,6.0)
-(US,*,football,6.0)
-(US,*,*,6.0)
-(*,F,baseball,5.5)
-(*,F,football,5.0)
-(*,F,*,5.25)
-(*,M,football,6.0)
-(*,M,*,6.0)
-(*,*,baseball,5.5)
-(*,*,football,5.75)
-(*,*,*,5.7)
+(UK,F,baseball,1,5.5)
+(UK,F,football,1,5.0)
+(UK,F,*,2,5.25)
+(UK,M,football,1,6.0)
+(UK,M,*,1,6.0)
+(UK,*,baseball,1,5.5)
+(UK,*,football,2,5.5)
+(UK,*,*,3,5.5)
+(US,M,football,2,6.0)
+(US,M,*,2,6.0)
+(US,*,football,2,6.0)
+(US,*,*,2,6.0)
+(*,F,baseball,1,5.5)
+(*,F,football,1,5.0)
+(*,F,*,2,5.25)
+(*,M,football,3,6.0)
+(*,M,*,3,6.0)
+(*,*,baseball,1,5.5)
+(*,*,football,4,5.75)
+(*,*,*,5,5.7)
 ```
 
-For example, the average height of all baseball players is 5.5,
-the average height of all people in the US is 6.0, and
-the average height of all people is 5.7.
+This table shows that `CUBE` computed all aggregations for a
+particular country, gender, and sport. But it also computed all
+aggregations for a particular country and gender (but any sport),
+country and sport (but any gender), and gender and sport (but any
+country).  It also computed all aggregations for a particular country
+(but any gender and sport), a particular gender (but any country
+and sport), and for a particular sport (but any gender and country)
+And finally, it computes the aggregation over all people.
+
+From this table, we see that the average height of all football
+players is 5.75, the average height of all people in the US is 6.0,
+and the average height of all football players in the US is 6.0.
 
 # The ROLLUP Operator
 
 The `ROLLUP` operator is similar to `CUBE`,
-but will only perform hirearchitcal
+but will only perform hierarchical
 aggregations. For our example,
-`ROLLUP` of (country,gender,sport)
-will aggregate over sport, then gender and sport,
-and then country, gender and sport.
+`ROLLUP` of country, gender, sport
+will perform all aggregations for a particular
+country, gender, and sport.
+Then it will perform all aggregations for
+a particular country and gender (but any sport).
+Then it will perform all aggregations for a particular
+country (but for any gender and sport).
 
 Lets `ROLLUP` our example from above:
 
@@ -341,48 +358,48 @@ rolledup = CUBE people BY ROLLUP(country,gender,sport);
 
 heights = FOREACH rolledup GENERATE 
     FLATTEN(group) AS (country,gender,sport),
+    COUNT_STAR(cube) AS num_people,
     AVG(cube.height) AS avg_height;  
 
 heights = FOREACH heights GENERATE
     (country is not NULL ? country : '*') as country, 
     (gender is not NULL ? gender : '*') as gender, 
     (sport is not NULL ? sport : '*') as sport,
+    num_people,
     avg_height;
 ```
 
-When we `ROLLUP` by country, gender, and sport we get the following
-aggregations:
+The `heights` table now contains:
 
 ```
-(UK,F,baseball,5.5)
-(UK,F,football,5.0)
-(UK,F,*,5.25)
-(UK,M,football,6.0)
-(UK,M,*,6.0)
-(UK,*,*,5.5)
-(US,M,football,6.0)
-(US,M,*,6.0)
-(US,*,*,6.0)
-(*,*,*,5.7)
+(UK,F,baseball,1,5.5)
+(UK,F,football,1,5.0)
+(UK,F,*,2,5.25)
+(UK,M,football,1,6.0)
+(UK,M,*,1,6.0)
+(UK,*,*,3,5.5)
+(US,M,football,2,6.0)
+(US,M,*,2,6.0)
+(US,*,*,2,6.0)
+(*,*,*,5,5.7)
 ```
 
-Although this might seem artificial, there are some situations where
-this is very useful.  For example, if the dataset contained 
-hirearctical columns 
-(like continent, country, and city), then these would be the only
-sensible aggregations.
+Although this might seem artificial, 
+it is very useful if the columns in a data set are 
+hierarchical. For example, this
+would be useful if the data had the columns continent, country, and city, 
 
 # Not Aggregating Over Certain Columns
 
-The last thing I wanted to cover was situations where you may
+The last situation is where you may
 not want to aggregation over a certain column.
-For our original people table above, supposed that we wanted to 
-compute the average height of people with a given 
-country and gender, but also of a particular sport. But
-for whatever reason, we don't want to aggregate over all 
-countries, as above.
+This may be useful if it that column cannot be aggregated over.
+For our example above, supposed that we wanted to 
+cube over gender and sport, but we wanted
+this quantity only for a particular country,
+and we did not want to aggregate over all countries.
 
-We can do this by cubing the data and then flattening out all of the bags:
+We can do this with `CUBE` followed by `FLATTEN`:
 
 ```
 cubed = CUBE people BY CUBE(gender, sport);
@@ -398,7 +415,8 @@ flattened_bags = FOREACH flattened_bags GENERATE
     height as height;
 ```
 
-The `flattened_bags` table contains:
+The `flattened_bags` table contains all of the rows
+from the bags created by `CUBE`:
 
 ```
 (Mary,UK,F,baseball,5.5)
@@ -423,50 +441,51 @@ The `flattened_bags` table contains:
 (Ted,UK,*,*,6.0)
 ```
 
-Now that we have generated the flattend bags,
-we can group by the columns we were originally
-interested in:
+Now that we have the flattened bags,
+we can group by the columns we wanted originally:
 
 ```
 grouped = GROUP flattened_bags BY (country,gender,sport);
 
 heights = FOREACH grouped GENERATE
     FLATTEN(group) AS (country,gender,sport),
+    COUNT(flattened_bags) AS num_people,
     AVG(flattened_bags.height) AS avg_height;
 ```
 
-This computes the average height for people of a given
-country, gender, and sport. 
+The `heights` table finally has:
 
 ```
-(UK,*,*,5.5)
-(UK,*,baseball,5.5)
-(UK,*,football,5.5)
-(UK,F,*,5.25)
-(UK,F,baseball,5.5)
-(UK,F,football,5.0)
-(UK,M,*,6.0)
-(UK,M,football,6.0)
-(US,*,*,6.0)
-(US,*,football,6.0)
-(US,M,*,6.0)
-(US,M,football,6.0)
+(UK,*,*,3,5.5)
+(UK,*,baseball,1,5.5)
+(UK,*,football,2,5.5)
+(UK,F,*,2,5.25)
+(UK,F,baseball,1,5.5)
+(UK,F,football,1,5.0)
+(UK,M,*,1,6.0)
+(UK,M,football,1,6.0)
+(US,*,*,2,6.0)
+(US,*,football,2,6.0)
+(US,M,*,2,6.0)
+(US,M,football,2,6.0)
 ```
 
-But it also aggregates over gender, sport, and gender and sport.
-
-But note that this does not compute aggregations over all countries.
+Note that this table has all possible combinations of
+aggregations over gender and sport, but does not aggregate over
+country.
 
 # Links
 
-* [Prasanth Jayachandran](http://prasanthj.info) created this function 
+* [Prasanth Jayachandran](http://prasanthj.info) created the `CUBE`
+and `ROLLUP` functions
 as a [Google Summer of Code project](http://www.google-melange.com/)
 in 2012. See [PIG-2167](https://issues.apache.org/jira/browse/PIG-2167) for
 the information on the development of htis feature.
-* [Here](https://blogs.apache.org/pig/entry/apache_pig_it_goes_to)
-is the officila release of Apache Pig 0.11 which included CUBE and ROLLUP.
-* The idea behind the CUBE and ROLLUP operator originated in the
-idea of a [OLAP cube](http://en.wikipedia.org/wiki/OLAP_cube) and
-exist in other databases (like 
-[Microsoft SQL Server](http://technet.microsoft.com/en-us/library/ms175939)).
+* The official release of [Apache Pig 0.11](https://blogs.apache.org/pig/entry/apache_pig_it_goes_to)
+that announced the `CUBE` and `ROLLUP` functions.
+* The idea behind the `CUBE` and `ROLLUP` originated in the
+idea of a [OLAP cube](http://en.wikipedia.org/wiki/OLAP_cube).
+* Several databases (like 
+[Microsoft SQL Server](http://technet.microsoft.com/en-us/library/ms175939)) implement
+`CUBE` and `ROLLUP`.
 
