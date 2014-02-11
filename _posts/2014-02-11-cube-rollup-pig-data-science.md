@@ -4,7 +4,7 @@ title: "CUBE and ROLLUP: Two Pig Functions That Every Data Scientist Should Know
 comments: true
 ---
 
-![The Apache Pig Logo](assets/pig_logo.jpg)
+![The Apache Pig Logo](/assets/pig_logo.jpg)
 
 I recently found two incredible functions in 
 [Apache Pig](https://pig.apache.org) called 
