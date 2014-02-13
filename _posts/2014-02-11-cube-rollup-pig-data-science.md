@@ -507,4 +507,4 @@ idea of a [OLAP cube](http://en.wikipedia.org/wiki/OLAP_cube).
 * Several databases (like 
 [Microsoft SQL Server](http://technet.microsoft.com/en-us/library/ms175939)) implement
 `CUBE` and `ROLLUP`.
-
+* Cube and Rollup are implemented in [Apache Hive](http://hive.apache.org/). See [here](https://cwiki.apache.org/confluence/display/Hive/Enhanced+Aggregation,+Cube,+Grouping+and+Rollup#EnhancedAggregation,Cube,GroupingandRollup-CubesandRollups).
