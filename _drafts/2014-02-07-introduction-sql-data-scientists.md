@@ -4,7 +4,22 @@ title: An Introduction to SQL for Data Scientists
 comments: true
 ---
 
-During my Physics PhD program, I never understood the purpose of 
+In this post, my intention is to go over broadly what the purpose
+of databases are, and how they are different from similar file
+formats. I will discuss the key topics of [Database
+normalization](http://en.wikipedia.org/wiki/Database_normalization), 
+the basic databases operators like joining and aggregating
+over tables, and developing indices on tables to speed up queries.
+
+Of course, databases are an enormous topic for which tehre
+is [an entire profession](http://en.wikipedia.org/wiki/Database_administrator),
+so this will be at most a whirlwind tour of the key concepts, the
+purpose being to convey the value of databases
+and to get you excited about them.
+
+# Background
+
+During my Physics PhD, I never understood the purpose of 
 [SQL](http://en.wikipedia.org/wiki/SQL) and
 similar [relational database management systems 
 (RDBMs)](http://en.wikipedia.org/wiki/Relational_database_management_system).
@@ -32,18 +47,6 @@ helping other academics transition to become become data scientists, I see that
 most of them have very similar confusion about the purpose and benefit of these
 databases. 
 
-In this post, my intention is to go over broadly what the purpose
-of databases are, and how they are different from similar file
-formats. My hope is to touch on the key topics of [Database
-normalization](http://en.wikipedia.org/wiki/Database_normalization), 
-the basic databases operators like joining and aggregating
-over tables, and developing indices on tables to speed up queries.
-
-Of course, databases are an enormous topic for which tehre
-is [an entire profession](http://en.wikipedia.org/wiki/Database_administrator),
-so this will be at most a whirlwind tour of the key concepts, the
-purpose being to convey the value of databases
-and to get you excited about them.
 
 # A Simple Example SQL Database
 
@@ -344,13 +347,23 @@ Now, we have seen the `SELECT`, `FROM`, `JOIN`, `ON`, and
 `WHERE` commands in SQL.
 
 There are only a couple more commands.
+Most importantly, the `GROUP BY` command is used to aggregate
+down a larger table to a smaller table, gaining insight
+from the aggregation.
 
-Supposed we wanted to make a list of the number of ingredients in
-a particular recipie. To do that, we want to count
-the number of 
+Supposed for example that we wanted to make a list of the number
+of ingredients all of our recipies. To do that, we want to count
+the number of
 
 
-# Advanced SQL queries
+# Harder SQL queries
+
+Surprising as it might seem, the few
+SQL commands described above go an enormous way
+in data analysis.
+
+Just to give you an idea of how powerful SQL queries can become,
+we could imagine a command:
 
 Other things you might want:
 

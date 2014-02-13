@@ -6,7 +6,7 @@ comments: true
 ---
 
 [A/B testing](http://en.wikipedia.org/wiki/A/B_testing) has been
-unbiquitious at tech companies to run controled experiments on their
+ubiquitous at tech companies to run controled experiments on their
 user base in the continual prcoess of feature development.  Companies
 like [Twitter](https://blog.twitter.com/2013/experiments-twitter)
 are constantly running these tests.
@@ -56,11 +56,26 @@ bucket and 10,000 users in our experiment bucket.
 | control    |  4,730 |     10,000  |
 | experiment |  4,912 |     10,000  |
 
+In this example we estimate 47% of the users in the control experiment
+click on the button and 49% of the users in the experiment. Therefore,
+this experiment increased the percent of users clicking on the
+button by 2%.
+
+In order to properly understand this experiment, we would like to
+test if this change is statistically significant. This is to say
+that we are interested in learning if the change is unlikey to be
+attributable to random chance.
+
 # Measuring an Increase in Amounts
 
-Wnat to A/B test number of pages viewed.
+The other common thing to test during A/B testing is if
+the amount of something changes. As an example, we might
+be interested in learning if users visit more pages on
+a website after a redesign.
 
-Using the KS Test
+Want to A/B test number of pages viewed.
+
+* Using the KS Test...
 
 # Power Calculations 
 
