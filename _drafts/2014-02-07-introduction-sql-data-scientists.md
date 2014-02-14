@@ -352,9 +352,34 @@ down a larger table to a smaller table, gaining insight
 from the aggregation.
 
 Supposed for example that we wanted to make a list of the number
-of ingredients all of our recipies. To do that, we want to count
-the number of
+of ingredients all of our recipies. To do that, 
+we want to group all of the recipe_id rows in the recipe_ingredients
+and then count all of the rows in each group. To do this in SQL:
 
+```sql
+SELECT recipe_id, COUNT(ingredient_id) as
+FROM recipe_ingredients
+GROUP BY recipe_id
+```
+
+This code says to group all of the rows by common `recipe_id`s and to 
+count all of the ingredient_id for each recipie.
+
+The resulting table is
+
+SELECT * 
+FROM
+  (
+      SELECT recipe_id, COUNT(ingredient_id) as
+      FROM recipe_ingredients
+      GROUP BY recipe_id
+  ) as recipe_ingredient_count
+JOIN
+
+
+You m
+
+# INNER, LEFT, and RIGHT join.
 
 # Harder SQL queries
 
