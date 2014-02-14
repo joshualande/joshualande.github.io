@@ -208,6 +208,23 @@ Which returns the table
 | 2             |
 | 5             |
 
+# The ORDER BY and LIMIT operators in SQL
+
+```sql
+SELECT *
+FROM recipes
+ORDER BY recipie_id DESC
+```
+
+...
+
+```sql
+SELECT *
+FROM recipes
+ORDER BY recipie_id DESC
+LIMIT 2
+```
+
 
 # The JOIN statement in SQL
 
@@ -320,7 +337,7 @@ But what's great about SQL is that once we have
 laid out our data in this abstract table representation,
 it becomes no harder to do all sorts of other
 queries against our database. For example,
-to find all the recipies that include tomatoes
+to find all the recipes that include tomatoes
 is just as easy as the above query:
 
 ```sql
@@ -341,7 +358,7 @@ This returns the expected tables
 | Tacos       |
 | Tomato Soup |
 
-# The GROUP BY Operator In SQL
+# The GROUP BY and HAVING Operators In SQL
 
 Now, we have seen the `SELECT`, `FROM`, `JOIN`, `ON`, and
 `WHERE` commands in SQL.
@@ -352,12 +369,12 @@ down a larger table to a smaller table, gaining insight
 from the aggregation.
 
 Supposed for example that we wanted to make a list of the number
-of ingredients all of our recipies. To do that, 
+of ingredients all of our recipes. To do that, 
 we want to group all of the recipe_id rows in the recipe_ingredients
 and then count all of the rows in each group. To do this in SQL:
 
 ```sql
-SELECT recipe_id, COUNT(ingredient_id) as
+SELECT recipe_id, COUNT(ingredient_id) as num_ingredients
 FROM recipe_ingredients
 GROUP BY recipe_id
 ```
@@ -367,14 +384,49 @@ count all of the ingredient_id for each recipie.
 
 The resulting table is
 
-SELECT * 
+| recipe_id | num_ingredients |
+| --------- | --------------- |
+|         0 |               5 |
+|         1 |               2 |
+|         2 |               2 |
+
+The `HAVING` clause in SQL is almost exactly like the `WHERE`
+clause, but happens on the aggregate data.
+
+Suppose we wanted to find only recipies with 2 ingredients in it.
+We could use the `HAVING` clause:
+
+```sql
+SELECT recipe_id, COUNT(ingredient_id) as num_ingredients
+FROM recipe_ingredients
+GROUP BY recipe_id
+HAVING num_ingredients = 2
+```
+
+This creates the table
+
+| recipe_id | num_ingredients |
+| --------- | --------------- |
+|         1 |               2 |
+|         2 |               2 |
+
+# Subqueries in SQL
+
+Now, you might think
+
+```sql
+SELECT  b.recipe_name, a.
 FROM
   (
       SELECT recipe_id, COUNT(ingredient_id) as
       FROM recipe_ingredients
-      GROUP BY recipe_id
-  ) as recipe_ingredient_count
+     GROUP BY recipe_id
+  ) AS a
 JOIN
+    recipes AS b
+ON
+    a.recipe_id = b.recipe_id
+```
 
 
 You m
@@ -476,15 +528,23 @@ VALUES
 
 How do we actually build these tables:
 
-* Indicies
-* Terradata/Vertica for distributed databases.
-* HIVE/Pig to run parallel Map/Reduce queries.
+# SQL Indicies For Faster Queries
+
 
 # Wrapup 
+
+The key concepts
+we went over in this post are:
+
 
 Thats about it. If you can get get you mind around the idea of table normalization, as well as
 as the benefits of joining tables together to produce more complicated queries, everything
 else should be easy.
+
+# Closing Words
+
+* Terradata/Vertica for distributed databases.
+* HIVE/Pig to run parallel Map/Reduce queries.
 
 # Relevant links
 
@@ -494,5 +554,9 @@ about SQL databases. There is tons of topics left to explore:
 * [MySQL](http://www.mysql.com/) is a popular SQL implementation.
 * [Sequel Pro](http://www.sequelpro.com) is a great MySQL client.
 
-If you liked this post you can follow me on Twitter [@joshualande](http://twitter.com/joshualande).
+If you liked this post, feel free to share this
+with your followers!
+
+
+Or you can follow me on Twitter [@joshualande](http://twitter.com/joshualande).
 
