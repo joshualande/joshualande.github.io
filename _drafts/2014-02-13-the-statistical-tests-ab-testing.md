@@ -1,7 +1,6 @@
 ---
 layout: page
 title: "The Secret Sauce Behind A/B Testing"
-subtitle: ""
 comments: true
 ---
 
