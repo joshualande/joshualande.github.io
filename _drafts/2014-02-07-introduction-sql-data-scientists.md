@@ -1,21 +1,34 @@
 ---
 layout: page
-title: An Introduction to SQL for Data Scientists
+title: An Introduction to SQL With Simple Examples
 comments: true
 ---
 
-In this post, my intention is to go over broadly what the purpose
-of databases are, and how they are different from similar file
-formats. I will discuss the key topics of [Database
-normalization](http://en.wikipedia.org/wiki/Database_normalization), 
-the basic databases operators like joining and aggregating
-over tables, and developing indices on tables to speed up queries.
+In this post, my intention is to broadly go over the purpose of
+relational databases like SQL and describe how they are different
+from other data structures or formats. I will discuss the key topics
+of database normalization, the basic databases operators like joining
+and aggregating tables, and a few advanced topics like using indices
+to speed up queries. To get you up to speed as quickly as possible, I will
+teach all of this using a simple examples.
 
-Of course, databases are an enormous topic for which tehre
+Of course, databases are an enormous topic for which there
 is [an entire profession](http://en.wikipedia.org/wiki/Database_administrator),
-so this will be at most a whirlwind tour of the key concepts, the
-purpose being to convey the value of databases
-and to get you excited about them.
+so this will be whirlwind tour of the key concepts, 
+enough to convey the value and get you started.
+
+<!--
+In a followup post, I discuss some more advanced SQL queries which require cleaver
+use of the basic building blocks of SQL.
+
+And in another post, I introduce the Apache Pig programming language, which is
+very similar to SQL but allows for analysis of big data.
+
+Before you start reading this post, I would recommend setting
+up SQL on your computer. I wrote instructions for doing so on a Mac here XXX.
+Once you have done that you can create the tables used in this example using
+the section linked from below XXX
+-->
 
 # Background
 
@@ -108,7 +121,7 @@ For every recipe
 
 Of course, we could imagine that a real database, like the one
 curated by [yummly.com](http://yummly.com), would have lots more information in it.
-You might want more accurate list of steps involved in preparing the recipie.
+You might want more accurate list of steps involved in preparing the recipe.
 But this simplified exmaple should get the point across.
 
 ## Similar python Implementation
@@ -153,7 +166,7 @@ recipes = {
 
 I am leaving out some of the other metadata to make my point clear.
 But this data structure makes it cumbersome to find what ingredients are
-required to make a paritcular recipie.
+required to make a paritcular recipe.
 This may seem like a contrived example, but in real life it is very often
 the case that that you later on have to query your data in ways you did not
 originally intent.
@@ -183,7 +196,7 @@ WHERE recipe_name="Tomato Soup"
 
 This querie says that we take the the `recipes` table,
 and we filter only on a particular kind of row (where the
-`recipie_name` is "Tomato Soup") and the filter for 
+`recipe_name` is "Tomato Soup") and the filter for 
 a particular column (the `recipe_id` column).
 
 This query returns the table
@@ -208,25 +221,74 @@ Which returns the table
 | 2             |
 | 5             |
 
-# The ORDER BY and LIMIT operators in SQL
+# The ORDER BY operator in SQL
+
+The next command we will cover is `ORDER BY`.
+`ORDER BY` can be used to sort the rows based on
+a particular column. For example, if we wanted
+to sort the ingredients by how expensive they are
+in order of descending price, we could run the query:
+
+```
+SELECT *
+FROM ingredients
+ORDER BY ingredient_price DESC
+```
+
+Which returns 
+
+| ingredient_id | ingredient_name | ingredient_price |
+| ------------- | --------------- | ---------------- |
+| 0             |            Beef |                5 |
+| 4             |          Cheese |                3 |
+| 6             |           Bread |                2 |
+| 3             |      Taco Shell |                2 |
+| 2             |        Tomatoes |                2 |
+| 1             |         Lettuce |                1 |
+| 5             |            Milk |                1 |
+
+If we wanted to sort columns of the same price alphabetically by name, we could
+use a similar query:
+
+```
+SELECT *
+FROM ingredients
+ORDER BY ingredient_price DESC,ingredient_name
+```
+
+This creates the table:
+
+| ingredient_id | ingredient_name | ingredient_price |
+| ------------- | --------------- | ---------------- |
+| 0             |            Beef |                5 |
+| 4             |          Cheese |                3 |
+| 6             |           Bread |                2 |
+| 3             |      Taco Shell |                2 |
+| 2             |        Tomatoes |                2 |
+| 1             |         Lettuce |                1 |
+| 5             |            Milk |                1 |
+
+# The LIMIT operator in SQL
+
+We can use the `LIMIT` operator to limit the number of results returend
+by the query. For example, to get only the most expensive ingredient, we could use
+the query:
 
 ```sql
 SELECT *
-FROM recipes
-ORDER BY recipie_id DESC
+FROM ingredients
+ORDER BY ingredient_price DESC
+LIMIT 1
 ```
 
-...
+This returns the table:
 
-```sql
-SELECT *
-FROM recipes
-ORDER BY recipie_id DESC
-LIMIT 2
-```
+| ingredient_id | ingredient_name | ingredient_price |
+| ------------- | --------------- | ---------------- |
+| 0             |            Beef |                5 |
 
 
-# The JOIN statement in SQL
+# The JOIN operator in SQL
 
 Having to perform multiple quieries on
 multiple tables is quite cumbersome,
@@ -234,7 +296,7 @@ and would require unnecessary additional
 logic outside of the database.
 
 Instead, if we wanted to directly get the
-`ingredient_id` knowing the `recipie_name`,
+`ingredient_id` knowing the `recipe_name`,
 we could `JOIN` together
 
 the way to do this is to join the 
@@ -268,7 +330,7 @@ For this example, we get the table:
 |         2 | Grilled Cheese | Delicious Cheese Sandwich | 2         |             6 | 2      |
 
 Now, we want to filter this table out by only getting the ingredient_id 
-when the recipie_name is "Tomato Soup":
+when the recipe_name is "Tomato Soup":
 
 ```sql
 SELECT recipe_ingredients.ingredient_id
@@ -358,7 +420,7 @@ This returns the expected tables
 | Tacos       |
 | Tomato Soup |
 
-# The GROUP BY and HAVING Operators In SQL
+# The GROUP BY Operator In SQL
 
 Now, we have seen the `SELECT`, `FROM`, `JOIN`, `ON`, and
 `WHERE` commands in SQL.
@@ -374,13 +436,15 @@ we want to group all of the recipe_id rows in the recipe_ingredients
 and then count all of the rows in each group. To do this in SQL:
 
 ```sql
-SELECT recipe_id, COUNT(ingredient_id) as num_ingredients
+SELECT recipe_id, 
+  COUNT(ingredient_id) as num_ingredients
 FROM recipe_ingredients
 GROUP BY recipe_id
+ORDER BY num_ingredients DESC
 ```
 
 This code says to group all of the rows by common `recipe_id`s and to 
-count all of the ingredient_id for each recipie.
+count all of the ingredient_id for each recipe.
 
 The resulting table is
 
@@ -390,14 +454,18 @@ The resulting table is
 |         1 |               2 |
 |         2 |               2 |
 
-The `HAVING` clause in SQL is almost exactly like the `WHERE`
-clause, but happens on the aggregate data.
+# The HAVING Operator in SQL
 
-Suppose we wanted to find only recipies with 2 ingredients in it.
+The `HAVING` clause in SQL is almost exactly like the `WHERE`
+clause, but filters the table after the aggregation has been
+performed.
+
+Suppose we wanted to find only recipes with 2 ingredients in it.
 We could use the `HAVING` clause:
 
 ```sql
-SELECT recipe_id, COUNT(ingredient_id) as num_ingredients
+SELECT recipe_id, 
+  COUNT(ingredient_id) as num_ingredients
 FROM recipe_ingredients
 GROUP BY recipe_id
 HAVING num_ingredients = 2
@@ -412,22 +480,87 @@ This creates the table
 
 # Subqueries in SQL
 
+These tables we created above would be nicer if they had the recipie
+name in them. One way to do this in SQL would be to
+create a new table in SQL to store the results.
+
+```sql
+CREATE TABLE ingredient_counts AS
+SELECT recipe_id, 
+  COUNT(ingredient_id) as num_ingredients
+FROM recipe_ingredients
+GROUP BY recipe_id
+```
+
+Then we can join this table with the recipies table
+to create a nicer name:
+
+```sql
+SELECT  b.recipe_name, a.num_ingredients
+FROM ingredient_counts as a
+JOIN recipes AS b
+ON a.recipe_id = b.recipe_id
+```
+
+| recipe_name    | num_ingredients |
+| -------------- | --------------- |
+| Tacos          |               5 |
+| Tomato Soup    |               2 |
+| Grilled Cheese |               2 |
+
+But it is cubmersome to have to create this temporary table.  In
+addition, anytime we modified the recipe_ingredients table, we would
+have to recreate the ingredient_counts table.  Another issue is
+that this command requires that you have write access on the database
+and permission to create new tables. In enterprise situations, you
+generally are (for good reason) now allowed to modify the database
+unless you really need to.
+
+SQL does support [temporary tables](http://dev.mysql.com/doc/refman/5.1/en/create-table.html)
+which could also be used in this situation.
+
+
+This leads us naturally into the next topic in SQL
+which is subqueries.  The idea behind subqueries is both simple and
+incredibly powerful. Because every query in SQL
+returns a table, you can use SQL queries as tables inside of other
+queries.
+
+So for our example above, conceptually all we have to do is
+join the ingredient count table with the recipie table on
+recpie_id to get the  names of all of the recipies.
+
+The synax in SQL would 
+
 Now, you might think
 
 ```sql
-SELECT  b.recipe_name, a.
+SELECT  b.recipe_name, a.num_ingredients
 FROM
   (
-      SELECT recipe_id, COUNT(ingredient_id) as
-      FROM recipe_ingredients
-     GROUP BY recipe_id
+    SELECT recipe_id, 
+      COUNT(ingredient_id) as num_ingredients
+    FROM recipe_ingredients
+    GROUP BY recipe_id
   ) AS a
 JOIN
-    recipes AS b
+  recipes AS b
 ON
-    a.recipe_id = b.recipe_id
+  a.recipe_id = b.recipe_id
 ```
 
+This returns a much nicer table then before:
+
+| recipe_name    | num_ingredients |
+| -------------- | --------------- |
+| Tacos          |               5 |
+| Tomato Soup    |               2 |
+| Grilled Cheese |               2 |
+
+# Views in SQL
+
+
+Another way is to create views. These are discussed below. XXX
 
 You m
 
@@ -553,6 +686,7 @@ about SQL databases. There is tons of topics left to explore:
 
 * [MySQL](http://www.mysql.com/) is a popular SQL implementation.
 * [Sequel Pro](http://www.sequelpro.com) is a great MySQL client.
+* Bill Howe's coursera class (https://www.coursera.org/course/datasci). The class Relational Databases, Relational Algebra (https://class.coursera.org/datasci-001/lecture).
 
 If you liked this post, feel free to share this
 with your followers!
