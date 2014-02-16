@@ -122,9 +122,75 @@ For every recipe
 Of course, we could imagine that a real database, like the one
 curated by [yummly.com](http://yummly.com), would have lots more information in it.
 You might want more accurate list of steps involved in preparing the recipe.
-But this simplified exmaple should get the point across.
+But this simplified example should get the point across.
 
-## Similar python Implementation
+# SQL Database Design
+
+Moving from the general to the concreate, here is
+the SQL code to create the database we described above:
+
+First, we can create the `recipes` table:
+
+```sql
+CREATE TABLE recipes (
+  recipe_id int(11) NOT NULL, 
+  recipe_name varchar(30) NOT NULL,
+  recipe_description varchar(30) NOT NULL
+);
+INSERT INTO recipes 
+    (recipe_id, recipe_name, recipe_description) 
+VALUES 
+    (0,"Tacos","Mom's famous Tacos"),
+    (1,"Tomato Soup","Homemade Tomato soup"),
+    (2,"Grilled Cheese","Delicious Cheese Sandwich");
+```
+
+Next we can reate the `ingredients` table:
+
+```sql
+CREATE TABLE ingredients (
+  ingredient_id int(11) NOT NULL, 
+  ingredient_name varchar(30) NOT NULL,
+  ingredient_price int(11) NOT NULL
+);
+INSERT INTO ingredients
+    (ingredient_id, ingredient_name, ingredient_price)
+VALUES 
+    (0, "Beef", 5),
+    (1, "Lettuce", 1),
+    (2, "Tomatoes", 2),
+    (3, "Taco Shell", 2),
+    (4, "Cheese", 3),
+    (5, "Milk", 1),
+    (6, "Bread", 2);
+```
+
+And finally, we can create the recipe-ingredient-mapping table:
+
+```sql
+CREATE TABLE recipe_ingredients (
+  recipe_id int(11) NOT NULL, 
+  ingredient_id int(11) NOT NULL, 
+  amount int(11) NOT NULL
+);
+INSERT INTO recipe_ingredients 
+    (recipe_id, ingredient_id, amount)
+VALUES
+    (0,0,1),
+    (0,1,2),
+    (0,2,2),
+    (0,3,3),
+    (0,4,1),
+    (1,2,2),
+    (1,5,1),
+    (2,4,1),
+    (2,6,2);
+```
+
+XXXXXX NOTE ABOUT SIMILAR BLOG POST ABOUT HOW TO SETUP MYSQL DATABASE
+AND PLAY ALONG WITH THE EXAMPLES IN THIS POST XXXXXX
+
+# Similar python Implementation
 
 Comming from a python background, my natural tendency is to feel that this
 is totally overengineering the problem. Instead, I would imagine using
@@ -431,8 +497,9 @@ down a larger table to a smaller table, gaining insight
 from the aggregation.
 
 Supposed for example that we wanted to make a list of the number
-of ingredients all of our recipes. To do that, 
-we want to group all of the recipe_id rows in the recipe_ingredients
+of ingredients for each recipe. 
+To do that, 
+we can group all of the recipe_id rows in the recipe_ingredients
 and then count all of the rows in each group. To do this in SQL:
 
 ```sql
@@ -454,6 +521,52 @@ The resulting table is
 |         1 |               2 |
 |         2 |               2 |
 
+Similarly, we can combine the `GROUP BY` and `JOIN` operators in a single query.
+To compute in addition the price of each recipe, we would need to figure
+out the price of each ingredient by joining with the ingredients table.
+This query would look like:
+
+```sql
+SELECT recipe_id, 
+    COUNT(a.ingredient_id) as num_ingredients, 
+    SUM(a.amount*b.ingredient_price) as total_price
+FROM recipe_ingredients as a
+JOIN ingredients as b
+ON a.ingredient_id = b.ingredient_id
+GROUP BY a.recipe_id
+```
+
+And this returns
+
+| recipe_id | num_ingredients | total_price |
+| --------- | --------------- | ----------- |
+|         0 |               5 |          20 |
+|         1 |               2 |           5 |
+|         2 |               2 |           7 |
+
+Similarly, if we want to make plot the nicer recipe name  
+we could also JOIN with the recipes tables:
+
+```sql
+SELECT c.recipe_name, 
+    COUNT(a.ingredient_id) as num_ingredients, 
+    SUM(a.amount*b.ingredient_price) as total_price
+FROM recipe_ingredients as a
+JOIN ingredients as b
+ON a.ingredient_id = b.ingredient_id
+JOIN recipes AS c
+ON a.recipe_id = c.recipe_id
+GROUP BY a.recipe_id
+```
+
+This returns a nicer formated table:
+
+|    recipe_name | num_ingredients | total_price |
+| -------------- | --------------- | ----------- |
+|          Tacos |               5 |          20 |
+|    Tomato Soup |               2 |           5 |
+| Grilled Cheese |               2 |           7 |
+
 # The HAVING Operator in SQL
 
 The `HAVING` clause in SQL is almost exactly like the `WHERE`
@@ -465,7 +578,7 @@ We could use the `HAVING` clause:
 
 ```sql
 SELECT recipe_id, 
-  COUNT(ingredient_id) as num_ingredients
+  COUNT(ingredient_id) AS num_ingredients
 FROM recipe_ingredients
 GROUP BY recipe_id
 HAVING num_ingredients = 2
@@ -480,24 +593,24 @@ This creates the table
 
 # Subqueries in SQL
 
-These tables we created above would be nicer if they had the recipie
+These tables we created above would be nicer if they had the recipe
 name in them. One way to do this in SQL would be to
 create a new table in SQL to store the results.
 
 ```sql
 CREATE TABLE ingredient_counts AS
 SELECT recipe_id, 
-  COUNT(ingredient_id) as num_ingredients
+  COUNT(ingredient_id) AS num_ingredients
 FROM recipe_ingredients
 GROUP BY recipe_id
 ```
 
-Then we can join this table with the recipies table
+Then we can join this table with the recipes table
 to create a nicer name:
 
 ```sql
 SELECT  b.recipe_name, a.num_ingredients
-FROM ingredient_counts as a
+FROM ingredient_counts AS a
 JOIN recipes AS b
 ON a.recipe_id = b.recipe_id
 ```
@@ -527,8 +640,8 @@ returns a table, you can use SQL queries as tables inside of other
 queries.
 
 So for our example above, conceptually all we have to do is
-join the ingredient count table with the recipie table on
-recpie_id to get the  names of all of the recipies.
+join the ingredient count table with the recipe table on
+recpie_id to get the  names of all of the recipes.
 
 The synax in SQL would 
 
@@ -539,7 +652,7 @@ SELECT  b.recipe_name, a.num_ingredients
 FROM
   (
     SELECT recipe_id, 
-      COUNT(ingredient_id) as num_ingredients
+      COUNT(ingredient_id) AS num_ingredients
     FROM recipe_ingredients
     GROUP BY recipe_id
   ) AS a
@@ -556,6 +669,16 @@ This returns a much nicer table then before:
 | Tacos          |               5 |
 | Tomato Soup    |               2 |
 | Grilled Cheese |               2 |
+
+What's really cool about SQL is that it is incredibly
+flexible about the struture of queries. Similar to how we
+can JOIN as many tables together as needed, we can also
+nest multiple subquieries together.
+
+# TEMP
+
+To compute the cost of each recipe
+
 
 # Views in SQL
 
@@ -590,69 +713,6 @@ The fundamental ideas begind a database are that
 [Database normalization](http://en.wikipedia.org/wiki/Database_normalization),
 which is the process of minimizing the amount of redundant data
 in a database by creating lots of related tables. The next idea is
-
-# SQL Database Design
-
-Moving from the general to the concreate, here is
-the SQL code to create the database we described above:
-
-First, we can create the `recipes` table:
-
-```sql
-CREATE TABLE recipes (
-  recipe_id int(11) NOT NULL, 
-  recipe_name varchar(30) NOT NULL,
-  recipe_description varchar(30) NOT NULL
-);
-INSERT INTO recipes 
-    (recipe_id, recipe_name, recipe_description) 
-VALUES 
-    (0,"Tacos","Mom's famous Tacos"),
-    (1,"Tomato Soup","Homemade Tomato soup"),
-    (2,"Grilled Cheese","Delicious Cheese Sandwich");
-```
-
-Next we can reate the `ingredients` table:
-
-```sql
-CREATE TABLE ingredients (
-  ingredient_id int(11) NOT NULL, 
-  ingredient_name varchar(30) NOT NULL,
-  ingredient_price int(11) NOT NULL
-);
-INSERT INTO ingredients
-    (ingredient_id, ingredient_name, ingredient_price)
-VALUES 
-    (0, "Beef", 5),
-    (1, "Lettuce", 1),
-    (2, "Tomatoes", 2),
-    (3, "Taco Shell", 2),
-    (4, "Cheese", 3),
-    (5, "Milk", 1),
-    (6, "Bread", 2);
-```
-
-And finally, we can create the recipe-ingredient-mapping table:
-
-```sql
-CREATE TABLE recipe_ingredients (
-  recipe_id int(11) NOT NULL, 
-  ingredient_id int(11) NOT NULL, 
-  amount int(11) NOT NULL
-);
-INSERT INTO recipe_ingredients 
-    (recipe_id, ingredient_id, amount)
-VALUES
-    (0,0,1),
-    (0,1,2),
-    (0,2,2),
-    (0,3,3),
-    (0,4,1),
-    (1,2,2),
-    (1,5,1),
-    (2,4,1),
-    (2,6,2);
-```
 
 
 
