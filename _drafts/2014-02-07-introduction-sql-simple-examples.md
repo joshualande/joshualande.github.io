@@ -104,7 +104,8 @@ in the ingredient_price column.
 Finally, we need some way of listing all of the ingredients in each recipe.
 Although we might naturally want to put this information into the recipe table,
 we will see that it is advantageous to use a third table to store this information.
-For every recipe 
+For every recipe, we will need to know all of the ingredients in that table.
+This information can nautrally be stored in a third table which we will call `recipe_ingredients`:
 
 | recipe_id | ingredient_id | amount |
 | --------- | ------------- | ------ |
@@ -118,6 +119,7 @@ For every recipe
 |         2 |             4 |      1 |
 |         2 |             6 |      2 |
 
+Note that we put in this table in addition how much of each ingredient is needed in each recipe.
 
 Of course, we could imagine that a real database, like the one
 curated by [yummly.com](http://yummly.com), would have lots more information in it.
