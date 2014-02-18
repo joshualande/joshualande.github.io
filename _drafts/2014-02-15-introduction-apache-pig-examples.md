@@ -11,6 +11,13 @@ In this post, we will see how a similar work can be done
 on [big data](http://en.wikipedia.org/wiki/Big_data)
 using [Apache Pig](https://pig.apache.org/).
 
+For the most part, there is a direct mapping
+from a SQL query to PigLatin code.
+
+# Example Data Set
+
+I will introduce the major topics in Pig by way of
+a simple example.
 
 First we need to create a sample data set to play with.
 For this post, we will use the same tables
@@ -22,7 +29,8 @@ For our example, I will assume you have the three
 tables stored as [CSV](http://en.wikipedia.org/wiki/Comma-separated_values).
 files on your computer: 
 
-First, we have the recipes data source:
+First, we have the recipes data source. 
+The data in this table is recipe_id, recipe_name, and recipe_description:
 
 ```
 $ cat recipes.csv
@@ -31,7 +39,8 @@ $ cat recipes.csv
 2,Grilled Cheese,Delicious Cheese Sandwich
 ```
 
-Second, we have the ingredients data set:
+Second, we have the ingredients data set.  The data in this table
+is ingredient_id, ingredient_name, and ingredient_price:
 
 ```
 $ cat ingredients.csv 
@@ -47,7 +56,7 @@ $ cat ingredients.csv
 Finally, we have the recipe-ingredients mapping data source:
 
 ```
-recipe_id,ingredient_id,amount
+$ cat recipe_ingredients.csv 
 0,0,1 
 0,1,2 
 0,2,2 
@@ -79,6 +88,7 @@ language of Apache Pig using our small data sources run in local mode.
 $ pig -x local
 ```
 
+# Key Differences Between SQL and Pig
 
 # Loading Data in Pig
 
@@ -113,13 +123,27 @@ Which returns the schema Pig has for the table:
 recipes: {recipe_id: int,recipe_name: chararray,recipe_description: chararray}
 ```
 
-Similar, we can dump the values in any table:
+Similar, we can dump the values in any table with the command:
 
 ```
-(0,Tacos,Mom's)
-(1,Tomato,Soup)
-(2,Grilled,Cheese)
+DUMP recipes
 ```
+
+This returns the output:
+
+```
+(0,Tacos,Mom's famous Tacos)
+(1,Tomato Soup,Homemade Tomato soup)
+(2,Grilled Cheese,Delicious Cheese Sandwich)
+```
+
+This shows that the table itself contains:
+
+| recipe_id |    recipe_name |        recipe_description |
+| --------- | -------------- | ------------------------- |
+|         0 |          Tacos |        Mom's famous Tacos |
+|         1 |    Tomato Soup |      Homemade Tomato soup |
+|         2 | Grilled Cheese | Delicious Cheese Sandwich |
 
 # The FILTER and FOREACH Operator in Apache Pig
 
@@ -172,6 +196,66 @@ The `ingredients_sorted` table contains:
 | 6             |           Bread |                2 |
 | 1             |         Lettuce |                1 |
 | 5             |            Milk |                1 |
+
+# The LIMIT Operator
+
+Similarly, if we wanted to find only the most expensive ingredient,
+we could
+
+```
+most_expensive = LIMIT ingredients_sorted 1;
+```
+
+The `most_expensive` table contains only the first row:
+
+| ingredient_id | ingredient_name | ingredient_price |
+| ------------- | --------------- | ---------------- |
+| 0             |            Beef |                5 |
+
+# Joins in Pig
+
+Joins in Pig are very similar to SQL.
+When we join the `recipes` table with the `recipe_ingredients` table, we get:
+
+```
+recipe_ingredients_by_name = JOIN recipes BY recipe_id, recipe_ingredients BY recipe_id;
+```
+
+When we `DESCRIBE` the `recipe_ingredients_by_name` table, we see that the schema is
+
+```
+recipe_ingredients_by_name: {
+    recipes::recipe_id: int,
+    recipes::recipe_name: chararray,
+    recipes::recipe_description: chararray,
+    recipe_ingredients::recipe_id: int,
+    recipe_ingredients::ingredient_id: int,
+    recipe_ingredients::amount: int}
+```
+
+If we wanted to broadcast out only the columns we cared about, we could do so using the `FOREACH` command:
+
+```
+nicer_recipe_ingredients_by_name = FOREACH recipe_ingredients_by_name GENERATE
+    recipes::recipe_name as recipe_name,
+    recipes::recipe_id as recipe_id,
+    recipes::recipe_description as recipe_description,
+    recipe_ingredients::ingredient_id as ingredient_id,
+    recipe_ingredients::amount as amount;
+```
+
+The table `nicer_recipe_ingredients_by_name` now contains:
+
+(Tacos,0,Mom's famous Tacos,0,1)
+(Tacos,0,Mom's famous Tacos,1,2)
+(Tacos,0,Mom's famous Tacos,2,2)
+(Tacos,0,Mom's famous Tacos,3,3)
+(Tacos,0,Mom's famous Tacos,4,1)
+(Tomato Soup,1,Homemade Tomato soup,2,2)
+(Tomato Soup,1,Homemade Tomato soup,5,1)
+(Grilled Cheese,2,Delicious Cheese Sandwich,4,1)
+(Grilled Cheese,2,Delicious Cheese Sandwich,6,2)
+
 
 
 # Advanced Pig:
