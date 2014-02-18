@@ -675,6 +675,11 @@ flexible about the struture of queries. Similar to how we
 can JOIN as many tables together as needed, we can also
 nest multiple subquieries together.
 
+# Example harder querie: get a list of the name
+and price of all recipies that include tomatoes
+
+MAKE SOME FANCY JOINING...
+
 # TEMP
 
 To compute the cost of each recipe
