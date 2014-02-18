@@ -79,3 +79,6 @@ Want to A/B test number of pages viewed.
 # Power Calculations 
 
 
+# Other common cotchas about AB Testing
+
+* Statistical Significance is different from magnitude of effect
