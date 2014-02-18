@@ -262,7 +262,7 @@ FROM recipes
 WHERE recipe_name="Tomato Soup"
 ```
 
-This querie says that we take the the `recipes` table,
+This query says that we take the the `recipes` table,
 and we filter only on a particular kind of row (where the
 `recipe_name` is "Tomato Soup") and the filter for 
 a particular column (the `recipe_id` column).
@@ -488,6 +488,30 @@ This returns the expected tables
 | Tacos       |
 | Tomato Soup |
 
+# The DISTINT Operator
+
+In SQL, `DISTINCT` can be used to
+find all of the unique elements in a set.
+
+For example, to find all the recipes that include
+either beef or cheese, we could use the SQL query below:
+
+```
+SELECT DISTINCT recipe_name
+FROM recipe_ingredients AS a
+JOIN ingredients AS b
+ON a.ingredient_id = b.ingredient_id
+JOIN recipes AS c
+ON a.recipe_id = c.recipe_id
+WHERE b.ingredient_name = 'Cheese' OR b.ingredient_name = 'Beef'
+```
+
+Note that here the `DISTINT`
+keyword is required because otherwise two rows would
+be returend for tacos since they contain bhot
+cheese and beef.
+
+
 # The GROUP BY Operator In SQL
 
 Now, we have seen the `SELECT`, `FROM`, `JOIN`, `ON`, and
@@ -595,97 +619,77 @@ This creates the table
 
 # Subqueries in SQL
 
-These tables we created above would be nicer if they had the recipe
-name in them. One way to do this in SQL would be to
-create a new table in SQL to store the results.
+As an example of a harder
+SQL query, we could imaging trying to
+make a list of the number of ingredients for
+all recipies that include tomatoes.
 
-```sql
-CREATE TABLE ingredient_counts AS
-SELECT recipe_id, 
-  COUNT(ingredient_id) AS num_ingredients
-FROM recipe_ingredients
-GROUP BY recipe_id
+To do this, we first would need to
+find all the recipies which include tomatoes
+and then count the number of ingredients
+for each of those recipies.
+
+We could imagine doing this in two steps.
+First, we find the recipies that
+have tomatoes in it:
+
+```
+SELECT a.recipe_id
+FROM recipe_ingredients AS a
+JOIN ingredients AS b
+ON a.ingredient_id = b.ingredient_id
+WHERE b.ingredient_name = 'Tomatoes' 
 ```
 
-Then we can join this table with the recipes table
-to create a nicer name:
+This creates the table:
+
+| recipe_id |
+| --------- |
+|         0 |
+|         1 |
+
+Next, we could joining this table with
+the ingredients count table from above
+to filter out the recipies that aren't in
+this table.
+
+This leads us natually to the idea of subqueries.
+In SQL. Because every SQL query returns a table,
+so wherever a table can be used in SQL,
+instead a subquerie can be used.
+
+Therefore, we can compute the desired table
+as follows
 
 ```sql
-SELECT  b.recipe_name, a.num_ingredients
-FROM ingredient_counts AS a
+SELECT b.recipe_name, 
+    COUNT(a.ingredient_id) as num_ingredients
+FROM recipe_ingredients as a
 JOIN recipes AS b
 ON a.recipe_id = b.recipe_id
+JOIN 
+    (
+        SELECT c.recipe_id
+        FROM recipe_ingredients AS c
+        JOIN ingredients AS d
+        ON c.ingredient_id = d.ingredient_id
+        WHERE d.ingredient_name = 'Tomatoes' 
+    ) as e
+ON b.recipe_id = e.recipe_id
+GROUP BY a.recipe_id
 ```
 
-| recipe_name    | num_ingredients |
-| -------------- | --------------- |
-| Tacos          |               5 |
-| Tomato Soup    |               2 |
-| Grilled Cheese |               2 |
+This returns the expected table
 
-But it is cubmersome to have to create this temporary table.  In
-addition, anytime we modified the recipe_ingredients table, we would
-have to recreate the ingredient_counts table.  Another issue is
-that this command requires that you have write access on the database
-and permission to create new tables. In enterprise situations, you
-generally are (for good reason) now allowed to modify the database
-unless you really need to.
+| recipe_name | num_ingredients |
+| ----------- | --------------- |
+| Tacos       |               5 |
+| Tomato Soup |               2 |
 
-SQL does support [temporary tables](http://dev.mysql.com/doc/refman/5.1/en/create-table.html)
-which could also be used in this situation.
-
-
-This leads us naturally into the next topic in SQL
-which is subqueries.  The idea behind subqueries is both simple and
-incredibly powerful. Because every query in SQL
-returns a table, you can use SQL queries as tables inside of other
-queries.
-
-So for our example above, conceptually all we have to do is
-join the ingredient count table with the recipe table on
-recpie_id to get the  names of all of the recipes.
-
-The synax in SQL would 
-
-Now, you might think
-
-```sql
-SELECT  b.recipe_name, a.num_ingredients
-FROM
-  (
-    SELECT recipe_id, 
-      COUNT(ingredient_id) AS num_ingredients
-    FROM recipe_ingredients
-    GROUP BY recipe_id
-  ) AS a
-JOIN
-  recipes AS b
-ON
-  a.recipe_id = b.recipe_id
-```
-
-This returns a much nicer table then before:
-
-| recipe_name    | num_ingredients |
-| -------------- | --------------- |
-| Tacos          |               5 |
-| Tomato Soup    |               2 |
-| Grilled Cheese |               2 |
-
-What's really cool about SQL is that it is incredibly
+What's cool about SQL is that it is incredibly
 flexible about the struture of queries. Similar to how we
 can JOIN as many tables together as needed, we can also
 nest multiple subquieries together.
-
-# Example harder querie: get a list of the name
-and price of all recipies that include tomatoes
-
-MAKE SOME FANCY JOINING...
-
-# TEMP
-
-To compute the cost of each recipe
-
 
 # Views in SQL
 
@@ -721,12 +725,10 @@ The fundamental ideas begind a database are that
 which is the process of minimizing the amount of redundant data
 in a database by creating lots of related tables. The next idea is
 
-
-
-
 # Advanced SQL: 
 
-How do we actually build these tables:
+* How do we actually build these tables:
+* Primary Keys
 
 # SQL Indicies For Faster Queries
 
