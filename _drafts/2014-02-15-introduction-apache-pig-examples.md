@@ -38,7 +38,7 @@ $ cat ingredients.csv
 0,Beef,5
 1,Lettuce,1
 2,Tomatoes,2
-3,Taco,Shell,2
+3,Taco Shell,2
 4,Cheese,3
 5,Milk,1
 6,Bread,2
@@ -121,7 +121,7 @@ Similar, we can dump the values in any table:
 (2,Grilled,Cheese)
 ```
 
-# Filtering rows in Apache Pig
+# The FILTER and FOREACH Operator in Apache Pig
 
 Suppose we want to find the recipe_id for the recipe named "Tomato Soup".
 To do this, we would issue the Pig command:
@@ -129,15 +129,49 @@ To do this, we would issue the Pig command:
 ```
 soup_recipe = FILTER recipes 
     BY recipe_name == 'Tomato Soup';
+```
 
+The `soup_recipe` table contains
+
+| recipe_id | recipe_name |   recipe_description |
+| --------- | ----------- |   ------------------ |
+|         1 | Tomato Soup | Homemade Tomato soup |
+
+If we wanted to select only the `user_id` from this table,
+we could use the `FOREACH` and `GENERATE` command:
+
+```
 soup_recipe_id = FOREACH soup_recipe 
     GENERATE recipe_id;
 ```
 
-When we dump the `soup_recipe_id` table, it is just has one column recpie_id and one
-row with the value 1, as expected:
+The `soup_recipe_id` contains the `recipe_id` column, as expected:
 
+| recipe_id |
+| --------- |
+|         1 |
 
+# The ORDER BY Operator in Pig
+
+Suppose we wanted to sort the ingredients table
+by price in descending order. In Pig we could use
+the ORDER BY Operator:
+
+```
+ingredients_sorted = ORDER ingredients BY ingredient_price DESC;
+```
+
+The `ingredients_sorted` table contains:
+
+| ingredient_id | ingredient_name | ingredient_price |
+| ------------- | --------------- | ---------------- |
+| 0             |            Beef |                5 |
+| 4             |          Cheese |                3 |
+| 2             |        Tomatoes |                2 |
+| 3             |      Taco Shell |                2 |
+| 6             |           Bread |                2 |
+| 1             |         Lettuce |                1 |
+| 5             |            Milk |                1 |
 
 
 # Advanced Pig:
