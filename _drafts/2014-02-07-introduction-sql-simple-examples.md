@@ -67,14 +67,14 @@ It is instructive to begin with a simple example.
 The most important takeaway about SQL databases
 is that a database is a collection of two-dimensional tables.
 Each table has a fixed number of rows and columns. This may
-seem like a very limited design, but as you will see later this simplification,
-along with the necessary opeations, becomes incredibly powerful.
+seem like a very limited design, but as you will see through this post,
+this design is incredibly powerful.
 
 As a simple example of a relational database, supposed 
 we want to describe a schema for a database of recipes.
 The first thing we might want to do is to describe a list of all
-the recipes. All recipes have a name which we call recipe_name and
-they all have a description which we will call recipe_description.
+the recipes. All recipes have a name which we call recipe\_name and
+they all have a description which we will call recipe\_description.
 In addition, we will associated a unique id for each recipe which
 we will call recipe_id.
 
@@ -725,10 +725,6 @@ The fundamental ideas begind a database are that
 which is the process of minimizing the amount of redundant data
 in a database by creating lots of related tables. The next idea is
 
-# Advanced SQL: 
-
-* How do we actually build these tables:
-* Primary Keys
 
 # SQL Indicies For Faster Queries
 
