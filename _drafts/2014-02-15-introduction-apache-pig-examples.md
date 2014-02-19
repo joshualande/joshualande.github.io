@@ -90,6 +90,15 @@ $ pig -x local
 
 # Key Differences Between SQL and Pig
 
+Note that HAVING doens't exist since it isn't needed.
+You can just folloup up a `GROUP BY` with a `FILTER`.
+
+No such thing as subquieries b/c you can procedurally
+create tables.
+
+
+Also note about how 
+
 # Loading Data in Pig
 
 As our first script,
@@ -144,6 +153,10 @@ This shows that the table itself contains:
 |         0 |          Tacos |        Mom's famous Tacos |
 |         1 |    Tomato Soup |      Homemade Tomato soup |
 |         2 | Grilled Cheese | Delicious Cheese Sandwich |
+
+# Saving out tables to a file
+
+XXX.
 
 # The FILTER and FOREACH Operator in Apache Pig
 
@@ -236,7 +249,8 @@ recipe_ingredients_by_name: {
 If we wanted to broadcast out only the columns we cared about, we could do so using the `FOREACH` command:
 
 ```
-nicer_recipe_ingredients_by_name = FOREACH recipe_ingredients_by_name GENERATE
+nicer_recipe_ingredients_by_name = FOREACH recipe_ingredients_by_name 
+    GENERATE
     recipes::recipe_name as recipe_name,
     recipes::recipe_id as recipe_id,
     recipes::recipe_description as recipe_description,
@@ -246,20 +260,58 @@ nicer_recipe_ingredients_by_name = FOREACH recipe_ingredients_by_name GENERATE
 
 The table `nicer_recipe_ingredients_by_name` now contains:
 
-(Tacos,0,Mom's famous Tacos,0,1)
-(Tacos,0,Mom's famous Tacos,1,2)
-(Tacos,0,Mom's famous Tacos,2,2)
-(Tacos,0,Mom's famous Tacos,3,3)
-(Tacos,0,Mom's famous Tacos,4,1)
-(Tomato Soup,1,Homemade Tomato soup,2,2)
-(Tomato Soup,1,Homemade Tomato soup,5,1)
-(Grilled Cheese,2,Delicious Cheese Sandwich,4,1)
-(Grilled Cheese,2,Delicious Cheese Sandwich,6,2)
+|    recipe_name | recipe_id |        recipe_description | ingredient_id | amount |
+| -------------- | --------- | ------------------------- | ------------- | ------ |
+|          Tacos |         0 |        Mom's famous Tacos |             0 |      1 |
+|          Tacos |         0 |        Mom's famous Tacos |             1 |      2 |
+|          Tacos |         0 |        Mom's famous Tacos |             2 |      2 |
+|          Tacos |         0 |        Mom's famous Tacos |             3 |      3 |
+|          Tacos |         0 |        Mom's famous Tacos |             4 |      1 |
+|    Tomato Soup |         1 |      Homemade Tomato soup |             2 |      2 |
+|    Tomato Soup |         1 |      Homemade Tomato soup |             5 |      1 |
+| Grilled Cheese |         2 | Delicious Cheese Sandwich |             4 |      1 |
+| Grilled Cheese |         2 | Delicious Cheese Sandwich |             6 |      2 |
+
+What is cool about Pig is that unlike SQL where more advanced
+queries become more cumbersome requirng nested subquiries and mutiple joins, in Pig compliated quieries
+just reuqire chaining the basic commands together.
+
+If we wanted to find the ingredient names for 
+recipies which contain "Tomato Soup", all we have to do is 
+`FILTER` our table, `JOIN` it with the `ingredients` table,
+and then broadcast out the column we want.
+
+In Pig, this becomes
+
+```
+recipe_ingredients_filtered = FILTER nicer_recipe_ingredients_by_name 
+    BY recipe_name == 'Tomato Soup';
+
+recipe_ingredients_recipe_name = JOIN 
+    recipe_ingredients_filtered BY ingredient_id, 
+    ingredients BY ingredient_id;
+
+tomato_soup_ingredients = FOREACH recipe_ingredients_recipe_name 
+    GENERATE ingredient_name;
+```
+
+As expected, the table `tomato_soup_ingredients` table contains
+
+| ingredient_name |
+| --------------- |
+|        Tomatoes |
+|            Milk |
+
+# The GROUP BY Operator in Apache Pig
 
 
+# The DISTINCT Operator
+
+# Set Operations: UNION and INTERSECTION
 
 # Advanced Pig:
 
-Skew Join, replicated JOIN
+* Skew `JOIN`
+* replicated `JOIN`
 
 # Links
