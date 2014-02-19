@@ -488,29 +488,6 @@ This returns the expected tables
 | Tacos       |
 | Tomato Soup |
 
-# The DISTINT Operator
-
-In SQL, `DISTINCT` can be used to
-find all of the unique elements in a set.
-
-For example, to find all the recipes that include
-either beef or cheese, we could use the SQL query below:
-
-```
-SELECT DISTINCT recipe_name
-FROM recipe_ingredients AS a
-JOIN ingredients AS b
-ON a.ingredient_id = b.ingredient_id
-JOIN recipes AS c
-ON a.recipe_id = c.recipe_id
-WHERE b.ingredient_name = 'Cheese' OR b.ingredient_name = 'Beef'
-```
-
-Note that here the `DISTINT`
-keyword is required because otherwise two rows would
-be returend for tacos since they contain bhot
-cheese and beef.
-
 
 # The GROUP BY Operator In SQL
 
@@ -691,14 +668,35 @@ flexible about the struture of queries. Similar to how we
 can JOIN as many tables together as needed, we can also
 nest multiple subquieries together.
 
-# Views in SQL
+# The DISTINT Operator
 
+In SQL, `DISTINCT` can be used to
+find all of the unique elements in a set.
 
-Another way is to create views. These are discussed below. XXX
+For example, to find all the recipes that include
+either beef or cheese, we could use the SQL query below:
 
-You m
+```sql
+SELECT DISTINCT recipe_name
+FROM recipe_ingredients AS a
+JOIN ingredients AS b
+ON a.ingredient_id = b.ingredient_id
+JOIN recipes AS c
+ON a.recipe_id = c.recipe_id
+WHERE b.ingredient_name = 'Cheese' OR b.ingredient_name = 'Beef'
+```
 
-# INNER, LEFT, and RIGHT join.
+Note that here the `DISTINT`
+keyword is required because otherwise two rows would
+be returend for tacos since they contain bhot
+cheese and beef.
+
+TODO: put a note about 
+```sql
+COUNT(DISTINCT XX)
+```
+which is surprisingly useful
+
 
 # Harder SQL queries
 
@@ -726,13 +724,10 @@ which is the process of minimizing the amount of redundant data
 in a database by creating lots of related tables. The next idea is
 
 
-# SQL Indicies For Faster Queries
-
 
 # Wrapup 
 
-The key concepts
-we went over in this post are:
+The key concepts we went over in this post are:
 
 
 Thats about it. If you can get get you mind around the idea of table normalization, as well as
@@ -741,6 +736,10 @@ else should be easy.
 
 # Closing Words
 
+Some more advanced topics I didn't cover:
+* Views
+* SQL Indicies For Faster Queries
+* INNER, LEFT, and RIGHT join.
 * Terradata/Vertica for distributed databases.
 * HIVE/Pig to run parallel Map/Reduce queries.
 
