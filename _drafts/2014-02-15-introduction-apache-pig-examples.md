@@ -4,20 +4,100 @@ title: An Introduction to Analyzing Big Data With Apache Pig Using Simple Exampl
 comments: true
 ---
 
-In [my blog post](XXXXX), I introduced the basics
-of analyzing data using SQL.
-
-In this post, we will see how a similar work can be done
-on [big data](http://en.wikipedia.org/wiki/Big_data)
+In [an earlier blog post](XXXXX), I introduced the basics of analyzing
+data using SQL.  In this post, we will see how the same sorts of
+analysis done in SQL can be done on [big
+data](http://en.wikipedia.org/wiki/Big_data) stored in HDFS using
 using [Apache Pig](https://pig.apache.org/).
 
-For the most part, there is a direct mapping
-from a SQL query to PigLatin code.
+By using Pig, it is surprisingly easy to get started using to analyze
+easily tens of terrabytes of data using distributed map-reduce
+algorithms.  In this post, I will go over the basics of [Pig
+Latin](http://pig.apache.org/docs/r0.7.0/piglatin_ref2.html), the
+programming language used to write Pig job.  And I will do all of
+this by way of a simple example which you can easily run on your
+local computer.
+
+# Introduction to Hadoop, HDFS, MapReduce, and Apache Pig
+
+In typical real-life situations, we expect the our data to be very
+large and unable to fit on any single computer. The data itself is
+so large that it is distributed over hundreds of different machines.
+[Apache Hadoop](http://hadoop.apache.org/) provides
+The [Hadoop Distributed File System
+(HDFS)](http://en.wikipedia.org/wiki/Apache_Hadoop) is a pogram
+which automates the managment of these very large files, storing
+them a distirbuted manner in a computing cluster. In addition, 
+at this scale the probability of data loss becomes non-neglegible
+and to avoid this HDFS stores typically three copies
+of each file on independent machines ([here](http://hadoop.apache.org/docs/r1.2.1/hdfs_design.html)
+is a detailed description of HDFS).
+
+On top of HDFS, Apache Hadoop provides a distributed data analysis
+and data reduction programming language called
+[MapReduce](http://wiki.apache.org/hadoop/MapReduce).  MapReduce
+limits an analysis to a series of mapper or reducer functions.  But
+MapReduce has the benefit that the algorithm is completely parallizable.
+In addition, as much as possible MapReduce moves the analysis code
+to the machines storing the data to avoid costly data transfers.
+And finally, the algorithm itself is [fault
+tolerant](http://developer.yahoo.com/hadoop/tutorial/module4.html#tolerence).
+If any of the machines fail, MapReduce will automatically rerun
+the work on another machine. This is especially important because
+the probability of any machine failing increases as the number
+of machines increases.
+
+Conversely, writing MapReduce jobs is cubmersome and the map-reduce
+framework doesn't always naturally map to the sorts of analysis
+people want to do with their data.
+
+To improve developer productivity and make analysizng large data
+sets easier, Apache Pig was created as a simpler data analysis
+langauge.  On the surface, Pig looks very similar to SQL.  For the
+most part, there is a direct mapping from a SQL commands to Pig
+code, and Pig provides all the farmilliar functions like filtering,
+aggregations, and joining, sorting, deduping, etc.  But under the
+hood, Pig converts these commands to a series of MapReduce jobs
+which are run in successuion.  
+
+In short, Pig then provides all the benefits of MapReduce, but is
+significantly easier to use.  In addition, just like with SQL, by
+writing your analysis in a high-level descriptive language, you can
+allow Pig to do its best to optimize the order of analyzing data
+to find a very efficient algoirhtm.
+
+
+# Key Differences Between SQL and Pig
+
+Although conceptually similar, in practice
+SQL and Pig are different in implementation.
+
+* Simpler commands, written one after another.
+* Conceptually, the code creates temporary tables, more similar to programming languages.
+
+Whereas
+
+Besides the fact that Pig runs on top of HDFS
+and convers your analysis code into parralleized
+map-reduce jobs, Pig itself has several
+practical differences from SQL.
+
+Note that HAVING doens't exist since it isn't needed.
+You can just folloup up a `GROUP BY` with a `FILTER`.
+
+No such thing as subquieries b/c you can procedurally
+create tables.
+
+
+Also note about how 
 
 # Example Data Set
 
-I will introduce the major topics in Pig by way of
-a simple example.
+In this post, I will introduce the 
+major synax constructs of PigLatin using a simple example.
+Of course, the major benefits of Pig come into play
+when the data itself is so big that it cannot be 
+stored on one computer.
 
 First we need to create a sample data set to play with.
 For this post, we will use the same tables
@@ -87,17 +167,6 @@ language of Apache Pig using our small data sources run in local mode.
 ```
 $ pig -x local
 ```
-
-# Key Differences Between SQL and Pig
-
-Note that HAVING doens't exist since it isn't needed.
-You can just folloup up a `GROUP BY` with a `FILTER`.
-
-No such thing as subquieries b/c you can procedurally
-create tables.
-
-
-Also note about how 
 
 # Loading Data in Pig
 
@@ -315,3 +384,4 @@ As expected, the table `tomato_soup_ingredients` table contains
 * replicated `JOIN`
 
 # Links
+
