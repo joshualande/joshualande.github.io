@@ -1,6 +1,7 @@
 ---
 layout: page
 title: An Introduction to Analyzing Big Data With Apache Pig Using Simple Examples
+tweet_text: An Introduction to Analyzing Big Data With Apache Pig Using Simple Examples
 comments: true
 ---
 
@@ -384,4 +385,8 @@ As expected, the table `tomato_soup_ingredients` table contains
 * replicated `JOIN`
 
 # Links
+
+If you liked this post, I feel free to 
+<a href="http://twitter.com/intent/tweet?url={{ site.url }}{{ page.url }}&text={{ page.tweet_text }}&via=@joshualande" target="_blank">
+share this with your followers</a> or <a href="http://twitter.com/joshualande">follow me on Twitter</a>.
 
