@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Indicies in MySQL For Faster Queries
+title: Speed Up Your SQL Queries Using Indices
 comments: true
 ---
 
