@@ -410,6 +410,8 @@ recipes_normalized = LOAD 'recipes_denormalized.csv'
     AS (recipe:chararray, ingredients: {name:chararray});
 ```
 
+# Better example
+
 ```
 Tacos	{(Beef),(Lettuce),(Tomatoes),(Taco Shell),(Cheese)}
 Tomato Soup	{(Tomatoes),(Milk)}
