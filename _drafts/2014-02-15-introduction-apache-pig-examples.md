@@ -427,9 +427,6 @@ recipes_normalized = LOAD 'recipes_denormalized.csv'
 DUMP recipes_normalized;
 ```
 
-```
-FOREACH recipient`
-
 ---
 
 ```
