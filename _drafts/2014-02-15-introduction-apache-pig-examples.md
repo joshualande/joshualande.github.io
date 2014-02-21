@@ -440,7 +440,7 @@ Grilled Cheese	{Cheese,Bread}
 
 Note that we use tabs now for XXX reason
 
-Despite having some obvious distadvantages, this might be ncessa
+Despite having some obvious distadvantages, this might be necessary:
 
 ```
 recipes_normalized = LOAD 'recipes_denormalized.csv'
@@ -448,6 +448,8 @@ recipes_normalized = LOAD 'recipes_denormalized.csv'
     AS (recipe:chararray, ingredients: {name:chararray});
 DUMP recipes_normalized;
 ```
+
+...
 
 ```
 recipe_ingredients_normalized = FOREACH recipes_normalized
@@ -508,6 +510,7 @@ temp = FOREACH grouped_ingredients GENERATE
 ```
 
 When we `DUMP` temp
+
 
 ```
 (0,{(0),(1),(2),(3),(4)})
