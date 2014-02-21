@@ -21,18 +21,24 @@ local computer.
 
 # Introduction to Hadoop, HDFS, MapReduce, and Apache Pig
 
-In typical real-life situations, we expect the our data to be very
-large and unable to fit on any single computer. The data itself is
-so large that it is distributed over hundreds of different machines.
-[Apache Hadoop](http://hadoop.apache.org/) provides
-The [Hadoop Distributed File System
+In this section, I will give an overview of hadoop, MapReduce, and
+the situaions where Apache Pig.  If you are already farmilliar with
+Hadoop or just want to get started, feel free to skip to the next
+section.
+
+In a typical 'big data' situations, we are dealing with data so
+large that it cannot fit on any single machine. The data itself is
+so large that it has to be distributed over hundreds of different
+machines.  [Apache Hadoop](http://hadoop.apache.org/) provides The
+[Hadoop Distributed File System
 (HDFS)](http://en.wikipedia.org/wiki/Apache_Hadoop) is a pogram
 which automates the managment of these very large files, storing
-them a distirbuted manner in a computing cluster. In addition, 
-at this scale the probability of data loss becomes non-neglegible
-and to avoid this HDFS stores typically three copies
-of each file on independent machines ([here](http://hadoop.apache.org/docs/r1.2.1/hdfs_design.html)
-is a detailed description of HDFS).
+them a distirbuted manner in a computing cluster. In addition, at
+this scale the probability of data loss becomes non-neglegible and
+to avoid this HDFS stores typically three copies of each file on
+independent machines
+([here](http://hadoop.apache.org/docs/r1.2.1/hdfs_design.html) is
+a detailed description of HDFS).
 
 On top of HDFS, Apache Hadoop provides a distributed data analysis
 and data reduction programming language called
@@ -59,7 +65,7 @@ most part, there is a direct mapping from a SQL commands to Pig
 code, and Pig provides all the farmilliar functions like filtering,
 aggregations, and joining, sorting, deduping, etc.  But under the
 hood, Pig converts these commands to a series of MapReduce jobs
-which are run in successuion.  
+which are run in successuion.
 
 In short, Pig then provides all the benefits of MapReduce, but is
 significantly easier to use.  In addition, just like with SQL, by
@@ -70,11 +76,17 @@ to find a very efficient algoirhtm.
 
 # Key Differences Between SQL and Pig
 
-Although conceptually similar, in practice
-SQL and Pig are different in implementation.
+Although conceptually similar, SQL and Pig are have several practical
+differences from SQL. In this section, I will describe how it is
+different. But if you want to get started or aren't farmilliar with
+SQL, feel free to skip ahead.
+
 
 * Simpler commands, written one after another.
 * Conceptually, the code creates temporary tables, more similar to programming languages.
+* Nested tables.
+* More complicated data types like tuples, bags, etc. Why is this useful in the big data error.
+* Schema on read/not write.
 
 Whereas
 
@@ -90,14 +102,14 @@ No such thing as subquieries b/c you can procedurally
 create tables.
 
 
-Also note about how 
+Also note about how
 
 # Example Data Set
 
-In this post, I will introduce the 
+In this post, I will introduce the
 major synax constructs of PigLatin using a simple example.
 Of course, the major benefits of Pig come into play
-when the data itself is so big that it cannot be 
+when the data itself is so big that it cannot be
 stored on one computer.
 
 First we need to create a sample data set to play with.
@@ -108,9 +120,9 @@ and one mapping recipies to ingredients.
 
 For our example, I will assume you have the three
 tables stored as [CSV](http://en.wikipedia.org/wiki/Comma-separated_values).
-files on your computer: 
+files on your computer:
 
-First, we have the recipes data source. 
+First, we have the recipes data source.
 The data in this table is recipe_id, recipe_name, and recipe_description:
 
 ```
@@ -124,7 +136,7 @@ Second, we have the ingredients data set.  The data in this table
 is ingredient_id, ingredient_name, and ingredient_price:
 
 ```
-$ cat ingredients.csv 
+$ cat ingredients.csv
 0,Beef,5
 1,Lettuce,1
 2,Tomatoes,2
@@ -137,19 +149,19 @@ $ cat ingredients.csv
 Finally, we have the recipe-ingredients mapping data source:
 
 ```
-$ cat recipe_ingredients.csv 
-0,0,1 
-0,1,2 
-0,2,2 
-0,3,3 
-0,4,1 
-1,2,2 
-1,5,1 
-2,4,1 
-2,6,2 
+$ cat recipe_ingredients.csv
+0,0,1
+0,1,2
+0,2,2
+0,3,3
+0,4,1
+1,2,2
+1,5,1
+2,4,1
+2,6,2
 ```
 
-What's great about Pig is it doesn't force data to 
+What's great about Pig is it doesn't force data to
 be stored in any particular schema. Pig can read data
 in whatever format you want. Pig also has built-in readers
 for simple file formats
@@ -157,7 +169,7 @@ like [CSV](http://en.wikipedia.org/wiki/Comma-separated_values).
 
 In typical real-life situations, we expect the files themselves
 to be very large and unable to fit on any single computer.
-The data itself is typically stored on the 
+The data itself is typically stored on the
 [Hadoop Distributed File System (HDFS)](http://en.wikipedia.org/wiki/Apache_Hadoop).
 And our Pig code would perform a distributed analysis
 of this data over the comptuer cluster using distributed algoirhtms.
@@ -174,19 +186,19 @@ $ pig -x local
 As our first script,
 
 ```
-recipes = LOAD 'recipes.csv' 
-    USING PigStorage(',') 
-    AS (recipe_id:int, recipe_name:chararray, 
+recipes = LOAD 'recipes.csv'
+    USING PigStorage(',')
+    AS (recipe_id:int, recipe_name:chararray,
         recipe_description:chararray);
 
-ingredients = LOAD 'ingredients.csv' 
-    USING PigStorage(',') 
-    AS (ingredient_id:int, ingredient_name:chararray, 
+ingredients = LOAD 'ingredients.csv'
+    USING PigStorage(',')
+    AS (ingredient_id:int, ingredient_name:chararray,
         ingredient_price:float);
 
-recipe_ingredients = LOAD 'recipe_ingredients.csv' 
-    USING PigStorage(',') 
-    AS (recipe_id:int, ingredient_id:int, 
+recipe_ingredients = LOAD 'recipe_ingredients.csv'
+    USING PigStorage(',')
+    AS (recipe_id:int, ingredient_id:int,
         amount:int);
 ```
 
@@ -234,7 +246,7 @@ Suppose we want to find the recipe_id for the recipe named "Tomato Soup".
 To do this, we would issue the Pig command:
 
 ```
-soup_recipe = FILTER recipes 
+soup_recipe = FILTER recipes
     BY recipe_name == 'Tomato Soup';
 ```
 
@@ -248,7 +260,7 @@ If we wanted to select only the `user_id` from this table,
 we could use the `FOREACH` and `GENERATE` command:
 
 ```
-soup_recipe_id = FOREACH soup_recipe 
+soup_recipe_id = FOREACH soup_recipe
     GENERATE recipe_id;
 ```
 
@@ -319,7 +331,7 @@ recipe_ingredients_by_name: {
 If we wanted to broadcast out only the columns we cared about, we could do so using the `FOREACH` command:
 
 ```
-nicer_recipe_ingredients_by_name = FOREACH recipe_ingredients_by_name 
+nicer_recipe_ingredients_by_name = FOREACH recipe_ingredients_by_name
     GENERATE
     recipes::recipe_name as recipe_name,
     recipes::recipe_id as recipe_id,
@@ -346,22 +358,22 @@ What is cool about Pig is that unlike SQL where more advanced
 queries become more cumbersome requirng nested subquiries and mutiple joins, in Pig compliated quieries
 just reuqire chaining the basic commands together.
 
-If we wanted to find the ingredient names for 
-recipies which contain "Tomato Soup", all we have to do is 
+If we wanted to find the ingredient names for
+recipies which contain "Tomato Soup", all we have to do is
 `FILTER` our table, `JOIN` it with the `ingredients` table,
 and then broadcast out the column we want.
 
 In Pig, this becomes
 
 ```
-recipe_ingredients_filtered = FILTER nicer_recipe_ingredients_by_name 
+recipe_ingredients_filtered = FILTER nicer_recipe_ingredients_by_name
     BY recipe_name == 'Tomato Soup';
 
-recipe_ingredients_recipe_name = JOIN 
-    recipe_ingredients_filtered BY ingredient_id, 
+recipe_ingredients_recipe_name = JOIN
+    recipe_ingredients_filtered BY ingredient_id,
     ingredients BY ingredient_id;
 
-tomato_soup_ingredients = FOREACH recipe_ingredients_recipe_name 
+tomato_soup_ingredients = FOREACH recipe_ingredients_recipe_name
     GENERATE ingredient_name;
 ```
 
@@ -372,7 +384,59 @@ As expected, the table `tomato_soup_ingredients` table contains
 |        Tomatoes |
 |            Milk |
 
+
+# Nested Data Structures in Pig
+
+So far, everything we have seen about Pig is fairly similar to SQL.
+No we are going to get into a few advanced topics in Pig where
+PigLatin really starts to diverge from SQL.
+
+One of the powerful things Pig provides in the ability to read in
+nested data strutures. For example, if we wanted we could
+define our recipes in a totally [denormalized](http://en.wikipedia.org/wiki/Denormalization)
+data design.
+
+
+```
+$ cat recipes_denormalized.csv
+Tacos,{Beef,Lettuce,Tomatoes,Taco Shell,Cheese}
+Tomato Soup,{Tomatoes,Milk}
+Grilled Cheese,{Cheese,Bread}
+```
+
+Despite having some obvious distadvantages, this might be ncessa
+
+```
+recipes_normalized = LOAD 'recipes_denormalized.csv'
+    USING PigStorage(',')
+    AS (recipe:chararray, ingredients: {chararray});
+```
+
+
 # The GROUP BY Operator in Apache Pig
+
+```
+grouped_ingredents = GROUP recipe_ingredients BY (ingredient_id);
+```
+
+When we `DESCRIBE` the `grouped_ingredents` table:
+
+```
+grouped_ingredents: {group: int,recipe_ingredients: {(recipe_id: int,ingredient_id: int,amount: int)}}
+```
+
+And when we `DUMP` the `grouped_ingredents` table:
+
+```
+(0,{(0,0,1)})
+(1,{(0,1,2)})
+(2,{(0,2,2),(1,2,2)})
+(3,{(0,3,3)})
+(4,{(0,4,1),(2,4,1)})
+(5,{(1,5,1)})
+(6,{(2,6,2)})
+```
+
 
 
 # The DISTINCT Operator
@@ -381,12 +445,13 @@ As expected, the table `tomato_soup_ingredients` table contains
 
 # Advanced Pig:
 
+* Ternary expressions
 * Skew `JOIN`
 * replicated `JOIN`
 
 # Links
 
-If you liked this post, I feel free to 
-<a href="http://twitter.com/intent/tweet?url={{ site.url }}{{ page.url }}&text={{ page.tweet_text }}&via=@joshualande" target="_blank">
+If you liked this post, I feel free to
+<a href="http://twitter.com/intent/tweet?url={{ site.url }}{{ page.url }}&text={{ page.tweet_text }}&via=joshualande" target="_blank">
 share this with your followers</a> or <a href="http://twitter.com/joshualande">follow me on Twitter</a>.
 
