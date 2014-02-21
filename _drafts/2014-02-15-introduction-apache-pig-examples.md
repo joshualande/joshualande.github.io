@@ -404,39 +404,87 @@ Tomato Soup,{Tomatoes,Milk}
 Grilled Cheese,{Cheese,Bread}
 ```
 
+```
+recipes_normalized = LOAD 'recipes_denormalized.csv'
+    USING PigStorage(',')
+    AS (recipe:chararray, ingredients: {name:chararray});
+```
+
+```
+Tacos,{(Beef),(Lettuce),(Tomatoes),(Taco Shell),(Cheese)}
+Tomato Soup,{(Tomatoes),(Milk)}
+Grilled Cheese,{(Cheese),(Bread)}
+```
+
 Despite having some obvious distadvantages, this might be ncessa
 
 ```
 recipes_normalized = LOAD 'recipes_denormalized.csv'
     USING PigStorage(',')
-    AS (recipe:chararray, ingredients: {chararray});
+    AS (recipe:chararray, ingredients: {(name:chararray)});
 ```
 
 
 # The GROUP BY Operator in Apache Pig
 
 ```
-grouped_ingredents = GROUP recipe_ingredients BY (ingredient_id);
+grouped_ingredients = GROUP recipe_ingredients 
+    BY (recipe_id);
 ```
 
-When we `DESCRIBE` the `grouped_ingredents` table:
+When we `DESCRIBE` the `grouped_ingredients` table:
 
 ```
-grouped_ingredents: {group: int,recipe_ingredients: {(recipe_id: int,ingredient_id: int,amount: int)}}
+grouped_ingredients: {
+    group: int,
+    recipe_ingredients: {
+        (recipe_id: int,
+         ingredient_id: int,
+         amount: int)
+    }
+}
 ```
 
-And when we `DUMP` the `grouped_ingredents` table:
+And when we `DUMP` the `grouped_ingredients` table:
 
 ```
-(0,{(0,0,1)})
-(1,{(0,1,2)})
-(2,{(0,2,2),(1,2,2)})
-(3,{(0,3,3)})
-(4,{(0,4,1),(2,4,1)})
-(5,{(1,5,1)})
-(6,{(2,6,2)})
+(0,{(0,0,1),(0,1,2),(0,2,2),(0,3,3),(0,4,1)})
+(1,{(1,2,2),(1,5,1)})
+(2,{(2,4,1),(2,6,2)})
 ```
 
+temp:
+
+```
+temp = FOREACH grouped_ingredients GENERATE
+    group AS recipe_id,
+    recipe_ingredients.ingredient_id AS ingredient_id;
+```
+
+When we `DUMP` temp
+
+```
+(0,{(0),(1),(2),(3),(4)})
+(1,{(2),(5)})
+(2,{(4),(6)})
+```
+
+
+```
+STORE temp INTO 'temp2' USING PigStorage(',');
+```
+
+```
+0,{(0),(1),(2),(3),(4)}
+1,{(2),(5)}
+2,{(4),(6)}
+```
+
+```
+temp3 = LOAD 'temp2'
+    USING PigStorage(',')
+    AS (recipe_id:chararray, ingredient_id: {(name:chararray)});
+```
 
 
 # The DISTINCT Operator
