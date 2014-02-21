@@ -411,17 +411,63 @@ recipes_normalized = LOAD 'recipes_denormalized.csv'
 ```
 
 ```
-Tacos,{(Beef),(Lettuce),(Tomatoes),(Taco Shell),(Cheese)}
-Tomato Soup,{(Tomatoes),(Milk)}
-Grilled Cheese,{(Cheese),(Bread)}
+Tacos	{(Beef),(Lettuce),(Tomatoes),(Taco Shell),(Cheese)}
+Tomato Soup	{(Tomatoes),(Milk)}
+Grilled Cheese	{(Cheese),(Bread)}
 ```
+
+Note that we use tabs now for XXX reason
 
 Despite having some obvious distadvantages, this might be ncessa
 
 ```
 recipes_normalized = LOAD 'recipes_denormalized.csv'
-    USING PigStorage(',')
+    USING PigStorage('\t')
     AS (recipe:chararray, ingredients: {(name:chararray)});
+DUMP recipes_normalized;
+```
+
+```
+FOREACH recipient`
+
+---
+
+```
+Tacos	{Beef,Lettuce,Tomatoes,Taco Shell,Cheese}
+Tomato Soup	{Tomatoes,Milk}
+Grilled Cheese	{Cheese,Bread}
+```
+
+Note that we use tabs now for XXX reason
+
+Despite having some obvious distadvantages, this might be ncessa
+
+```
+recipes_normalized = LOAD 'recipes_denormalized.csv'
+    USING PigStorage('\t')
+    AS (recipe:chararray, ingredients: {name:chararray});
+DUMP recipes_normalized;
+```
+
+```
+recipe_ingredients_normalized = FOREACH recipes_normalized
+    GENERATE recipe,
+    FLATTEN(ingredients.name) as ingredient;
+DUMP recipe_ingredients_normalized;
+```
+
+Creates:
+
+```
+(Tacos,Beef)
+(Tacos,Lettuce)
+(Tacos,Tomatoes)
+(Tacos,Taco Shell)
+(Tacos,Cheese)
+(Tomato Soup,Tomatoes)
+(Tomato Soup,Milk)
+(Grilled Cheese,Cheese)
+(Grilled Cheese,Bread)
 ```
 
 
