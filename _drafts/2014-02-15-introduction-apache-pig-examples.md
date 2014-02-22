@@ -387,74 +387,65 @@ As expected, the table `tomato_soup_ingredients` table contains
 
 # Nested Data Structures in Pig
 
-So far, everything we have seen about Pig is fairly similar to SQL.
-No we are going to get into a few advanced topics in Pig where
-PigLatin really starts to diverge from SQL.
+So far, everything we have seen about Pig probably seems fairly similar
+to SQL. 
+But one of the biggest ways in which Pig diverges from
+SQL is that it allows for nested data structure.
 
-One of the powerful things Pig provides in the ability to read in
-nested data strutures. For example, if we wanted we could
-define our recipes in a totally [denormalized](http://en.wikipedia.org/wiki/Denormalization)
-data design.
+For example, if we wanted, we could
+define our recipes in a totally 
+[denormalized](http://en.wikipedia.org/wiki/Denormalization)
+data structure where the ingredients are nested within
+the rows for each recipe.
+commas separating items.
 
+Despite having some obvious distadvantages, there are a
+few advantages to having this denormalized data structure.
 
-```
-$ cat recipes_denormalized.csv
-Tacos,{Beef,Lettuce,Tomatoes,Taco Shell,Cheese}
-Tomato Soup,{Tomatoes,Milk}
-Grilled Cheese,{Cheese,Bread}
-```
+* Costly joins
 
-```
-recipes_normalized = LOAD 'recipes_denormalized.csv'
-    USING PigStorage(',')
-    AS (recipe:chararray, ingredients: {name:chararray});
-```
-
-# Better example
+To do that, we can define the file as:
 
 ```
-Tacos	{(Beef),(Lettuce),(Tomatoes),(Taco Shell),(Cheese)}
-Tomato Soup	{(Tomatoes),(Milk)}
-Grilled Cheese	{(Cheese),(Bread)}
-```
-
-Note that we use tabs now for XXX reason
-
-Despite having some obvious distadvantages, this might be ncessa
-
-```
-recipes_normalized = LOAD 'recipes_denormalized.csv'
-    USING PigStorage('\t')
-    AS (recipe:chararray, ingredients: {(name:chararray)});
-DUMP recipes_normalized;
-```
-
----
-
-```
+$ cat recipes_denormalized.tsv$ cat recipes_denormalized.csv
 Tacos	{Beef,Lettuce,Tomatoes,Taco Shell,Cheese}
 Tomato Soup	{Tomatoes,Milk}
 Grilled Cheese	{Cheese,Bread}
 ```
 
-Note that we use tabs now for XXX reason
+I will mention that here that I switch from the CSV to TSV file format 
+because pig gets confused between the commas separating items
+in the bag from commas separating items.
 
-Despite having some obvious distadvantages, this might be necessary:
 
 ```
-recipes_normalized = LOAD 'recipes_denormalized.csv'
+recipes_denormalized = LOAD 'recipes_denormalized.tsv'
     USING PigStorage('\t')
     AS (recipe:chararray, ingredients: {name:chararray});
-DUMP recipes_normalized;
+DUMP recipes_denormalized;
 ```
 
-...
 
 ```
-recipe_ingredients_normalized = FOREACH recipes_normalized
+$ cat recipes_denormalized.json
+{"recipe":"Tacos","ingredients":["Beef","Lettuce","Tomatoes","Taco Shell","Cheese"]}
+{"recipe":"Tomato Soup","ingredients":["Tomatoes","Milk"]}
+{"recipe":"Grilled Cheese","ingredients":["Cheese","Bread"]}
+```
+
+```
+recipes_denormalized = LOAD 'recipes_denormalized.json' 
+    USING JsonLoader('recipe:chararray, ingredients: {(name:chararray)}');
+DESCRIBE recipes_denormalized;
+```
+
+---
+
+```
+recipe_ingredients_denormalized = FOREACH recipes_denormalized
     GENERATE recipe,
     FLATTEN(ingredients.name) as ingredient;
-DUMP recipe_ingredients_normalized;
+DUMP recipe_ingredients_denormalized;
 ```
 
 Creates:
