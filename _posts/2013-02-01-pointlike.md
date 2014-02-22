@@ -1,6 +1,6 @@
 ---
 layout: page
-title: The pointlike Maximum-likelihood Fitting Package
+title: The pointlike Maximum-likelihood Fitting Package For Analysis Fermi-LAT Data
 comments: true
 ---
 
@@ -498,3 +498,5 @@ If you would like to learn more about pointlike:
 * [Matthew Kerr's PhD Thesis](http://arxiv.org/abs/1101.6072) describes the implementation details of pointlike.
 * The extended source functionality of pointlike is described in [this publication](http://arxiv.org/abs/1207.0027).
 * You can view the pointlike source code [here](http://www-glast.stanford.edu/cgi-bin/viewcvs/pointlike/python/uw).
+
+{% include twitter_plug.html %}

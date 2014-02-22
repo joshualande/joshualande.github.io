@@ -491,8 +491,6 @@ This table has all possible combinations of
 aggregations over gender and sport, but does not aggregate over
 country.
 
-If you liked this post you can follow me on Twitter [@joshualande](https://twitter.com/joshualande).
-
 # Links
 
 * [Prasanth Jayachandran](http://prasanthj.info) created the `CUBE`
@@ -508,3 +506,5 @@ idea of a [OLAP cube](http://en.wikipedia.org/wiki/OLAP_cube).
 [Microsoft SQL Server](http://technet.microsoft.com/en-us/library/ms175939)) implement
 `CUBE` and `ROLLUP`.
 * Cube and Rollup are implemented in [Apache Hive](http://hive.apache.org/). See [here](https://cwiki.apache.org/confluence/display/Hive/Enhanced+Aggregation,+Cube,+Grouping+and+Rollup#EnhancedAggregation,Cube,GroupingandRollup-CubesandRollups) for documentation.
+
+{% include twitter_plug.html %}
