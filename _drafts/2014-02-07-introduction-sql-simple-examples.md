@@ -4,18 +4,27 @@ title: An Introduction to SQL With Simple Examples
 comments: true
 ---
 
-In this post, my intention is to broadly go over the purpose of
-relational databases like SQL and describe how they are different
-from other data structures or formats. I will discuss the key topics
-of database normalization, the basic databases operators like joining
-and aggregating tables, and a few advanced topics like using indices
-to speed up queries. To get you up to speed as quickly as possible, I will
-teach all of this using a simple examples.
+In this post, I will broadly go over the purpose of relational
+databases like [SQL](http://en.wikipedia.org/wiki/SQL) and describe
+they ways in which they are better than other programming languages
+and data formats. I will discuss the benefits of database normalization
 
-Of course, databases are an enormous topic for which there
-is [an entire profession](http://en.wikipedia.org/wiki/Database_administrator),
-so this will be whirlwind tour of the key concepts, 
-enough to convey the value and get you started.
+Then, by way of a simple to understand example, I will 
+describe the basics of how to store data in a database
+and the benefits of 
+database normalization.
+
+Finally, working with the example database I describe,
+I will work through successifly harder SQL
+queries to introduce the
+basic operators in SQL like filtering, joining
+and aggregating.
+
+This post is intended as a 
+whirlwind tour of the key concepts of SQL,
+with the intention of conveying the value of
+databases, describing the major operations,
+and getting youe xcited to learn more.
 
 <!--
 In a followup post, I discuss some more advanced SQL queries which require cleaver
@@ -30,6 +39,8 @@ Once you have done that you can create the tables used in this example using
 the section linked from below XXX
 -->
 
+
+<!--
 # Background
 
 During my Physics PhD, I never understood the purpose of 
@@ -59,7 +70,7 @@ Now that I am on the other side of the table
 helping other academics transition to become become data scientists, I see that
 most of them have very similar confusion about the purpose and benefit of these
 databases. 
-
+-->
 
 # A Simple Example SQL Database
 
