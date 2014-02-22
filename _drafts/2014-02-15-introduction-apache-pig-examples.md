@@ -439,9 +439,9 @@ recipes_denormalized: {
 
 Similarly, when we `DUMP` this table:
 ```
-(Tacos	{Beef,Lettuce,Tomatoes,Taco Shell,Cheese},)
-(Tomato Soup	{Tomatoes,Milk},)
-(Grilled Cheese	{Cheese,Bread},)
+(Tacos,{(Beef),(Lettuce),(Tomatoes),(Taco Shell),(Cheese)})
+(Tomato Soup,{(Tomatoes),(Milk)})
+(Grilled Cheese,{(Cheese),(Bread)})
 ```
 
 Note that the tsv fileformat is wonkly, but Pig also
@@ -461,9 +461,24 @@ $ cat recipes_denormalized.json
 
 ```
 $ cat recipes_denormalized.json
-{"recipe":"Tacos","ingredients":[{"name":"Beef"},{"name":"Lettuce"},{"name":"Tomatoes"},{"name":"Taco Shell"},{"name":"Cheese"}]}
-{"recipe":"Tomato Soup","ingredients":[{"name":"Tomatoes"},{"name":"Milk"}]}
-{"recipe":"Grilled Cheese","ingredients":[{"name":"Cheese"},{"name":"Bread"}]}
+{"recipe":"Tacos",
+ "ingredients": [
+    {"name":"Beef"},
+    {"name":"Lettuce"},
+    {"name":"Tomatoes"},
+    {"name":"Taco Shell"},
+    {"name":"Cheese"}
+]}
+{"recipe":"Tomato Soup",
+ "ingredients": [
+    {"name":"Tomatoes"},
+    {"name":"Milk"}
+]}
+{"recipe":"Grilled Cheese",
+ "ingredients": [
+    {"name":"Cheese"},
+    {"name":"Bread"}
+]}
 ```
 
 And load the file using:
@@ -471,9 +486,15 @@ And load the file using:
 ```
 recipes_denormalized = LOAD 'recipes_denormalized.json' 
     USING JsonLoader('recipe:chararray, ingredients: {(name:chararray)}');
-DUMP recipes_denormalized;
 ```
 
+Note that because
+
+```
+recipes_denormalized = LOAD 'recipes_denormalized.json' USING JsonLoader()}');
+```
+
+...
 
 ```
 STORE recipes_denormalized INTO 'recipes_denormalized.json' USING JsonStorage();
