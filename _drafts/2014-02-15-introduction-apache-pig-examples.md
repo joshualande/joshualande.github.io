@@ -438,6 +438,7 @@ recipes_denormalized: {
 ```
 
 Similarly, when we `DUMP` this table:
+
 ```
 (Tacos,{(Beef),(Lettuce),(Tomatoes),(Taco Shell),(Cheese)})
 (Tomato Soup,{(Tomatoes),(Milk)})
