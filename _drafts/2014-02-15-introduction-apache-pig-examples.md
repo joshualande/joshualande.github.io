@@ -407,37 +407,78 @@ few advantages to having this denormalized data structure.
 To do that, we can define the file as:
 
 ```
-$ cat recipes_denormalized.tsv$ cat recipes_denormalized.csv
-Tacos	{Beef,Lettuce,Tomatoes,Taco Shell,Cheese}
-Tomato Soup	{Tomatoes,Milk}
-Grilled Cheese	{Cheese,Bread}
+$ cat recipes_denormalized.tsv
+Tacos	{(Beef),(Lettuce),(Tomatoes),(Taco Shell),(Cheese)}
+Tomato Soup		{(Tomatoes),(Milk)}
+Grilled Cheese	{(Cheese),(Bread)}
 ```
 
 I will mention that here that I switch from the CSV to TSV file format 
 because pig gets confused between the commas separating items
-in the bag from commas separating items.
-
+in the bag from commas separating items. 
+NOte that the charater between the recipe name
+and the bag is a tab!
 
 ```
 recipes_denormalized = LOAD 'recipes_denormalized.tsv'
     USING PigStorage('\t')
-    AS (recipe:chararray, ingredients: {name:chararray});
-DUMP recipes_denormalized;
+    AS (recipe:chararray, ingredients: {(name:chararray)});
 ```
 
+When we `DESCRIBE` this table, we see that each row has a character array recipie
+and a bag of ingredients:
 
+```
+recipes_denormalized: {
+    recipe: chararray,
+    ingredients: {
+        (name: chararray)
+    }
+}
+```
+
+Similarly, when we `DUMP` this table:
+```
+(Tacos	{Beef,Lettuce,Tomatoes,Taco Shell,Cheese},)
+(Tomato Soup	{Tomatoes,Milk},)
+(Grilled Cheese	{Cheese,Bread},)
+```
+
+Note that the tsv fileformat is wonkly, but Pig also
+supports a more conventional JSON format for data.
+To read the same data in JSON format, we could
+define:
+
+
+<!--
 ```
 $ cat recipes_denormalized.json
 {"recipe":"Tacos","ingredients":["Beef","Lettuce","Tomatoes","Taco Shell","Cheese"]}
 {"recipe":"Tomato Soup","ingredients":["Tomatoes","Milk"]}
 {"recipe":"Grilled Cheese","ingredients":["Cheese","Bread"]}
 ```
+-->
+
+```
+$ cat recipes_denormalized.json
+{"recipe":"Tacos","ingredients":[{"name":"Beef"},{"name":"Lettuce"},{"name":"Tomatoes"},{"name":"Taco Shell"},{"name":"Cheese"}]}
+{"recipe":"Tomato Soup","ingredients":[{"name":"Tomatoes"},{"name":"Milk"}]}
+{"recipe":"Grilled Cheese","ingredients":[{"name":"Cheese"},{"name":"Bread"}]}
+```
+
+And load the file using:
 
 ```
 recipes_denormalized = LOAD 'recipes_denormalized.json' 
     USING JsonLoader('recipe:chararray, ingredients: {(name:chararray)}');
-DESCRIBE recipes_denormalized;
+DUMP recipes_denormalized;
 ```
+
+
+```
+STORE recipes_denormalized INTO 'recipes_denormalized.json' USING JsonStorage();
+```
+
 
 ---
 
@@ -510,7 +551,7 @@ When we `DUMP` temp
 
 
 ```
-STORE temp INTO 'temp2' USING PigStorage(',');
+STORE INTO 'temp2' USING PigStorage(',');
 ```
 
 ```
