@@ -763,9 +763,4 @@ about SQL databases. There is tons of topics left to explore:
 * [Sequel Pro](http://www.sequelpro.com) is a great MySQL client.
 * Bill Howe's coursera class (https://www.coursera.org/course/datasci). The class Relational Databases, Relational Algebra (https://class.coursera.org/datasci-001/lecture).
 
-If you liked this post, feel free to share this
-with your followers!
-
-
-Or you can follow me on Twitter [@joshualande](http://twitter.com/joshualande).
-
+{% include twitter_plug.html %}
