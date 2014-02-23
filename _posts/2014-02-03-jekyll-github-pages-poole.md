@@ -97,7 +97,7 @@ I will describe next some tweaks I made to the base website.
 
 To get my blog to its current form, I made a few modifications to the base poole layout. 
 
-FIrst, I wanted to create an [Archive](/archive) page which listed all of my blog posts.
+FIrst, I wanted to create an [Archive](/archive/) page which listed all of my blog posts.
 To do this, I created the file [archive.md](https://github.com/joshualande/joshualande.github.io/blob/5e5ca6389fbc66be06488b9b7803e0278ee1b89f/archive.md) which shows a dynamic list of all of 
 my blog posts:
 {% highlight html %}
@@ -116,7 +116,7 @@ title: Archive
 {% endhighlight %}
 Note that the syntax ```{% raw %}{% for post in site.posts %}{% endraw %}``` is from the Liquid templating system.
 
-Next, I wanted to add a navigation bar at the top of the website with links to the [About](/about) page, [Archive](/archive) page, and the feed. To do this, I modified the file [_config.yml](https://github.com/joshualande/joshualande.github.io/blob/64d03b883b64dd8aedf30b903ecaae92a282955a/_config.yml) to define a dictionary of pages to show in my header:
+Next, I wanted to add a navigation bar at the top of the website with links to the [About](/about/) page, [Archive](/archive) page, and the feed. To do this, I modified the file [_config.yml](https://github.com/joshualande/joshualande.github.io/blob/64d03b883b64dd8aedf30b903ecaae92a282955a/_config.yml) to define a dictionary of pages to show in my header:
 {% highlight yaml %}
 pages_list:       
   About: '/about'
