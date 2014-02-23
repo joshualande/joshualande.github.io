@@ -28,6 +28,6 @@ github:
 
 # This is the list of pages to incldue in the header of the website.
 pages_list:       
-  About: '/about'
-  Archive: '/archive'
+  About: '/about/'
+  Archive: '/archive/'
   Feed: '/atom.xml'
