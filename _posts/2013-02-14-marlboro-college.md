@@ -25,7 +25,7 @@ Norsen.](/assets/josh_marlboro_orals-580x832.jpg)
 During the summer after my senior year of high school (2005) and
 again after my first year of college (2006), I participated in a
 [SEAP](http://seap.asee.org/program_details) internship at
-[ANSER](http://www.anser.org). I have written about the
+[ANSER](http://www.anser.org/). I have written about the
 internship [here]({% post_url 2013-02-14-seap-internship %}).
 
 
