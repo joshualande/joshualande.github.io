@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: SEAP Internship
 comments: true
 ---

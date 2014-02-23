@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: "How I Transitions From a PhD in Physics to a Career in Data Scientist"
 comments: true
 ---

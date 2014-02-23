@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: "CUBE and ROLLUP: Two Pig Functions That Every Data Scientist Should Know"
 comments: true
 ---

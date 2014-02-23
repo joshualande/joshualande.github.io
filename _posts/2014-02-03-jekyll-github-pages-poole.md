@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: How I Created a Beautiful and Minimal Blog Using Jekyll, Github Pages, and poole
 comments: true 
 ---

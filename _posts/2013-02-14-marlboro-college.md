@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: Marlboro College Research
 comments: true
 ---

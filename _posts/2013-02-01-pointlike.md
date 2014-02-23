@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: The pointlike Maximum-likelihood Fitting Package For Analysis Fermi-LAT Data
 comments: true
 ---

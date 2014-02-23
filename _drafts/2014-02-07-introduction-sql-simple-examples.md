@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: An Introduction to SQL With Simple Examples
 comments: true
 ---

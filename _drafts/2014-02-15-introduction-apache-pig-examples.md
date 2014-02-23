@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: An Introduction to Analyzing Big Data With Apache Pig Using Simple Examples
 comments: true
 ---

@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: SLAC SULI Internship
 comments: true
 ---
