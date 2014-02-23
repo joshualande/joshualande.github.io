@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "CUBE and ROLLUP: Two Pig Functions That Every Data Scientist Should Know"
+title: "CUBE and ROLLUP: Two Apache Pig Functions That Every Data Scientist Should Know"
 comments: true
 ---
 
