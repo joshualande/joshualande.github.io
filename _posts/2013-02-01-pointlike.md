@@ -77,7 +77,7 @@ sa=SpectralAnalysis(ds,
                     minROI=10)
 {% endhighlight %}
 
-Assuming you have a [gtlike-style XML file](href="http://fermi.gsfc.nasa.gov/ssc/data/analysis/scitools/source_models.html) defining the sky model, create the region of interest (ROI):
+Assuming you have a [gtlike-style XML file](http://fermi.gsfc.nasa.gov/ssc/data/analysis/scitools/source_models.html) defining the sky model, create the region of interest (ROI):
 
 {% highlight python %}
 roi=sa.roi(xmlfile="model.xml")
