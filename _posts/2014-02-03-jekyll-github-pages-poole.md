@@ -187,7 +187,7 @@ Google Analytics. Google gave me this javascript tracking code to embed on every
 </script>
 {% endhighlight %}
 I put this code in the file
-[\_includes/google\_analytics.html](https://github.com/joshualande/joshualande.github.io/blob/64d03b883b64dd8aedf30b903ecaae92a282955a/_includes/google_analytics)
+[\_includes/google\_analytics.html](https://github.com/joshualande/joshualande.github.io/blob/64d03b883b64dd8aedf30b903ecaae92a282955a/_includes/google_analytics.html)
 Finally, I included this tracking code on all of the pages of my website by modifying the file
 [_layouts/default.html](https://github.com/joshualande/joshualande.github.io/blob/64d03b883b64dd8aedf30b903ecaae92a282955a/_layouts/default.html)
 to include the line:
