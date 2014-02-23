@@ -24,7 +24,7 @@ Instead of reading a lot of documentation, I found this really great git repo ca
 
 ![The demo pool website](/assets/demo_poole_website.png)
 
-To get started with my blog, all I had to do was create a new Git repo with the name [joshualande.github.io](joshualande.github.io), download the poole repository, and push it to my git repo. A few minutes later the website joshualande.github.io was ready! I only had a few posts on my previous website so I just copied them over manually. But there is [a package](http://jekyllrb.com/docs/migrations) for migrating blogs to Jekyll.
+To get started with my blog, all I had to do was create a new Git repo with the name [joshualande.github.io](http://joshualande.github.io), download the poole repository, and push it to my git repo. A few minutes later the website joshualande.github.io was ready! I only had a few posts on my previous website so I just copied them over manually. But there is [a package](http://jekyllrb.com/docs/migrations) for migrating blogs to Jekyll.
 
 # Blog Layout
 
