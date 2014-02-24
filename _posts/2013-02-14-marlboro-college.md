@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Marlboro College Research
+title: Studying Physics at Marlboro College in the Hills of Vermont
 comments: true
 ---
 
