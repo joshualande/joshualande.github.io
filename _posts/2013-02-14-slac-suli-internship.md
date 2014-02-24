@@ -1,6 +1,6 @@
 ---
 layout: post
-title: SLAC SULI Internship
+title: Calibrating X-ray Powder Diffraction Data at the Stanford Synchrotron Radiation Laboratory
 comments: true
 ---
 

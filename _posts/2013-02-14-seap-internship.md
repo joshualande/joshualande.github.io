@@ -1,6 +1,6 @@
 ---
 layout: post
-title: SEAP Internship
+title: "Quantifying the Health Impact of Solar Particle Events on Astronauts With SStoRM: The Solar Storm Radiation Model"
 comments: true
 ---
 

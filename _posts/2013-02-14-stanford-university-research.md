@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Searching for Pulsar Wind Nebulae at Stanford University
+title: Searching for Pulsar Wind Nebulae at the Kavli Institute for Particle Astrophysics and Cosmology
 comments: true
 ---
 
