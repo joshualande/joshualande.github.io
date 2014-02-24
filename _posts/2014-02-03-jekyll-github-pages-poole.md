@@ -204,6 +204,58 @@ Once I got my blog up to speed on GitHub with the URL [joshualande.github.io](ht
 I hope this blog will help you get up to speed quickly with GitHub Pages, Jekyll, and poole.
 If you have any questions about my implementation, you can view my entire website on [GitHub](https://github.com/joshualande/joshualande.github.io) or leave a question below.
 
+# Adding a Custom Twitter Plug To the Bottom of Each Post
+
+I was not thrilled by the idea of putting
+big Social Media buttons on my website.
+I felt that they would disrupt the minimal design and layout of my website. 
+And after reading 
+[this discussion](https://news.ycombinator.com/item?id=7232738) 
+on [Hacker News](news.ycombinator.com), I decided
+to leave them off.
+But I wanted some lightweight way to
+allow people to share my posts on Twitter if they though
+their followers would appreciate it.
+As a compromise, I decide to add a
+sentence at the end of each blog post saying:
+
+>  "{% include twitter_plug.html %}"
+
+I felt this was a reasonable compromise between
+utility and obnoxiousness.
+
+To dynamically generate this sentence on each post
+and automatically create a nice looking Tweet,
+I created a file called 
+[\_includes/twitter\_plug.html](https://github.com/joshualande/joshualande.github.io/blob/8405f035bd7da5306b1a35a4a4632bf698ea4f0a/_includes/twitter_plug.html)
+which contains:
+
+```html
+{% raw %}
+If you liked this post, you can
+<a href="https://twitter.com/intent/tweet?url={{ site.url }}{{ page.url }}&text={{ page.title }}&via=joshualande" 
+   target="_blank">
+  share it with your followers</a> 
+or 
+<a href="https://twitter.com/joshualande">
+  follow me on Twitter</a>!
+{% endraw %}
+```
+
+When you click on "share it with your followers", it will automatically compose a tweet like:
+
+> How I Created a Beautiful and Minimal Blog Using Jekyll, Github Pages, and poole http://www.joshualande.com/2014/02/03/jekyll-github-pages-poole/ via @joshualande
+
+Whenever I want to include the Twitter plug on a post, I just add the liquid tag:
+
+```
+{% raw %}
+{% include twitter_plug.html %}
+{% endraw %}
+```
+
+
+
 # Links:
 
 Here are some links which helped me along the way:
