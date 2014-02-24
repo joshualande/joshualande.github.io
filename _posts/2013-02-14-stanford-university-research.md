@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Stanford University Research
+title: Searching for Pulsar Wind Nebulae at Stanford University
 comments: true
 ---
 
