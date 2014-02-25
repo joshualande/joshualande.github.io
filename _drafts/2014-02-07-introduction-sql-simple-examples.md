@@ -4,27 +4,22 @@ title: An Introduction to SQL With Simple Examples
 comments: true
 ---
 
-In this post, I will broadly go over the purpose of relational
+In this post, I will go over many of the benefits of relational
 databases like [SQL](http://en.wikipedia.org/wiki/SQL) and describe
-they ways in which they are better than other programming languages
-and data formats. I will discuss the benefits of database normalization
+the ways in which they are better than other programming languages
+and data formats. 
 
-Then, by way of a simple to understand example, I will 
-describe the basics of how to store data in a database
-and the benefits of 
-database normalization.
-
-Finally, working with the example database I describe,
-I will work through successifly harder SQL
-queries to introduce the
-basic operators in SQL like filtering, joining
-and aggregating.
+Then, by way of a simple to understand example, I will describe the
+basics of how to store data in a database and the benefits of
+database normalization.  Finally, with the example I will work
+through successively harder SQL queries to introduce the basic
+operators in SQL like filtering, joining and aggregating.
 
 This post is intended as a 
-whirlwind tour of the key concepts of SQL,
-with the intention of conveying the value of
-databases, describing the major operations,
-and getting youe xcited to learn more.
+whirlwind tour of the key concepts of SQL.
+It will get you up to speed quickly, but
+will necessary skip some of the more advanced topics.
+At the end, I will provide some links for future reading.
 
 <!--
 In a followup post, I discuss some more advanced SQL queries which require cleaver
@@ -74,32 +69,41 @@ databases.
 
 # A Simple Example SQL Database
 
-It is instructive to begin with a simple example.
-The most important takeaway about SQL databases
-is that a database is a collection of two-dimensional tables.
-Each table has a fixed number of rows and columns. This may
-seem like a very limited design, but as you will see through this post,
-this design is incredibly powerful.
+It is instructive to begin with a simple example
+to make things concrete.
+Suppose for example that we want to store information
+about recipes in a cookbook.
+Fro this example, all reipies have a name and a list of
+ingredients.
 
-As a simple example of a relational database, supposed 
-we want to describe a schema for a database of recipes.
-The first thing we might want to do is to describe a list of all
-the recipes. All recipes have a name which we call recipe\_name and
-they all have a description which we will call recipe\_description.
-In addition, we will associated a unique id for each recipe which
-we will call recipe_id.
+The fundamental building block of SQL databases are two-dimensional
+tables. This may seem like a very limited design, but as you will
+see, this design is incredibly powerful.
 
-| recipe_id |    recipe_name |        recipe_description |
-| --------- | -------------- | ------------------------- |
-|         0 |          Tacos |        Mom's famous Tacos |
-|         1 |    Tomato Soup |      Homemade Tomato soup |
-|         2 | Grilled Cheese | Delicious Cheese Sandwich |
+In order to place our reipies into the database, we might first
+want to create a table which has the names of all of our recipes.
+All recipes have a name which we call recipe\_name.  In addition,
+we will associated a unique id for each recipe which we will call
+recipe\_id. Although unclear at this point, the purpose of the
+recipe\_id will be to connect rows in this table to rows in other
+tables.
 
-But each recipe is built out of ingredients, so 
-we might want an ingredients table describing all of the ingredients 
-that we can build food out of. For this simplified example,
-we assume that all ingredients have a price which is stored
-in the ingredient_price column.
+For our exmaple, we will call this table `recipes` and it will have the following
+data:
+
+| recipe_id |    recipe_name |
+| --------- | -------------- |
+|         0 |          Tacos |
+|         1 |    Tomato Soup |
+|         2 | Grilled Cheese |
+
+Each recipe is built out of ingredients, so 
+we can now make a table containing
+all of the ingredinets that are in our recipes.
+
+For our simplified example, we assume every recipe has
+a price and we define the `ingredients` table as
+follows:
 
 | ingredient_id | ingredient_name | ingredient_price |
 | ------------- | --------------- | ---------------- |
@@ -112,11 +116,19 @@ in the ingredient_price column.
 |             6 |           Bread |                2 |
 
   
-Finally, we need some way of listing all of the ingredients in each recipe.
+Finally, we need some way of listing what ingredients are in each
+recipe.
 Although we might naturally want to put this information into the recipe table,
-we will see that it is advantageous to use a third table to store this information.
-For every recipe, we will need to know all of the ingredients in that table.
-This information can nautrally be stored in a third table which we will call `recipe_ingredients`:
+it is advantageous to use a third table to store this information.
+
+This table needs to contain a mapping from recipies to ingredients.
+Although it might seem cumbersome, a straightfowrd way to do this
+is to have a table with all the (recipie, ingredient) pairs.
+
+To make the following examples more entertaining, we will also
+list an amount for each ingredinet to allow different ingredients to
+have more or less of anything. Our
+`recipe_ingredients` table now looks like:
 
 | recipe_id | ingredient_id | amount |
 | --------- | ------------- | ------ |
@@ -130,78 +142,63 @@ This information can nautrally be stored in a third table which we will call `re
 |         2 |             4 |      1 |
 |         2 |             6 |      2 |
 
-Note that we put in this table in addition how much of each ingredient is needed in each recipe.
+Of course, this exmaple is very simplified. 
+We could imagine that a real database like the one
+curated by [yummly.com](http://yummly.com) would have lots more information in it.
+But this example should be sufficient to allow for very interesting questions
+to be asked of the database.
 
-Of course, we could imagine that a real database, like the one
-curated by [yummly.com](http://yummly.com), would have lots more information in it.
-You might want more accurate list of steps involved in preparing the recipe.
-But this simplified example should get the point across.
+Before we move on, a little bit of terminology:
 
-# SQL Database Design
+* Schema:
+* Query:
 
-Moving from the general to the concreate, here is
-the SQL code to create the database we described above:
+# The Basics of Database Normalization
 
-First, we can create the `recipes` table:
+At this point, I would expect you to be confused about why we laid out the table in 
+in this manner.
+One natural question would be why we needed three tables to store
+what seemingly isn't very much information.  Another question is
+why `recipe_ingredients` stores these strange IDs instead of just
+storing the names of the recipies and ingredients.  And finally,
+one might wonder why each recipe-ingredient pair takes up its own
+row in the `recipe_ingredients` table.
 
-```sql
-CREATE TABLE recipes (
-  recipe_id int(11) NOT NULL, 
-  recipe_name varchar(30) NOT NULL,
-  recipe_description varchar(30) NOT NULL
-);
-INSERT INTO recipes 
-    (recipe_id, recipe_name, recipe_description) 
-VALUES 
-    (0,"Tacos","Mom's famous Tacos"),
-    (1,"Tomato Soup","Homemade Tomato soup"),
-    (2,"Grilled Cheese","Delicious Cheese Sandwich");
-```
+This naturally leads us to the concept of [database
+normalization](http://en.wikipedia.org/wiki/Database_normalization).
+The goal of database normalization is to design
+the database which avoid having any duplciate data in the
+database.
 
-Next we can reate the `ingredients` table:
+If we stored recipie and ingredient names
+directly in the `recipe_ingredients` table,
+we would end up with rows like
 
-```sql
-CREATE TABLE ingredients (
-  ingredient_id int(11) NOT NULL, 
-  ingredient_name varchar(30) NOT NULL,
-  ingredient_price int(11) NOT NULL
-);
-INSERT INTO ingredients
-    (ingredient_id, ingredient_name, ingredient_price)
-VALUES 
-    (0, "Beef", 5),
-    (1, "Lettuce", 1),
-    (2, "Tomatoes", 2),
-    (3, "Taco Shell", 2),
-    (4, "Cheese", 3),
-    (5, "Milk", 1),
-    (6, "Bread", 2);
-```
+| recipe_name | ingredient_name | amount |
+| ----------- | --------------- | ------ |
+|       Tacos |            Beef |      1 |
+|       Tacos |         Lettuce |      2 |
 
-And finally, we can create the recipe-ingredient-mapping table:
+At some point in the future, somebody might
+decide that they wanted the Tacos to have Chicken
+instead of beef. In the process of updating
+the table, they migth accidently
+change the name of the recipe.
 
-```sql
-CREATE TABLE recipe_ingredients (
-  recipe_id int(11) NOT NULL, 
-  ingredient_id int(11) NOT NULL, 
-  amount int(11) NOT NULL
-);
-INSERT INTO recipe_ingredients 
-    (recipe_id, ingredient_id, amount)
-VALUES
-    (0,0,1),
-    (0,1,2),
-    (0,2,2),
-    (0,3,3),
-    (0,4,1),
-    (1,2,2),
-    (1,5,1),
-    (2,4,1),
-    (2,6,2);
-```
+| recipe_name | ingredient_name | amount |
+| ----------- | --------------- | ------ |
+|       tacos |         Chicken |      1 |
+|       Tacos |         Lettuce |      2 |
 
-XXXXXX NOTE ABOUT SIMILAR BLOG POST ABOUT HOW TO SETUP MYSQL DATABASE
-AND PLAY ALONG WITH THE EXAMPLES IN THIS POST XXXXXX
+But if the recipe\_name wasn't changed consistently, the table
+itself could become inconsistent.  Finding and fixing these sorts
+of bugs can be costly and time consuming.  So it is a huge win if
+we can design our database to not allow this sort of error.
+
+In addition, database normalization has the added benefit that
+updating the name of an ingredient or recipie requires only chaning
+one thing in one place.  You could imagine how difficult it would
+be to change an ingredient name if it showed up all over the database.
 
 # Similar python Implementation
 
@@ -255,6 +252,70 @@ As you will see, SQL solves this problem by dividing up our data into multiple t
 The second issue with the approach listed above is that there are a lot of duplciate data
 which shows up in mulitple places. 
 
+# Commands to Build the Database in SQL
+
+Moving from the general to the concreate, here is
+the SQL code to create the database we described above:
+
+First, we can create the `recipes` table:
+
+```sql
+CREATE TABLE recipes (
+  recipe_id int(11) NOT NULL, 
+  recipe_name varchar(30) NOT NULL
+);
+INSERT INTO recipes 
+    (recipe_id, recipe_name) 
+VALUES 
+    (0,"Tacos"),
+    (1,"Tomato Soup"),
+    (2,"Grilled Cheese");
+```
+
+Next we can reate the `ingredients` table:
+
+```sql
+CREATE TABLE ingredients (
+  ingredient_id int(11) NOT NULL, 
+  ingredient_name varchar(30) NOT NULL,
+  ingredient_price int(11) NOT NULL
+);
+INSERT INTO ingredients
+    (ingredient_id, ingredient_name, ingredient_price)
+VALUES 
+    (0, "Beef", 5),
+    (1, "Lettuce", 1),
+    (2, "Tomatoes", 2),
+    (3, "Taco Shell", 2),
+    (4, "Cheese", 3),
+    (5, "Milk", 1),
+    (6, "Bread", 2);
+```
+
+And finally, we can create the recipe-ingredient-mapping table:
+
+```sql
+CREATE TABLE recipe_ingredients (
+  recipe_id int(11) NOT NULL, 
+  ingredient_id int(11) NOT NULL, 
+  amount int(11) NOT NULL
+);
+INSERT INTO recipe_ingredients 
+    (recipe_id, ingredient_id, amount)
+VALUES
+    (0,0,1),
+    (0,1,2),
+    (0,2,2),
+    (0,3,3),
+    (0,4,1),
+    (1,2,2),
+    (1,5,1),
+    (2,4,1),
+    (2,6,2);
+```
+
+XXXXXX NOTE ABOUT SIMILAR BLOG POST ABOUT HOW TO SETUP MYSQL DATABASE
+AND PLAY ALONG WITH THE EXAMPLES IN THIS POST XXXXXX
 
 
 
@@ -396,17 +457,17 @@ there that the recipe_id is equal.
 
 For this example, we get the table:
 
-| recipe_id | recipe_name    | recipe_description        | recipe_id | ingredient_id | amount |
-| --------- | -------------- | ------------------------- | --------- | ------------- | ------ |
-|         0 | Tacos          | Mom's famous Tacos        | 0         |             0 | 1      |
-|         0 | Tacos          | Mom's famous Tacos        | 0         |             1 | 2      |
-|         0 | Tacos          | Mom's famous Tacos        | 0         |             2 | 2      |
-|         0 | Tacos          | Mom's famous Tacos        | 0         |             3 | 3      |
-|         0 | Tacos          | Mom's famous Tacos        | 0         |             4 | 1      |
-|         1 | Tomato Soup    | Homemade Tomato soup      | 1         |             2 | 2      |
-|         1 | Tomato Soup    | Homemade Tomato soup      | 1         |             5 | 1      |
-|         2 | Grilled Cheese | Delicious Cheese Sandwich | 2         |             4 | 1      |
-|         2 | Grilled Cheese | Delicious Cheese Sandwich | 2         |             6 | 2      |
+| recipe_id | recipe_name    | recipe_id | ingredient_id | amount |
+| --------- | -------------- | --------- | ------------- | ------ |
+|         0 | Tacos          | 0         |             0 | 1      |
+|         0 | Tacos          | 0         |             1 | 2      |
+|         0 | Tacos          | 0         |             2 | 2      |
+|         0 | Tacos          | 0         |             3 | 3      |
+|         0 | Tacos          | 0         |             4 | 1      |
+|         1 | Tomato Soup    | 1         |             2 | 2      |
+|         1 | Tomato Soup    | 1         |             5 | 1      |
+|         2 | Grilled Cheese | 2         |             4 | 1      |
+|         2 | Grilled Cheese | 2         |             6 | 2      |
 
 Now, we want to filter this table out by only getting the ingredient_id 
 when the recipe_name is "Tomato Soup":
