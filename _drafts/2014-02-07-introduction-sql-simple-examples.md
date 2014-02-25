@@ -15,11 +15,13 @@ database normalization.  Finally, with the example I will work
 through successively harder SQL queries to introduce the basic
 operators in SQL like filtering, joining and aggregating.
 
-This post is intended as a 
-whirlwind tour of the key concepts of SQL.
-It will get you up to speed quickly, but
-will necessary skip some of the more advanced topics.
-At the end, I will provide some links for future reading.
+This post is intended more of a why than a how about databases.
+But the end of the post, I hope that you understand the
+key benefits of SQL, how to design robust tables,
+and how to issue simple quieries to find 
+data inside of a database.
+
+NOTE ABOUT HOW COMMADS ARE FOR MYSQL BUT ARE VERY TRANSFERABLE TO OTHER DATABASES
 
 <!--
 In a followup post, I discuss some more advanced SQL queries which require cleaver
@@ -142,32 +144,37 @@ have more or less of anything. Our
 |         2 |             4 |      1 |
 |         2 |             6 |      2 |
 
-Of course, this exmaple is very simplified. 
-We could imagine that a real database like the one
-curated by [yummly.com](http://yummly.com) would have lots more information in it.
-But this example should be sufficient to allow for very interesting questions
-to be asked of the database.
+Of course, this exmaple is very simplified.  We could imagine that
+a real database like the one curated by [yummly.com](http://yummly.com)
+would have lots more information in it.  But this example should
+be sufficient to allow for very interesting questions to be asked
+of the database.
+
+At this point, I would expect you to be confused about why we laid
+out the table in in this manner. We will go over the reational for
+this design in the next two sections, but before moving on I hope
+you understand the logical correctness of the design.
 
 Before we move on, a little bit of terminology:
 
 * Schema:
 * Query:
 
+
 # The Basics of Database Normalization
 
-At this point, I would expect you to be confused about why we laid out the table in 
-in this manner.
-One natural question would be why we needed three tables to store
-what seemingly isn't very much information.  Another question is
-why `recipe_ingredients` stores these strange IDs instead of just
-storing the names of the recipies and ingredients.  And finally,
-one might wonder why each recipe-ingredient pair takes up its own
-row in the `recipe_ingredients` table.
+
+One natural question would be why
+we needed three tables to store what seemingly isn't very much
+information.  Another question is why `recipe_ingredients` stores
+these strange IDs instead of just storing the names of the recipies
+and ingredients.  And finally, one might wonder why each recipe-ingredient
+pair takes up its own row in the `recipe_ingredients` table.
 
 This naturally leads us to the concept of [database
 normalization](http://en.wikipedia.org/wiki/Database_normalization).
 The goal of database normalization is to design
-the database which avoid having any duplciate data in the
+the database which avoid having any duplicate data in the
 database.
 
 If we stored recipie and ingredient names
@@ -192,67 +199,96 @@ change the name of the recipe.
 
 But if the recipe\_name wasn't changed consistently, the table
 itself could become inconsistent.  Finding and fixing these sorts
-of bugs can be costly and time consuming.  So it is a huge win if
-we can design our database to not allow this sort of error.
+of bugs can be costly and time consuming.  And as the size of a
+database grows (more tables and more rows), these errors become
+even harder to spot and avoid.  So it is a huge win if we can design
+our database to prevent this sort of error.
 
 In addition, database normalization has the added benefit that
 updating the name of an ingredient or recipie requires only chaning
-one thing in one place.  You could imagine how difficult it would
-be to change an ingredient name if it showed up all over the database.
+one thing in one place. This is useful because the end user
+of your database will most likely always want to change things.
 
-# Similar python Implementation
+Finally, another another benefit of this modular table design 
+is that it scales nicely to adding additonal information.
+Suppose we wanted to store information about the steps needed to
+build the recipe. We could just create a new table called
+`recipe_instructions` which linked back to the recipies by recipe\_id:
 
-Comming from a python background, my natural tendency is to feel that this
-is totally overengineering the problem. Instead, I would imagine using
-a nested dictionary to define this data:
+| step_id | recipe_id | step_number |                 step_description |
+| ------- | --------- | ----------- | -------------------------------- |
+|       0 |         0 |           0 |   Put the Taco Shells in an oven |
+|       1 |         0 |           1 | Cook the beef in a pan on medium |
+
+Being able to add new data easily without altering the orignal
+tables is very useful because it is less error prone and doesn't
+require modifying any of the existing code and quieries which read
+and write from the database.
+
+Finally, if the extra data only existed for a limited number of
+rows, this would be another win in space since otherwise
+the table would have to have lots of `NULL` values in it for
+recipies without directions.
+
+# Why Do Tables Have to be Flat?
+
+If you are used to programming in scripting langauges like ruby, python, or perl,
+or if you are used to dealing with JSON data, you may be confused
+why tables in SQL have to be flat.
+A common paradme is to next data in a format which is more human readable.
+So in python, I could imagine storing our data in a dictionary of sets:
 
 ```python
 recipes = {
-  "Tacos": ["Beef", "Lettuce", "Tomatoes", 
-            "Taco Shell", "Cheese" ],
-  "Tomato Soup": [ "Tomatoes", "Milk" ],
-  "Grilled Cheese": [ "Cheese", "Bread" ]
+  "Tacos": ("Beef", "Lettuce", "Tomatoes", 
+            "Taco Shell", "Cheese"),
+  "Tomato Soup": ("Tomatoes", "Milk"),
+  "Grilled Cheese": ("Cheese", "Bread")
 }
 ```
-That way, if I wanted to find, for example, all of the ingredients associated
-with Tomato Soup, I could use the code:
+
+Using this dictionary, it would be easy to find all the
+ingredients for a particular recipe:
 
 ```python
 ingredients = recipes["Tomato Soup"]["ingredients"]
 ```
 
-Although this seems works well, there are several issues associated with this approach.
-The first is that organizing our data in this particular way makes
-other queries about the data particularly hard.
-For example, it is much more cumbersome to get a list of all recipes 
-which contain tomatoes. You could imagine a similar data structure optimized for that 
-kind of query:
+But the problem with laying out the data in this way is it
+makes this paritcular query easy at the expense of making other kinds
+of queries hard. 
+
+It would be cumbersome for example to 
+to list all recipies that have a particular ingredient.
+We could imagine building a data structure optimized to
+solve this question:
 
 ```python
 recipes = {
-    "Beef": [ "Tacos" ],
-    "Lettuce": [ "Tacos" ],
-    "Tomatoes": [ "Tacos", "Tomato Soup"],
-    "Taco Shell": [ "Tacos"],
-    "Cheese": [ "Tacos", "Grilled Cheese"]
-    "Milk": [ "Tomato Soup" ]
-    "Bread": [ "Grilled Cheese" ]
+    "Beef": ("Tacos"),
+    "Lettuce": ("Tacos"),
+    "Tomatoes": ("Tacos", "Tomato Soup"),
+    "Taco Shell": ("Tacos"),
+    "Cheese": ("Tacos", "Grilled Cheese"),
+    "Milk": ("Tomato Soup" )
+    "Bread": ("Grilled Cheese")
 }
 ```
 
-I am leaving out some of the other metadata to make my point clear.
-But this data structure makes it cumbersome to find what ingredients are
-required to make a paritcular recipe.
-This may seem like a contrived example, but in real life it is very often
-the case that that you later on have to query your data in ways you did not
-originally intent.
+But this structure this makes the first query more difficult!
 
-As you will see, SQL solves this problem by dividing up our data into multiple tables.
+Although it seems strange at first, having to use flat tables is
+actually a good thing.  By forcing you to use a flat table, SQL
+ensures that our table isn't bias towards (and also against) certain
+kinds of query.
 
-The second issue with the approach listed above is that there are a lot of duplciate data
-which shows up in mulitple places. 
+The designers of SQL can have optimized the database so that our
+table can be efficient for all sorts of SQL queries.  There is a
+very good chance that what you think will be interesting to do now
+with your data today will be quite different from a year from now.
+So having his power is a huge win.
 
-# Commands to Build the Database in SQL
+# Creating Tables in SQL
 
 Moving from the general to the concreate, here is
 the SQL code to create the database we described above:
@@ -261,9 +297,12 @@ First, we can create the `recipes` table:
 
 ```sql
 CREATE TABLE recipes (
-  recipe_id int(11) NOT NULL, 
-  recipe_name varchar(30) NOT NULL
+  recipe_id int(11) NOT NULL,
+  recipe_name varchar(30) NOT NULL,
+  PRIMARY KEY (recipe_id)
+  UNIQUE (recipe_name)
 );
+
 INSERT INTO recipes 
     (recipe_id, recipe_name) 
 VALUES 
@@ -272,14 +311,27 @@ VALUES
     (2,"Grilled Cheese");
 ```
 
-Next we can reate the `ingredients` table:
+The purpose of the `PRIMARY KEY` is to 
+avoid any possiblity of having duplicate
+rows in the table. The `PRIMARY KEY`
+forces every row to have a different value.
+of the `PRIMARY KEY`. In addition, we
+can use the `UNIQUE (recipe_name)` 
+command to ensure that no two
+rows have the same recipe name since
+this could introduce bugs.
+
+Similaryly, we can reate the `ingredients` table:
 
 ```sql
 CREATE TABLE ingredients (
   ingredient_id int(11) NOT NULL, 
   ingredient_name varchar(30) NOT NULL,
-  ingredient_price int(11) NOT NULL
+  ingredient_price int(11) NOT NULL,
+  PRIMARY KEY (ingredient_id),  
+  UNIQUE (ingredient_name)
 );
+
 INSERT INTO ingredients
     (ingredient_id, ingredient_name, ingredient_price)
 VALUES 
@@ -292,13 +344,17 @@ VALUES
     (6, "Bread", 2);
 ```
 
-And finally, we can create the recipe-ingredient-mapping table:
+Note that we do not ensure uniqueness of the `ingredient_price`
+since multiple recipies could have the same price.
+
+Finally, we can create the recipe-ingredient-mapping table:
 
 ```sql
 CREATE TABLE recipe_ingredients (
   recipe_id int(11) NOT NULL, 
   ingredient_id int(11) NOT NULL, 
   amount int(11) NOT NULL
+  PRIMARY KEY (recipe_id,ingredient_id),  
 );
 INSERT INTO recipe_ingredients 
     (recipe_id, ingredient_id, amount)
@@ -314,10 +370,15 @@ VALUES
     (2,6,2);
 ```
 
-XXXXXX NOTE ABOUT SIMILAR BLOG POST ABOUT HOW TO SETUP MYSQL DATABASE
-AND PLAY ALONG WITH THE EXAMPLES IN THIS POST XXXXXX
+Here, our `PRIMARY KEY` is for `recipe_id`, `ingredient_id`
+pairs because two rows can have the same `recipe_id` as long
+as they have a different `ingredient_id` (and vice versa).
 
-
+One last thing to mention is there is an `AUTO_INCREMENT` command
+which can be used to let SQL pick the `recipe_id` and `ingredient_id`
+ID values to ensure that each ID is one larger than the last one
+added to database.  Here is [more
+documentation](http://dev.mysql.com/doc/refman/5.0/en/example-auto-increment.html)
 
 # THE SELECT, FROM, and WHERE Statements in SQL
 
