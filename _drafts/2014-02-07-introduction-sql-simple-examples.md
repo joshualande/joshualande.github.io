@@ -377,8 +377,8 @@ as they have a different `ingredient_id` (and vice versa).
 One last thing to mention is there is an `AUTO_INCREMENT` command
 which can be used to let SQL pick the `recipe_id` and `ingredient_id`
 ID values to ensure that each ID is one larger than the last one
-added to database.  Here is [the offical documentation on this 
-command](http://dev.mysql.com/doc/refman/5.0/en/example-auto-increment.html).
+added to database.  [Here](http://dev.mysql.com/doc/refman/5.0/en/example-auto-increment.html)
+is the offical documentation on this command.
 
 # THE SELECT, FROM, and WHERE Statements in SQL
 
