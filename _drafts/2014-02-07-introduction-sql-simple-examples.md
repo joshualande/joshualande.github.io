@@ -232,11 +232,17 @@ recipies without directions.
 
 # Why Do Tables Have to be Flat?
 
-If you are used to programming in scripting langauges like ruby, python, or perl,
-or if you are used to dealing with JSON data, you may be confused
-why tables in SQL have to be flat.
-A common paradme is to next data in a format which is more human readable.
-So in python, I could imagine storing our data in a dictionary of sets:
+This limitation that SQL tables have to be flat may at first seem
+strange.  Although it should seem clear at this point that there
+is some way of flattening out your data using keys to fit into flat
+tables, it is probably unclear why this is enforced.
+
+If you are used to programming in scripting langauges
+like ruby, python, or perl, or if you are used to dealing with JSON
+data, you may be confused why tables in SQL have to be flat.  A
+common paradme is to next data in a format which is more human
+readable.  So in python, I could imagine storing our data in a
+dictionary of sets:
 
 ```python
 recipes = {
@@ -290,10 +296,20 @@ So having his power is a huge win.
 
 # Creating Tables in SQL
 
-Moving from the general to the concreate, here is
-the SQL code to create the database we described above:
+Before getting further,
+I would highly recommend [setting up
+MySQL](https://dev.mysql.com/tech-resources/articles/mysql_intro.html) on
+your local machine and creating a test database to
+run these examples in. Everything in this blog post
+should be self contained, so you can will be able to
+create all of the the tables and run all of the quieries. 
+If you are using an Apple computer,
+I recommend using the program [Sequel Pro](http://www.sequelpro.com/)
+which provides a great graphical interface for interacting
+with MySQL.
 
-First, we can create the `recipes` table:
+First, we can create the `recipes` table
+using the `CREATE TABLE` command:
 
 ```sql
 CREATE TABLE recipes (
@@ -375,19 +391,22 @@ pairs because two rows can have the same `recipe_id` as long
 as they have a different `ingredient_id` (and vice versa).
 
 One last thing to mention is there is an `AUTO_INCREMENT` command
-which can be used to let SQL pick the `recipe_id` and `ingredient_id`
-ID values to ensure that each ID is one larger than the last one
+which can be used to let SQL automatically
+pick the `recipe_id` and `ingredient_id`
+values to ensure that each ID is one larger than the last one
 added to database.  [Here](http://dev.mysql.com/doc/refman/5.0/en/example-auto-increment.html)
-is the offical documentation on this command.
+is the documentation on this command.
 
 # THE SELECT, FROM, and WHERE Statements in SQL
 
-Given our recipe schema above, there are many kind of calculations we could imagine doing
-on this databse.
+Given our recipe database, there are all kinds
+of interesting questionts we could
+ask using our database.
 
-Imagine that we wanted to find all the recipes in "Tomato Soup".
-As a first step, we could figure out the recipe_id for "Tomato Soup"
-with a simple SQL query using the `SELECT` statement:
+Imagine that we wanted to find all the ingredients in "Tomato Soup".
+As a first step, we could figure out the recipe_id for "Tomato Soup".
+Whenever we want to query information from the database,
+we use the `SELECT` statement:
 
 ```sql
 SELECT recipe_id 
@@ -395,18 +414,16 @@ FROM recipes
 WHERE recipe_name="Tomato Soup"
 ```
 
-This query says that we take the the `recipes` table,
-and we filter only on a particular kind of row (where the
-`recipe_name` is "Tomato Soup") and the filter for 
-a particular column (the `recipe_id` column).
-
+This query says take the the `recipes` table,
+filter for rows where `recipe_name` is "Tomato Soup", 
+and select only the clumn `recipe_id`.
 This query returns the table
 
 | recipe_id |
 | --------- |
 |         1 |
 
-Now, we can get a list of the `ingredient_id` using a similar query
+We can get the `ingredient_id` values using a similar query
 on the `recipe_ingredients` table:
 
 ```sql
@@ -415,78 +432,27 @@ FROM recipe_ingredients
 WHERE recipe_id = 1
 ```
 
-Which returns the table
+This returns
 
 | ingredient_id |
 | ------------- |
 | 2             |
 | 5             |
 
-# The ORDER BY operator in SQL
-
-The next command we will cover is `ORDER BY`.
-`ORDER BY` can be used to sort the rows based on
-a particular column. For example, if we wanted
-to sort the ingredients by how expensive they are
-in order of descending price, we could run the query:
-
-```
-SELECT *
-FROM ingredients
-ORDER BY ingredient_price DESC
-```
-
-Which returns 
-
-| ingredient_id | ingredient_name | ingredient_price |
-| ------------- | --------------- | ---------------- |
-| 0             |            Beef |                5 |
-| 4             |          Cheese |                3 |
-| 6             |           Bread |                2 |
-| 3             |      Taco Shell |                2 |
-| 2             |        Tomatoes |                2 |
-| 1             |         Lettuce |                1 |
-| 5             |            Milk |                1 |
-
-If we wanted to sort columns of the same price alphabetically by name, we could
-use a similar query:
-
-```
-SELECT *
-FROM ingredients
-ORDER BY ingredient_price DESC,ingredient_name
-```
-
-This creates the table:
-
-| ingredient_id | ingredient_name | ingredient_price |
-| ------------- | --------------- | ---------------- |
-| 0             |            Beef |                5 |
-| 4             |          Cheese |                3 |
-| 6             |           Bread |                2 |
-| 3             |      Taco Shell |                2 |
-| 2             |        Tomatoes |                2 |
-| 1             |         Lettuce |                1 |
-| 5             |            Milk |                1 |
-
-# The LIMIT operator in SQL
-
-We can use the `LIMIT` operator to limit the number of results returend
-by the query. For example, to get only the most expensive ingredient, we could use
-the query:
+Getting the ingredient names is similar:
 
 ```sql
-SELECT *
+SELECT ingredient_name
 FROM ingredients
-ORDER BY ingredient_price DESC
-LIMIT 1
+WHERE ingredient_id=2 OR ingredient_id=5
 ```
 
-This returns the table:
+This returns:
 
-| ingredient_id | ingredient_name | ingredient_price |
-| ------------- | --------------- | ---------------- |
-| 0             |            Beef |                5 |
+| ingredient_name |
+| --------------- |
+| Tomatoes        |
+| Milk            |
 
 
 # The JOIN operator in SQL
@@ -727,6 +693,8 @@ This creates the table
 |         1 |               2 |
 |         2 |               2 |
 
+PUT A NOTE ABOUT HAVING IS THE SAME AS A FILTER AFTER THE SUBQUERY
+
 # Subqueries in SQL
 
 As an example of a harder
@@ -856,33 +824,120 @@ The fundamental ideas begind a database are that
 which is the process of minimizing the amount of redundant data
 in a database by creating lots of related tables. The next idea is
 
+# The ORDER BY operator in SQL
+
+The next command we will cover is `ORDER BY`.
+`ORDER BY` can be used to sort the rows based on
+a particular column. For example, if we wanted
+to sort the ingredients by how expensive they are
+in order of descending price, we could run the query:
+
+```
+SELECT *
+FROM ingredients
+ORDER BY ingredient_price DESC
+```
+
+Which returns 
+
+| ingredient_id | ingredient_name | ingredient_price |
+| ------------- | --------------- | ---------------- |
+| 0             |            Beef |                5 |
+| 4             |          Cheese |                3 |
+| 6             |           Bread |                2 |
+| 3             |      Taco Shell |                2 |
+| 2             |        Tomatoes |                2 |
+| 1             |         Lettuce |                1 |
+| 5             |            Milk |                1 |
+
+If we wanted to sort columns of the same price alphabetically by name, we could
+use a similar query:
+
+```
+SELECT *
+FROM ingredients
+ORDER BY ingredient_price DESC,ingredient_name
+```
+
+This creates the table:
+
+| ingredient_id | ingredient_name | ingredient_price |
+| ------------- | --------------- | ---------------- |
+| 0             |            Beef |                5 |
+| 4             |          Cheese |                3 |
+| 6             |           Bread |                2 |
+| 3             |      Taco Shell |                2 |
+| 2             |        Tomatoes |                2 |
+| 1             |         Lettuce |                1 |
+| 5             |            Milk |                1 |
+
+# The LIMIT operator in SQL
+
+We can use the `LIMIT` operator to limit the number of results returend
+by the query. For example, to get only the most expensive ingredient, we could use
+the query:
+
+```sql
+SELECT *
+FROM ingredients
+ORDER BY ingredient_price DESC
+LIMIT 1
+```
+
+This returns the table:
+
+| ingredient_id | ingredient_name | ingredient_price |
+| ------------- | --------------- | ---------------- |
+| 0             |            Beef |                5 |
 
 
-# Wrapup 
 
-The key concepts we went over in this post are:
+# Thanks for Reading
 
+In this post, we went over the key concepts of good database design
+and dateabase normalization. Then, we went over the topics of how
+to issue queries on a database using the `SELECT` statement. Finally,
+we saw the power of filtering, joining, and aggregating multiple
+tables in order to ask advanced questions about your data.
 
-Thats about it. If you can get get you mind around the idea of table normalization, as well as
-as the benefits of joining tables together to produce more complicated queries, everything
-else should be easy.
+# Links
 
-# Closing Words
+This was just a whirlwind tour of what's so great
+about SQL databases. There are tons of advanced topics left to explore.
+Here is some further reading to get you started:
 
-Some more advanced topics I didn't cover:
-* Views
-* SQL Indicies For Faster Queries
-* INNER, LEFT, and RIGHT join.
-* Terradata/Vertica for distributed databases.
-* HIVE/Pig to run parallel Map/Reduce queries.
-
-# Relevant links
-
-This was of course just a whirlwind tour of what's so great
-about SQL databases. There is tons of topics left to explore:
-
-* [MySQL](http://www.mysql.com/) is a popular SQL implementation.
-* [Sequel Pro](http://www.sequelpro.com) is a great MySQL client.
-* Bill Howe's coursera class (https://www.coursera.org/course/datasci). The class Relational Databases, Relational Algebra (https://class.coursera.org/datasci-001/lecture).
+* SQL databases go through great lenghts to deal with `NULL` values
+  in a sensible way. [Here](http://dev.mysql.com/doc/refman/5.0/en/working-with-null.html)
+  is some documentation in the way MySQL handles `NULL` values.
+* SQL has the concept of `INNER`, `LEFT`, `RIGHT`, and `OUTER` joins,
+  which behave different in the situation where you are joining on 
+  columns with `NULL` values in them.
+  [Here](http://dev.mysql.com/doc/refman/5.0/en/join.html)
+  is some documentation on different joins.
+* [Table Indicies](http://en.wikipedia.org/wiki/Database_index) are a concept in
+  database design where sorted indicies of a table can be cached to
+  improve performance of particular quieries on a table.
+* [Views](http://dev.mysql.com/doc/refman/5.0/en/create-view.html) in
+  SQL act as temporary tables, able to both simplify queiries in MySQL
+  as well as abstract the end user from the underlying implementation
+  of a database.
+* Beyond [MySQL](http://www.mysql.com/), there are some really great
+  high-performance parallel databases like
+  [Terradata](http://www.teradata.com/) and
+  [Vertica](http://www.vertica.com/). They allow for large data
+  sets then can traditionally be stored in MySQL.
+* For data sets of a large enough size, [hadoop](http://hadoop.apache.org/),
+  the [Hadoop Distributed File System (HDFS)](http://hadoop.apache.org/docs/r1.2.1/hdfs_design.html),
+  and [MapReduce](https://hadoop.apache.org/docs/r1.2.1/mapred_tutorial.html) 
+  are typically used to store and analyze the data. 
+  [Apache Hive](http://hive.apache.org/) is an implementation of
+  SQL on top of MapReduce capable of analyzing these exceptionally-large
+  data sets. [Apache Pig](https://pig.apache.org/) is a similar SQL-like
+  langauge which runs on top of MapReduce.
+* If you are interested in learning more about the implementaion of query
+  optimizers inf SQL, Bill Howe's coursera class 
+  [Introduction to Data Science](https://www.coursera.org/course/datasci)
+  has a great discussion of database implmeenations in his lectures on
+  "[Relational Databases, Relational Algebra](https://class.coursera.org/datasci-001/lecture/preview)".
 
 {% include twitter_plug.html %}
