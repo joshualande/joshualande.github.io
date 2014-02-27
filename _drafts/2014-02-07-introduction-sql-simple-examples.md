@@ -1,6 +1,6 @@
 ---
 layout: post
-title: An Introduction to SQL With Simple Examples
+title: Get Started with SQL Using Simple Examples
 comments: true
 ---
 
@@ -11,87 +11,34 @@ and data formats.
 
 Then, by way of a simple to understand example, I will describe the
 basics of how to store data in a database and the benefits of
-database normalization.  Finally, with the example I will work
+database normalization.  Using this example, I will work
 through successively harder SQL queries to introduce the basic
 operators in SQL like filtering, joining and aggregating.
 
-This post is intended more of a why than a how about databases.
-But the end of the post, I hope that you understand the
-key benefits of SQL, how to design robust tables,
-and how to issue simple quieries to find 
-data inside of a database.
-
-NOTE ABOUT HOW COMMADS ARE FOR MYSQL BUT ARE VERY TRANSFERABLE TO OTHER DATABASES
-
-<!--
-In a followup post, I discuss some more advanced SQL queries which require cleaver
-use of the basic building blocks of SQL.
-
-And in another post, I introduce the Apache Pig programming language, which is
-very similar to SQL but allows for analysis of big data.
-
-Before you start reading this post, I would recommend setting
-up SQL on your computer. I wrote instructions for doing so on a Mac here XXX.
-Once you have done that you can create the tables used in this example using
-the section linked from below XXX
--->
-
-
-<!--
-# Background
-
-During my Physics PhD, I never understood the purpose of 
-[SQL](http://en.wikipedia.org/wiki/SQL) and
-similar [relational database management systems 
-(RDBMs)](http://en.wikipedia.org/wiki/Relational_database_management_system).
-As I prepared to transition to a career as a data scientist, I was
-confused why so much data science was done inside of these databases.
-
-After all, physicists (and scientists more broadly) love to reinvent the wheel. 
-Working in astrophysics, I had used all sorts of file formats like
-[ROOT Trees](http://en.wikipedia.org/wiki/ROOT), 
-[Fits Files](http://en.wikipedia.org/wiki/FITS),
-[HDF5 Files](http://en.wikipedia.org/wiki/Hierarchical_Data_Format),
-and [pandas DataFrames](http://en.wikipedia.org/wiki/Pandas_(software). 
-I wans't sure why I needed to learn SQL.
-
-And besides, SQL seemed so limited. Everything had to be these flat
-tables, and the syntax to deal with theme seemes archane. 
-
-Now that I have been a data scientist for half a year, I have grown
-to really love databases.  They do what they are designed to do
-well they do better than anything else.  And their use case in
-business and data science applications is almost limitless.
-
-Now that I am on the other side of the table 
-helping other academics transition to become become data scientists, I see that
-most of them have very similar confusion about the purpose and benefit of these
-databases. 
--->
+This post is intended as more of a why than a how.  Despite 
+lacking throughness, by the end of the post you 
+should dave a good overview of the key benefits and major topics
+of SQL. In this post, I will show commands for the 
+[MySQL](http://www.mysql.com/) database, but the commands and 
+concepts are easily transferable to
 
 # A Simple Example SQL Database
 
-It is instructive to begin with a simple example
-to make things concrete.
-Suppose for example that we want to store information
-about recipes in a cookbook.
-Fro this example, all reipies have a name and a list of
-ingredients.
+We begin with a simple example.  Suppose for that we want to store
+in a database information about recipes in a cookbook. 
 
 The fundamental building block of SQL databases are two-dimensional
-tables. This may seem like a very limited design, but as you will
-see, this design is incredibly powerful.
+tables. This may seem like a limited design, but as you will
+see, this limitation is incredibly powerful.
 
-In order to place our reipies into the database, we might first
-want to create a table which has the names of all of our recipes.
-All recipes have a name which we call recipe\_name.  In addition,
-we will associated a unique id for each recipe which we will call
-recipe\_id. Although unclear at this point, the purpose of the
-recipe\_id will be to connect rows in this table to rows in other
-tables.
+In order to store our recipes into the database, we can first create
+a table listing the names of all of our recipes.  In addition, we
+will associated a unique id for each recipe.  The purpose of the
+recipe id, as you will see soon, is to connect rows in this table
+to rows in other tables.
 
-For our exmaple, we will call this table `recipes` and it will have the following
-data:
+For our particular example, we will call this table `recipes` and
+it will have the following data:
 
 | recipe_id |    recipe_name |
 | --------- | -------------- |
@@ -123,7 +70,7 @@ recipe.
 Although we might naturally want to put this information into the recipe table,
 it is advantageous to use a third table to store this information.
 
-This table needs to contain a mapping from recipies to ingredients.
+This table needs to contain a mapping from recipes to ingredients.
 Although it might seem cumbersome, a straightfowrd way to do this
 is to have a table with all the (recipie, ingredient) pairs.
 
@@ -144,30 +91,30 @@ have more or less of anything. Our
 |         2 |             4 |      1 |
 |         2 |             6 |      2 |
 
-Of course, this exmaple is very simplified.  We could imagine that
+Of course, this example is very simplified.  We could imagine that
 a real database like the one curated by [yummly.com](http://yummly.com)
 would have lots more information in it.  But this example should
 be sufficient to allow for very interesting questions to be asked
 of the database.
 
 At this point, I would expect you to be confused about why we laid
-out the table in in this manner. We will go over the reational for
+out the table in in this manner. We will go over the rationale for
 this design in the next two sections, but before moving on I hope
 you understand the logical correctness of the design.
 
-Before we move on, a little bit of terminology:
+Before we move on, I will mention two bits of terminology used when
+discussing databases.  A [query](http://en.wikipedia.org/wiki/SQL#Queries)
+in SQL is a command which retrivies data from a database.  A
+[schema](http://en.wikipedia.org/wiki/Database_schema) is the
+structure of the tables in the database.
 
-* Schema:
-* Query:
 
-
-# The Basics of Database Normalization
-
+# Normalize Your Database
 
 One natural question would be why
 we needed three tables to store what seemingly isn't very much
 information.  Another question is why `recipe_ingredients` stores
-these strange IDs instead of just storing the names of the recipies
+these strange IDs instead of just storing the names of the recipes
 and ingredients.  And finally, one might wonder why each recipe-ingredient
 pair takes up its own row in the `recipe_ingredients` table.
 
@@ -213,7 +160,7 @@ Finally, another another benefit of this modular table design
 is that it scales nicely to adding additonal information.
 Suppose we wanted to store information about the steps needed to
 build the recipe. We could just create a new table called
-`recipe_instructions` which linked back to the recipies by recipe\_id:
+`recipe_instructions` which linked back to the recipes by recipe\_id:
 
 | step_id | recipe_id | step_number |                 step_description |
 | ------- | --------- | ----------- | -------------------------------- |
@@ -222,13 +169,13 @@ build the recipe. We could just create a new table called
 
 Being able to add new data easily without altering the orignal
 tables is very useful because it is less error prone and doesn't
-require modifying any of the existing code and quieries which read
+require modifying any of the existing code and queries which read
 and write from the database.
 
 Finally, if the extra data only existed for a limited number of
 rows, this would be another win in space since otherwise
 the table would have to have lots of `NULL` values in it for
-recipies without directions.
+recipes without directions.
 
 # Why Do Tables Have to be Flat?
 
@@ -265,7 +212,7 @@ makes this paritcular query easy at the expense of making other kinds
 of queries hard. 
 
 It would be cumbersome for example to 
-to list all recipies that have a particular ingredient.
+to list all recipes that have a particular ingredient.
 We could imagine building a data structure optimized to
 solve this question:
 
@@ -302,7 +249,7 @@ MySQL](https://dev.mysql.com/tech-resources/articles/mysql_intro.html) on
 your local machine and creating a test database to
 run these examples in. Everything in this blog post
 should be self contained, so you can will be able to
-create all of the the tables and run all of the quieries. 
+create all of the tables and run all of the queries. 
 If you are using an Apple computer,
 I recommend using the program [Sequel Pro](http://www.sequelpro.com/)
 which provides a great graphical interface for interacting
@@ -361,7 +308,7 @@ VALUES
 ```
 
 Note that we do not ensure uniqueness of the `ingredient_price`
-since multiple recipies could have the same price.
+since multiple recipes could have the same price.
 
 Finally, we can create the recipe-ingredient-mapping table:
 
@@ -414,7 +361,7 @@ FROM recipes
 WHERE recipe_name="Tomato Soup"
 ```
 
-This query says take the the `recipes` table,
+This query says take the `recipes` table,
 filter for rows where `recipe_name` is "Tomato Soup", 
 and select only the clumn `recipe_id`.
 This query returns the table
@@ -457,18 +404,16 @@ This returns:
 
 # The JOIN operator in SQL
 
-Having to perform multiple quieries on
-multiple tables is quite cumbersome,
-and would require unnecessary additional
-logic outside of the database.
+Because our data is spread across three
+tables, having to perform multiple successive
+queries is a hassle.
+To avoid this, we can join the tables
+to ask more complicated questions
+about our database.
 
-Instead, if we wanted to directly get the
-`ingredient_id` knowing the `recipe_name`,
-we could `JOIN` together
-
-the way to do this is to join the 
-two tables together when the `recipe_id`
-is equal:
+When we join two tables on a column, it will create a row in the
+joined table whenever that value is the same in both tables.  For
+example, if we joined `recipes` with `recipe_ingredients`:
 
 ```sql
 SELECT *
@@ -477,12 +422,7 @@ JOIN recipe_ingredients
 ON recipes.recipe_id = recipe_ingredients.recipe_id
 ```
 
-The `JOIN` command will combine all the rows
-from the one table with all the rows from the other
-table when the condition of the `ON` clause is true,
-there that the recipe_id is equal.
-
-For this example, we get the table:
+We get the table:
 
 | recipe_id | recipe_name    | recipe_id | ingredient_id | amount |
 | --------- | -------------- | --------- | ------------- | ------ |
@@ -496,8 +436,11 @@ For this example, we get the table:
 |         2 | Grilled Cheese | 2         |             4 | 1      |
 |         2 | Grilled Cheese | 2         |             6 | 2      |
 
-Now, we want to filter this table out by only getting the ingredient_id 
-when the recipe_name is "Tomato Soup":
+Getting back to our example from above,
+we can compute the ingredient IDs for 
+for 'Tomato Soup' by joining 
+`recipes` with `recipe_ingredients` on
+the recipe ID.
 
 ```sql
 SELECT recipe_ingredients.ingredient_id
@@ -507,44 +450,33 @@ ON recipes.recipe_id = recipe_ingredients.recipe_id
 WHERE recipes.recipe_name = 'Tomato Soup'
 ```
 
-This returns exactly the table we were looking for
+This returns:
 
 | ingredient_id |
 | ------------- |
 | 2             |
 | 5             |
 
-# JOINing Three Tables in SQL
-
-What's really cool about SQL is all of the commands can e stacked.
-So if we wanted to directly return the name of the ingredients
-in Tomatoe Soup, all we have to do is JOIN the
-ingredients table to the other two tables joined above.
-The query ends up being:
+As an aside, having to use the table names over
+and over again in a SQL query is cumbersome, and
+there is a shorthand where we can give each table
+a nickname:
 
 ```sql
-SELECT ingredients.ingredient_name 
+SELECT b.ingredient_id
 FROM recipes AS a
 JOIN recipe_ingredients AS b
 ON a.recipe_id = b.recipe_id
-JOIN ingredients 
-ON b.ingredient_id = ingredients.ingredient_id
-WHERE
-    a.recipe_name = "Tomato Soup"
+WHERE a.recipe_name = 'Tomato Soup'
 ```
+This is functionally equivalent, but somewhat easier to understand.
 
-Which returns the table
 
-| ingredient_name |
-| --------------- |
-| Tomatoes        |
-| Milk            |
+# JOINing Three Tables in SQL
 
-Sometimes people find it cumbersome that
-the table name shows up so many times
-in a SQL query, so as a short hand
-you can give your tables nicknames.
-A more conventional query might look something like:
+What's  cool about SQL is that we can JOIN multiple tables.
+To find the ingredient names for the 'Tomato Soup' recipe,
+all we have to do is join all three tables on recipe ID:
 
 ```sql
 SELECT c.ingredient_name 
@@ -557,17 +489,18 @@ WHERE
     a.recipe_name = "Tomato Soup"
 ```
 
-Now at this point, you are probably thinking
-that having to join three tables together is way
-too much work compared to the simple data structure
-we wrote in python above.
+This returns the table:
 
-But what's great about SQL is that once we have
-laid out our data in this abstract table representation,
-it becomes no harder to do all sorts of other
-queries against our database. For example,
-to find all the recipes that include tomatoes
-is just as easy as the above query:
+| ingredient_name |
+| --------------- |
+| Tomatoes        |
+| Milk            |
+
+Another great about SQL is that once we have laid out data across
+three normalized tables, it is just as easy to ask many other
+questions about our data.
+
+For example, to find all the recipes that include 'tomatoes':
 
 ```sql
 SELECT a.recipe_name
@@ -580,7 +513,7 @@ WHERE
     c.ingredient_name = "tomatoes"
 ```
 
-This returns the expected tables
+As expected, this returns:
 
 | recipe_name |
 | ----------- |
@@ -590,19 +523,13 @@ This returns the expected tables
 
 # The GROUP BY Operator In SQL
 
-Now, we have seen the `SELECT`, `FROM`, `JOIN`, `ON`, and
-`WHERE` commands in SQL.
+The next major command to learn in SQL is `GROUP BY`, which can be
+used to aggregate rows in a table.
 
-There are only a couple more commands.
-Most importantly, the `GROUP BY` command is used to aggregate
-down a larger table to a smaller table, gaining insight
-from the aggregation.
-
-Supposed for example that we wanted to make a list of the number
-of ingredients for each recipe. 
-To do that, 
-we can group all of the recipe_id rows in the recipe_ingredients
-and then count all of the rows in each group. To do this in SQL:
+Supposed for example that we wanted to list the number
+of ingredients in each recipe. We could do this by 
+grouping the rows in the `recipe_ingredients` table by the
+recipe ID and count the number or grouped rows.
 
 ```sql
 SELECT recipe_id, 
@@ -612,10 +539,7 @@ GROUP BY recipe_id
 ORDER BY num_ingredients DESC
 ```
 
-This code says to group all of the rows by common `recipe_id`s and to 
-count all of the ingredient_id for each recipe.
-
-The resulting table is
+The code returns:
 
 | recipe_id | num_ingredients |
 | --------- | --------------- |
@@ -623,7 +547,7 @@ The resulting table is
 |         1 |               2 |
 |         2 |               2 |
 
-Similarly, we can combine the `GROUP BY` and `JOIN` operators in a single query.
+We can combine the `GROUP BY` and `JOIN` operators in a single query.
 To compute in addition the price of each recipe, we would need to figure
 out the price of each ingredient by joining with the ingredients table.
 This query would look like:
@@ -700,15 +624,15 @@ PUT A NOTE ABOUT HAVING IS THE SAME AS A FILTER AFTER THE SUBQUERY
 As an example of a harder
 SQL query, we could imaging trying to
 make a list of the number of ingredients for
-all recipies that include tomatoes.
+all recipes that include tomatoes.
 
 To do this, we first would need to
-find all the recipies which include tomatoes
+find all the recipes which include tomatoes
 and then count the number of ingredients
-for each of those recipies.
+for each of those recipes.
 
 We could imagine doing this in two steps.
-First, we find the recipies that
+First, we find the recipes that
 have tomatoes in it:
 
 ```
@@ -728,13 +652,13 @@ This creates the table:
 
 Next, we could joining this table with
 the ingredients count table from above
-to filter out the recipies that aren't in
+to filter out the recipes that aren't in
 this table.
 
-This leads us natually to the idea of subqueries.
+This leads us to the idea of subqueries.
 In SQL. Because every SQL query returns a table,
 so wherever a table can be used in SQL,
-instead a subquerie can be used.
+instead a subquery can be used.
 
 Therefore, we can compute the desired table
 as follows
@@ -765,7 +689,7 @@ This returns the expected table
 | Tomato Soup |               2 |
 
 What's cool about SQL is that it is incredibly
-flexible about the struture of queries. Similar to how we
+flexible about the structure of queries. Similar to how we
 can JOIN as many tables together as needed, we can also
 nest multiple subquieries together.
 
@@ -789,40 +713,15 @@ WHERE b.ingredient_name = 'Cheese' OR b.ingredient_name = 'Beef'
 
 Note that here the `DISTINT`
 keyword is required because otherwise two rows would
-be returend for tacos since they contain bhot
+be returned for tacos since they contain bhot
 cheese and beef.
 
-TODO: put a note about 
+TODO: PUT A NOTE ABOUT 
 ```sql
 COUNT(DISTINCT XX)
 ```
-which is surprisingly useful
+WHICH IS SURPRISINGLY USEFUL
 
-
-# Harder SQL queries
-
-Surprising as it might seem, the few
-SQL commands described above go an enormous way
-in data analysis.
-
-Just to give you an idea of how powerful SQL queries can become,
-we could imagine a command:
-
-Other things you might want:
-
-* A list of users in the system.
-* A mapping of what users have eaten what recipes...
-* FIT DATA INSIDE MEMORY.
- 
-# Benefits of SQL Over Other Data Structures
-
-* Future proofign yourself against changing business requirements.
-* Letting SQL decide the fastest way to do run the query
-
-The fundamental ideas begind a database are that
-[Database normalization](http://en.wikipedia.org/wiki/Database_normalization),
-which is the process of minimizing the amount of redundant data
-in a database by creating lots of related tables. The next idea is
 
 # The ORDER BY operator in SQL
 
@@ -891,6 +790,23 @@ This returns the table:
 | 0             |            Beef |                5 |
 
 
+# Query Optimization
+
+Now that we have seen several examples of the `SELECT` statement,
+I will mention one final benefit of using relational databases
+compared to programming languages.  As we saw above, a SQL query
+is a logical description of what should be done to the data, not
+a description of how or in what order to perform the operations 
+needed to get the desired data.  
+
+Because of this, SQL databases have [query
+optimizers](http://en.wikipedia.org/wiki/Query_optimization) which
+will logically inspect the query, think of different ways that the
+query could be executed, and guess at the most efficient way to
+perform the calculation. This is especially powerful because it is
+often not clear to a user the fastest way to perform a calculation.
+Furthermore, the SQL implementation has the benefit that best method
+could change over time as the size of the database evolves.
 
 # Thanks for Reading
 
@@ -916,7 +832,7 @@ Here is some further reading to get you started:
   is some documentation on different joins.
 * [Table Indicies](http://en.wikipedia.org/wiki/Database_index) are a concept in
   database design where sorted indicies of a table can be cached to
-  improve performance of particular quieries on a table.
+  improve performance of particular queries on a table.
 * [Views](http://dev.mysql.com/doc/refman/5.0/en/create-view.html) in
   SQL act as temporary tables, able to both simplify queiries in MySQL
   as well as abstract the end user from the underlying implementation
