@@ -103,10 +103,12 @@ this design in the next two sections, but before moving on I hope
 you understand the logical correctness of the design.
 
 Before we move on, I will mention two bits of terminology used when
-discussing databases.  A [query](http://en.wikipedia.org/wiki/SQL#Queries)
-in SQL is a command which retrivies data from a database.  A
+discussing databases.  A
 [schema](http://en.wikipedia.org/wiki/Database_schema) is the
-structure of the tables in the database.
+structure of the tables in the database.  A
+[query](http://en.wikipedia.org/wiki/SQL#Queries) in SQL is a command
+which retrivies data from a database.
+
 
 
 # Normalize Your Database
@@ -472,7 +474,7 @@ WHERE a.recipe_name = 'Tomato Soup'
 This is functionally equivalent, but somewhat easier to understand.
 
 
-# JOINing Three Tables in SQL
+# JOIN Three Tables in SQL
 
 What's  cool about SQL is that we can JOIN multiple tables.
 To find the ingredient names for the 'Tomato Soup' recipe,
@@ -830,6 +832,7 @@ Here is some further reading to get you started:
   columns with `NULL` values in them.
   [Here](http://dev.mysql.com/doc/refman/5.0/en/join.html)
   is some documentation on different joins.
+* XXXXXXXXXXX TODO: NOTE ABOUT THE `UNION` AND `INTERSECTION` COMMAND.
 * [Table Indicies](http://en.wikipedia.org/wiki/Database_index) are a concept in
   database design where sorted indicies of a table can be cached to
   improve performance of particular queries on a table.
