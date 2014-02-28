@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Get Started with SQL Using Simple Examples
+title: Learn SQL With Simple Examples (Part 1)
 comments: true
 ---
 
