@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Robust Database Design in SQL
+title: "Database Normalization: How to Design a Better Database"
 comments: true
+permalink: /:title
 ---
 
 In this post, I will go over the benefits of laying out data in a
