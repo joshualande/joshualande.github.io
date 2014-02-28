@@ -1,14 +1,20 @@
 ---
 layout: post
-title: Learn SQL With Simple Examples (Part 2) - Information Retrieval
+title: Querying Information from an SQL Database
 comments: true
 ---
 
+In this post, I will take the example recipes database from the
+previous post and work through successively harder SQL queries.
+This will introduce the basic operators in SQL like filtering,
+joining and aggregating.
+
 # THE SELECT, FROM, and WHERE Statements in SQL
 
-Given our recipe database, there are all kinds
-of interesting questionts we could
-ask using our database.
+Our recipes example from before had three tables, one with the list
+of recipes, one with a list of ingredients, and opne mapping
+ingerdients to recipies.  Given this database, there are all kinds
+of interesting questionts we could ask using our database.
 
 Imagine that we wanted to find all the ingredients in "Tomato Soup".
 As a first step, we could figure out the recipe_id for "Tomato Soup".

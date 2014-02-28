@@ -1,19 +1,19 @@
 ---
 layout: post
-title: Learn SQL With Simple Examples (Part 1) - Robust Database Design
+title: Robust Database Design in SQL
 comments: true
 ---
 
 In this post, I will go over the benefits of laying out data in a
-relatinoal database like [SQL](http://en.wikipedia.org/wiki/SQL)
-compared to other data formats.
-
+relational database like [SQL](http://en.wikipedia.org/wiki/SQL)
 By way of a simple example, I will then go over the basics of how
 to design a robust database and the concepts of [database
 normalization](http://en.wikipedia.org/wiki/Database_normalization).
-Finally, I will go over the commands required to set up this
-database in MySQL.
+Finally, I will go over the commands required to set up this database
+in MySQL.
 
+In the next post in this series, I will discuss the commands
+required to query information from a database.
 
 # A Simple Example SQL Database
 
