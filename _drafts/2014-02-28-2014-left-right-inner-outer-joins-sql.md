@@ -28,10 +28,35 @@ Next, we have a `heights` table:
 
 Finally, we have a `ages` table:
 
-|  person | height |
+|  person |    age |
 | ------- | ------ |
 |       1 |     26 |
 |       2 |   NULL |
 
 We might want to query, for example,
 the hieght of all people who have...
+
+# Inner Joins
+
+Suppose we want to get a table with
+the heights and ages of everybody
+in our table.
+
+We could join these tables together:
+
+```sql
+SELECT *
+FROM heights
+JOIN person
+```
+
+# Left and Right Join
+
+# Approximating a Full Outer Join
+
+
+
+
+
+
+
