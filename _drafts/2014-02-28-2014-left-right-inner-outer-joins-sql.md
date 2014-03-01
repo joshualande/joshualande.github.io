@@ -7,6 +7,13 @@ comments: true
 SQL has the concept of INNER, LEFT, RIGHT, and OUTER joins.
 They are all similar, but provide slightly different behavior
 in the situation where rows are missing in a table.
+
+# Explanation
+
+This will all make more sense with a simple exmaple
+
+# JOINing with a Simple Exmaple
+
 The easiest way to understand this is by way of another example.
 
 Suppse we have a database storing information about people. For each
@@ -21,6 +28,8 @@ First, we have a `people` table
 |         0 | George |
 |         1 |  Alice |
 |         2 |  Steve |
+|         3 |    Ted |
+|         4 |  Sarah |
 
 Next, we have a `heights` table:
 
@@ -35,19 +44,40 @@ Finally, we have a `ages` table:
 | --------- | ------ |
 |         1 |     26 |
 |         2 |   NULL |
+|         4 |     37 |
 
 Before we get into the examples, I will
 provide self-contained SQL syntax so
 you can play with these examples on your computer:
 
 ```sql
-CREATE TABLE ingredients (
+CREATE TABLE people (
   person_id int(11), 
-  name varchar(30),
+  name varchar(30)
 );
+INSERT INTO people (person_id, name)
+VALUES (0, "George"), 
+       (1, "Alice"), 
+       (2, "Steve"), 
+       (3, "Ted"),
+       (4, "Sarah");
 
-INSERT INTO ingredients (person_id, name)
-VALUES (0, "George), (1, "Alice), (2, "Steve");
+CREATE TABLE heights (
+  person_id int(11), 
+  height float
+);
+INSERT INTO heights (person_id, height)
+VALUES (0, 6.1), 
+       (1, 5.3);
+
+CREATE TABLE ages (
+  person_id int(11), 
+  age float
+);
+INSERT INTO ages (person_id, age)
+VALUES (1, 26), 
+       (2, NULL),
+       (4, 37);
 ```
 
 # Inner Joins
@@ -59,16 +89,85 @@ in our table. To do this, we could
 
 ```sql
 SELECT *
-FROM heights
-JOIN person
+FROM heights AS a
+JOIN ages AS b
+ON a.person_id = b.person_id;
 ```
 
-But this returns
+| a.person_id | a.height | b.person_id | b.age |
+|-------------|----------|-------------|-------|
+|           1 |      5.3 |           1 |    26 |
 
-# Left and Right Join
 
-# Approximating a Full Outer Join
+# Left and Right Joins
 
+A left join:
+
+```sql
+SELECT *
+FROM heights AS a
+LEFT JOIN ages AS b
+ON a.person_id = b.person_id;
+```
+
+| a.person_id | a.height | b.person_id | b.age |
+|-------------|----------|-------------|-------|
+|           0 |      6.1 |        NULL |  NULL |
+|           1 |      5.3 |           1 |    26 |
+
+
+Similarly, a right join
+
+```sql
+SELECT *
+FROM heights AS a
+RIGHT JOIN ages AS b
+ON a.person_id = b.person_id;
+```
+
+| a.person_id | a.height | b.person_id | b.age |
+|-------------|----------|-------------|-------|
+|           1 |      5.3 |           1 |    26 |
+|        NULL |     NULL |           2 |  NULL |
+|        NULL |     NULL |           4 |    37 |
+
+
+
+# Outer Join
+
+Conceptually, an OUTER JOIN is...
+
+It is not supported by MySQL.
+
+It can always be emulated by unioning a
+left join with a right join where the right
+join filteres out rows which show up in the
+left join:
+
+```sql
+(
+    SELECT *
+    FROM heights AS a
+    LEFT JOIN ages AS b
+    ON a.person_id = b.person_id
+)
+UNION ALL 
+(
+    SELECT *
+    FROM heights AS a
+    RIGHT JOIN ages AS b
+    ON a.person_id = b.person_id
+    WHERE a.person_id IS NULL
+)
+```
+
+
+| a.person_id | a.height | b.person_id | b.age |
+|-------------|----------|-------------|-------|
+|           0 |      6.1 |        NULL |  NULL |
+|           1 |      5.3 |           1 |    26 |
+|        NULL |     NULL |           2 |  NULL |
+|        NULL |     NULL |           4 |    37 |
 
 
 We might want to query, for example,
