@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Database Normalization: How to Design a Better Database"
+title: "Design a Better Database Using Database Normalization "
 comments: true
 permalink: /:title
 ---
