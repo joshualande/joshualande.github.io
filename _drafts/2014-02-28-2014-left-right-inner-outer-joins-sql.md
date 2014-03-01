@@ -21,17 +21,17 @@ First, we have a `people` table
 
 Next, we have a `heights` table:
 
-|  person | height |
-| ------- | ------ |
-|       0 |    6.1 |
-|       1 |    5.3 |
+| person_id | height |
+| --------- | ------ |
+|         0 |    6.1 |
+|         1 |    5.3 |
 
 Finally, we have a `ages` table:
 
-|  person |    age |
-| ------- | ------ |
-|       1 |     26 |
-|       2 |   NULL |
+| person_id |    age |
+| --------- | ------ |
+|         1 |     26 |
+|         2 |   NULL |
 
 We might want to query, for example,
 the hieght of all people who have...
@@ -40,15 +40,16 @@ the hieght of all people who have...
 
 Suppose we want to get a table with
 the heights and ages of everybody
-in our table.
-
-We could join these tables together:
+in our table. To do this, we could
+`JOIN` the tables together:
 
 ```sql
 SELECT *
 FROM heights
 JOIN person
 ```
+
+But this returns
 
 # Left and Right Join
 
