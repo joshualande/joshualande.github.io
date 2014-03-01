@@ -9,7 +9,10 @@ They are all similar, but provide slightly different behavior
 in the situation where rows are missing in a table.
 The easiest way to understand this is by way of another example.
 
-Suppse we have a database storing information about people.
+Suppse we have a database storing information about people. For each
+person, we know their name, their height, and their age. But for
+our example, we will imagine our data to be spread across three
+tables:
 
 First, we have a `people` table
 
@@ -33,8 +36,19 @@ Finally, we have a `ages` table:
 |         1 |     26 |
 |         2 |   NULL |
 
-We might want to query, for example,
-the hieght of all people who have...
+Before we get into the examples, I will
+provide self-contained SQL syntax so
+you can play with these examples on your computer:
+
+```sql
+CREATE TABLE ingredients (
+  person_id int(11), 
+  name varchar(30),
+);
+
+INSERT INTO ingredients (person_id, name)
+VALUES (0, "George), (1, "Alice), (2, "Steve");
+```
 
 # Inner Joins
 
@@ -55,6 +69,10 @@ But this returns
 
 # Approximating a Full Outer Join
 
+
+
+We might want to query, for example,
+the hieght of all people who have...
 
 
 
