@@ -1,25 +1,27 @@
 ---
 layout: post
-title: Querying Information from an SQL Database
+title: Find What You Need to Know By Querying in SQL
 comments: true
 ---
 
-In this post, I will take the example recipes database from the
-previous post and work through successively harder SQL queries.
-This will introduce the basic operators in SQL like filtering,
+In the previous post, I went over the benefits of database normalization
+for correctly organizing data in a database.  In this post, I will
+take the example recipes database worked out in the previous post
+and use it to ask successfuly harder SQL queriies.  This querieis
+will allow me to introduce the basic operators in SQL like filtering,
 joining and aggregating.
 
 # THE SELECT, FROM, and WHERE Statements in SQL
 
-Our recipes example from before had three tables, one with the list
-of recipes, one with a list of ingredients, and opne mapping
-ingerdients to recipies.  Given this database, there are all kinds
-of interesting questionts we could ask using our database.
+In our recipes database,
+we had three tables. One
+had a list of recipes, one with a list of ingredients, and one mapped
+ingredients to recipies.  Given this schema, there are all kinds
+of interesting questions we could ask using our recipies.
 
-Imagine that we wanted to find all the ingredients in "Tomato Soup".
-As a first step, we could figure out the recipe_id for "Tomato Soup".
-Whenever we want to query information from the database,
-we use the `SELECT` statement:
+If we wanted to find all the ingredients in the recipe for "Tomato Soup",
+we could first figure out the recipe ID for "Tomato Soup".
+We always query information from the database using the `SELECT` statement:
 
 ```sql
 SELECT recipe_id 
@@ -27,9 +29,9 @@ FROM recipes
 WHERE recipe_name="Tomato Soup"
 ```
 
-This query says take the `recipes` table,
-filter for rows where `recipe_name` is "Tomato Soup", 
-and select only the clumn `recipe_id`.
+This query says take the table of recipe names,
+filter for rows where the name is "Tomato Soup", 
+and select the recipe ID column.
 This query returns the table
 
 | recipe_id |
