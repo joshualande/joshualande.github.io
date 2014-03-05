@@ -172,9 +172,9 @@ rows, this would be another win becasue we wouldn't have to store
 # Why Do Tables Have to be Flat?
 
 The limitation that SQL tables have to be flat may at first very
-seem strange.  Although it should be clear at this point that there
-is most likley some way of flattening out any data into some schema
-design using flat tables, it is probably unclear why this is better
+seem strange.  Although it should be clear that there
+is probably some way way to flattening out any data structure
+to fit into flat tables, it is probably unclear why this is better
 than allowing nested data structures.
 
 If you are used to programming in scripting langauges like
@@ -182,10 +182,8 @@ If you are used to programming in scripting langauges like
 or [perl](http://www.perl.org/), or if you are used to dealing with
 [JSON](http://json.org/)-formatted data, you may be
 very used to nested data.
-
-A common design you might expected in these langauges would
-be to store our recipes as a 
-dictionary of sets. In python, it would look like:
+A common design, for example in python, for our recipies
+might look like:
 
 ```python
 recipes = {
@@ -203,20 +201,16 @@ ingredients for a particular recipe:
 ingredients = recipes["Tomato Soup"]["ingredients"]
 ```
 
-But the downside of laying out the data in this way is that it
-makes this query easy at the expense of making other kinds
-of queries hard. 
+But the downside of this is it would be expensive to make other queries. 
 For example, to find all the recipies with a given ingredient
-would require innefficiently looking through all recipies:
+would require having to look through all recipies:
 
 ```python
 recipies = [ i for i in recipies.keys() if "Tomaotes" in recipies[i]]
 ```
 
-It would be cumbersome for example to 
-to list all recipes that have a particular ingredient.
-We could imagine building a data structure optimized to
-solve this question:
+We could nest our recipies inside of ingreidnets to make
+this query easier:
 
 ```python
 recipes = {
@@ -232,39 +226,56 @@ recipes = {
 
 But this structure this makes the first query more difficult!
 
-Although it seems strange at first, having to use flat tables is
-actually a good thing.  By forcing you to use a flat table, SQL
-ensures that our table isn't bias towards (and also against) certain
-kinds of query.
-
-The designers of SQL can have optimized the database so that our
-table can be efficient for all sorts of SQL queries.  There is a
-very good chance that what you think will be interesting to do now
-with your data today will be quite different from a year from now.
-So having his power is a huge win.
+Although it seems strange at first, flattening out the tables ensures
+that our data is not biased towards (or againts) any kinds of query.
+Instead, the designers of SQL optimized thier database 
+to perform all kinds of efficient queries against these flat tablse.
+Because there is a good change that what will want to querying
+tomorrow will be different from what you are querying today,
+this is a huge advantage.
 
 As a final note, some newer databases like
 [MongoDB](http://www.mongodb.com/) nativly support nested
 [JSON](http://json.org/)-like data structures.  Despite the caveats
-mentioned above, in real-world situations it is sometimes significantly
-more convenient to store data in this structure.
+mentioned above, for practical reasons in real-world situations it
+is sometimes significantly more convenient to store data inside of
+nested structures.
+
+# Setting up SQL On Your local Machine
+
+Before getting further, I would recommend setting up
+SQL on your local computer. For my examples, 
+I will assume you are using 
+[MySQL](http://www.mysql.com/), a popular free
+and open source database program.
+
+Here is some docuemntation for installing MySQL
+on [Windows](https://dev.mysql.com/doc/refman/5.0/en/windows-installation.html)
+or on your [Mac](https://dev.mysql.com/doc/refman/5.0/en/macosx-installation.html).
+
+If you are using an Apple computer, I recommend using the free and
+open-source graphical program [Sequel Pro](http://www.sequelpro.com/)
+to test out the MySQL commands in this example.
 
 # Creating Tables in SQL
 
-Before getting further,
-I would highly recommend [setting up
-MySQL](https://dev.mysql.com/tech-resources/articles/mysql_intro.html) on
-your local machine and creating a test database to
-run these examples in. Everything in this blog post
-should be self contained, so you can will be able to
-create all of the tables and run all of the queries. 
-If you are using an Apple computer,
-I recommend using the program [Sequel Pro](http://www.sequelpro.com/)
-which provides a great graphical interface for interacting
-with MySQL.
+To wrap up this post, I will
+go through the commands required to create
+the the recipipes database described above.
 
-First, we can create the `recipes` table
-using the `CREATE TABLE` command:
+First, we have to create a database to work in
+
+```sql
+CREATE DATABASE recipes_database
+```
+
+Next, we have to enter the databse
+
+```sql
+USE recipes_database
+```
+
+To create the recipes table, we can use the `CREATE TABLE` command:
 
 ```sql
 CREATE TABLE recipes (
@@ -282,17 +293,12 @@ VALUES
     (2,"Grilled Cheese");
 ```
 
-The purpose of the `PRIMARY KEY` is to 
-avoid any possiblity of having duplicate
-rows in the table. The `PRIMARY KEY`
-forces every row to have a different value.
-of the `PRIMARY KEY`. In addition, we
-can use the `UNIQUE (recipe_name)` 
-command to ensure that no two
-rows have the same recipe name since
-this could introduce bugs.
+The purpose of the `PRIMARY KEY` is to avoid any possiblity of
+having duplicate rows in the table. The `PRIMARY KEY` forces every
+row to have a different value.  In addition, we use the `UNIQUE`
+keyword to ensure that no two rows have the same recipe name.
 
-Similaryly, we can reate the `ingredients` table:
+Similarly, we can create the ingredients table:
 
 ```sql
 CREATE TABLE ingredients (
@@ -341,15 +347,20 @@ VALUES
     (2,6,2);
 ```
 
-Here, our `PRIMARY KEY` is for `recipe_id`, `ingredient_id`
-pairs because two rows can have the same `recipe_id` as long
-as they have a different `ingredient_id` (and vice versa).
+Here, our `PRIMARY KEY` is for `(recipe_id,ingredient_id)`
+pairs because two rows can have the same recipe ID as long
+as they have a different ingredient ID.
 
-One last thing to mention is there is an `AUTO_INCREMENT` command
+One last thing to mention is that there is an `AUTO_INCREMENT` command
 which can be used to let SQL automatically
 pick the `recipe_id` and `ingredient_id`
-values to ensure that each ID is one larger than the last one
-added to database.  [Here](http://dev.mysql.com/doc/refman/5.0/en/example-auto-increment.html)
+values to ensure uniqueness.
+[Here](http://dev.mysql.com/doc/refman/5.0/en/example-auto-increment.html)
 is the documentation on this command.
+
+# Next Time: Querying the Database
+
+In the next post, I will discuss the commands required to ask
+very sophistical questions about data in this database.
 
 {% include twitter_plug.html %}
