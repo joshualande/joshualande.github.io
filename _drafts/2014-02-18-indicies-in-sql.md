@@ -75,6 +75,7 @@ sorted by column specified. For our example, it would look like:
 |     8 |
 |     3 |
 
+
 Note that the index does not contain any information about the value
 of the column at that index. In addition, for columns
 with the same value of `amount`, there is no guarantee about their
@@ -100,6 +101,7 @@ Because at each stage of the search we half the number of rows we
 need to check, this algorithm is O(log(n)). For example, if there
 were a million rows, the log of a million is only six.  So this is
 a huge efficiency gain over the full table scan.
+
 
 The syntax to create an index on this column is:
 
@@ -134,7 +136,6 @@ On the other hand, indicies have to be automatically updated by the
 database when tables are modified, and this additional overhead
 will degrate write performance.  So they should only be added as
 necesary when performance is an issue.
-
 
 Despite giving all the right intuition
 
@@ -172,15 +173,21 @@ CREATE INDEX amount_name
 ON recipe_ingredients (ingredient_id, recipe_id, amount)
 ```
 
-And will create a tablet like
+And will create an index like:
 
 | index |
 | ----- |
 |   ... |
 
+Because the index is sorted first by ingredient_id, then by recipe_id,
+and finally by amount, we can easily binary search through our index for
+rows with a particular ingredient id, recipe id, and amount.
+
+This leads to a natural question. When we run a query
+testing multiple rows, in what order should we set the order of the
+columns in the index. The rule of thumb
 
 
-This leads to a natural question, which is in what order to set the index.
 
 # Advanced Indexing
 
@@ -206,11 +213,30 @@ To get all three benefits, SQL has to resport to a more complicated
 data structure called a balanced B-tree where each of the 
 notes is 
 
+# Indexing on inequalities
 
-# Advanced topics:
 
-* Function-based indexing
-* The `ORDER BY` clause
+
+# Function-based Indexing
+
+
+# Indexing for the GROUP BY clause
+
+# Indexing for the JOIN clause
+
+# Indexing for the ORDER BY clause
 
 # Indexing in SQL Cheat Sheet
 
+I will end this post post with a list of recipies, summarized
+from the earlier discussion, which can be referred to later when building
+indicies:
+
+1. An index is a sorted list of columns in a database.
+   A good index can allow for quickly retrieving information from
+   a database
+2. When indexing on an inequality, put the inequlaity expression
+   at the end of the index for more efficeint optimization.
+3. When possible, avoid querying on functions of parameters 
+   becuase they break indexing in SQL. When necessary,
+   some databases allow function-based indexing
