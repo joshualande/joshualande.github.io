@@ -20,7 +20,7 @@ a more custom-made application.  In this post, I will introduce the
 topic of indexing in SQL, which is a tool for caching intermediate
 data
 
-# The Structure of an Index in SQL
+# Sorting a Table in SQL Using an Index
 
 An index in SQL is just a sorted list of all of our data in a table
 where the index specifies in the column order in which to sort rows.
@@ -28,17 +28,13 @@ where the index specifies in the column order in which to sort rows.
 It is illustrative to begin with a simple example of our.
 `recipe_ingredients` table from the post XXX.
 
-| recipe_id | ingredient_id | amount |
-| --------- | ------------- | ------ |
-|         0 |             0 |      1 |
-|         0 |             1 |      2 |
-|         0 |             2 |      2 |
-|         0 |             3 |      3 |
-|         0 |             4 |      1 |
-|         1 |             2 |      2 |
-|         1 |             5 |      1 |
-|         2 |             4 |      1 |
-|         2 |             6 |      2 |
+| person_id | First |  Last | gender | Age |
+| --------- | ----- | ----- | ------ | --- |
+|         0 |  Alex | Smith |      m |  27 |
+|         2 | Steve | Smith |      m |  26 |
+|         3 |  Alex | Young |      m |  26 |
+|         1 |  Alex | Smith |      m |  26 |
+|         3 | Sarah | Young |      f |  26 |
 
 Suppose we wanted to compute, for example, all
 of the recipies which required three of a particular ingredient (`amount=3`). 
@@ -46,8 +42,8 @@ The query for this is straightforward:
 
 ```sql
 SELECT *
-  FROM recipe_ingredients
- WHERE amount = 3
+  FROM people
+ WHERE age = 27
 ```
 
 Given that SQL does not internally sort the table by any particular
@@ -65,15 +61,7 @@ sorted by column specified. For our example, it would look like:
 
 | index |
 | ----- |
-|     0 |
-|     4 |
-|     6 |
-|     7 |
-|     1 |
-|     2 |
-|     5 |
-|     8 |
-|     3 |
+|   ... |
 
 
 Note that the index does not contain any information about the value
@@ -118,9 +106,12 @@ ON recipe_ingredients (amount)
 
 # Primary Key Indices
 
-PUT a note about how a PK is also an index.
-HOW this makes sense for quickly deciding if a 
+Put a note about how a PK is also an index.
+How this makes sense for quickly deciding if a 
 PK constraint has been violated.
+
+"It has an associated index, for fast query 
+performance" -- http://dev.mysql.com/doc/refman/5.5/en/optimizing-primary-keys.html
 
 # Benefits of SQL indices
 
@@ -137,8 +128,6 @@ database when tables are modified, and this additional overhead
 will degrate write performance.  So they should only be added as
 necesary when performance is an issue.
 
-Despite giving all the right intuition
-
 # Multi-column Indices in SQL
 
 Now that we have seen the benefits of indexing,
@@ -154,23 +143,24 @@ If so, we could run a query like:
 
 ```sql
 SELECT *
-  FROM recipe_ingredients
- WHERE ingredient_id = 3
-   AND recipe_id = 0
-   AND amount = 3
+  FROM people
+ WHERE first='Steve'
+   AND last='Smith'
+   AND gender='m'
+   AND age=26
 ```
 
 In oder to efficiently run this query,
-we can build an index which sorts on (ingredient_id, recipie_id, amount).
-What this means is we first sort on the ingredient ID.
-Whenver the ingredient ID is the same, we then sort by the recipie ID.
-And finally, whenever the ingredietn and recpies IDs are the same,
-when then sort on the amount column.
-The syntax to do this is straightforward:
+we can build an index which sorts on 
+(last, first, age, gender)What this means is we first sort 
+on the last name.
+Whenver the last name is the same, we then
+sort on first name. Whenever both are the same, we sort on age.
+Finally, we sort on gender when all three are the same.
 
 ```sql
 CREATE INDEX amount_name
-ON recipe_ingredients (ingredient_id, recipe_id, amount)
+ON recipe_ingredients (first,last,gender,age)
 ```
 
 And will create an index like:
@@ -179,22 +169,75 @@ And will create an index like:
 | ----- |
 |   ... |
 
-Because the index is sorted first by ingredient_id, then by recipe_id,
-and finally by amount, we can easily binary search through our index for
-rows with a particular ingredient id, recipe id, and amount.
-
-This leads to a natural question. When we run a query
-testing multiple rows, in what order should we set the order of the
-columns in the index. The rule of thumb
+Given that we have sorted by all four columns, it is easy binary
+search or data for people of a given first name, last name, age, and gender.
+Similarly,
 
 
+This leads to a natural question. When we define our index, in what
+order should we list the columns in the index. The rule here is
+that we want to order our columns from the most-rapidly varying to
+the least-rapidly varying.  The reason for this is because we can
+narrow down the the list of potential rows by first searching for
+all the rows which match the first query term.
 
-# Advanced Indexing
+So for our example, we assume there are many more ingredients than
+recipies and many more recipies than possible maounts.
+
+As a simple analogy to understand this, suppose you were to design
+a phone book for quickly looking up a person.  Would you first sort
+the book by first name and then, for people with the same first
+name, sort by last name? Or would you first sort by last name and
+then by first name? Because there are typically a lot more last
+names than first names, it is usually going to be faster to first
+find everybody with a specific last name and then, for all the
+people with that given last name, find the person with the first
+name you are looking for. The same concept applies with
+indexing in SQL.
+
+# Indexing on inequalities
+
+Indexing on inequalities requires a somewhat different
+logic than equality indexing.
+For example, if we wanted to find all the men
+who were older than 25, we would
+use the query
+
+```sql
+SELECT *
+  FROM people
+ WHERE gender = 'm'
+   AND age > 25
+```
+
+Despite the rule from above that there are more ages than genders,
+it is better to make age the final index.  The reason for this is
+because we can first select all men and then binary search the lis
+tof all men for the people older than 25 who are store contigiously
+in memory.  The alternative would be to have to go through all ages
+greater than 25 and for each of them to find all men.
+
+# Function-based Indexing
+
+Suppose we wanted 
+
+# Indexing on Regular Expressions
+
+...
+
+
+# Indexing for the GROUP BY clause
+
+# Indexing for the JOIN clause
+
+# Indexing for the ORDER BY clause
+
 
 
 # Database Implementation of Indicies in SQL
 
-The simple picture of an index being a sorted array is a bit
+Despite giving all the right intuition,
+the simple picture of an index being a sorted array is a bit
 idealized. It gives all the right intiution for
 building the best index for a given query. 
 
@@ -213,19 +256,6 @@ To get all three benefits, SQL has to resport to a more complicated
 data structure called a balanced B-tree where each of the 
 notes is 
 
-# Indexing on inequalities
-
-
-
-# Function-based Indexing
-
-
-# Indexing for the GROUP BY clause
-
-# Indexing for the JOIN clause
-
-# Indexing for the ORDER BY clause
-
 # Indexing in SQL Cheat Sheet
 
 I will end this post post with a list of recipies, summarized
@@ -233,10 +263,21 @@ from the earlier discussion, which can be referred to later when building
 indicies:
 
 1. An index is a sorted list of columns in a database.
-   A good index can allow for quickly retrieving information from
-   a database
-2. When indexing on an inequality, put the inequlaity expression
-   at the end of the index for more efficeint optimization.
+1. Indexing in SQL improves query efficiency at the expense
+   of table alteration efficiency.
+2. When querying on multiple columns, make an index on all of them,
+   sorting the columns in the index based on the cardinality of the
+   columns.
+3. A query can use all the columns in an index until a column
+   in the index which is not part of the query.
+2. When indexing on an inequality, it is most efficient to 
+   put the inequlaity expression as the last column in the index.
 3. When possible, avoid querying on functions of parameters 
-   becuase they break indexing in SQL. When necessary,
+   becuase they break indexing. When necessary,
    some databases allow function-based indexing
+
+# Further resources
+
+* http://use-the-index-luke.com/
+
+{% include twitter_plug.html %}
