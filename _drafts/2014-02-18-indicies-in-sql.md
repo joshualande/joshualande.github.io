@@ -4,46 +4,47 @@ title: Indexing in SQL for the Rest of Us
 comments: true
 ---
 
-As was discussedin XXX, the benefit of relational databases is that
-they abstract the logical layout of our data from the underlying
-implemntation of how the data should be stored. Furthemroe, they
-abstract the logical question you want to ask of the data (the
-query) from the the details of finding an efficent way to get this
-data (the [Query
+One of the biggest benefits of relational databases is that they
+abstract the logical layout of our data from the underlying
+implementation of how the data should be stored. Furthemore, they
+abstract the queries you ask of the database from the details about
+how the queriies shoudl be run.  Databases then use the the [Query
 optimizer](http://en.wikipedia.org/wiki/Query_optimization)/[Query
-execution plan](http://en.wikipedia.org/wiki/Query_plan)).
+execution plan](http://en.wikipedia.org/wiki/Query_plan) to find
+an efficient way to write the query.
 
-But this picture is a bit naieve because there SQL cannot naturally
-find an efficient algorithm for every query you can throw at it,
-and will often in practice issue queries signficiatly slower that
-a more custom-made application.  In this post, I will introduce the
-topic of indexing in SQL, which is a tool for caching intermediate
-data
+But this picture is a bit naieve because SQL cannot without help
+find an efficient algorithm for every query you can could come up with.
+In pactice, SQL quierie scan often be very slow, and one has
+to introduce indicies to speed up queries and improve read
+performance of the database.
 
 # Sorting a Table in SQL Using an Index
 
 An index in SQL is just a sorted list of all of our data in a table
 where the index specifies in the column order in which to sort rows.
 
-It is illustrative to begin with a simple example of our.
-`recipe_ingredients` table from the post XXX.
+It is illustrative to consider querying from
+a simple table of people:
 
-| person_id | First |  Last | gender | Age |
-| --------- | ----- | ----- | ------ | --- |
-|         0 |  Alex | Smith |      m |  27 |
-|         2 | Steve | Smith |      m |  26 |
-|         3 |  Alex | Young |      m |  26 |
-|         1 |  Alex | Smith |      m |  26 |
-|         3 | Sarah | Young |      f |  26 |
+| person_id | First |  Last | gender |  birthdate |
+| --------- | ----- | ----- | ------ | ---------- |
+|         0 |  Alex | Smith |      m | 1985-05-27 |
+|         1 | Steve | Smith |      m | 1991-03-57 |
+|         2 |  Alex | Young |      m |            |
+|         3 |  Alex | Smith |      m |            |
+|         4 | Sarah | Young |      f |            |
+
+PUT A NOTE ABOUT HOW DATES ARE STORED HERE.
 
 Suppose we wanted to compute, for example, all
-of the recipies which required three of a particular ingredient (`amount=3`). 
+the people with a given last name.
 The query for this is straightforward:
 
 ```sql
 SELECT *
   FROM people
- WHERE age = 27
+ WHERE last = 'Young'
 ```
 
 Given that SQL does not internally sort the table by any particular
@@ -62,7 +63,6 @@ sorted by column specified. For our example, it would look like:
 | index |
 | ----- |
 |   ... |
-
 
 Note that the index does not contain any information about the value
 of the column at that index. In addition, for columns
@@ -130,14 +130,14 @@ necesary when performance is an issue.
 
 # Multi-column Indices in SQL
 
-Now that we have seen the benefits of indexing,
-we will go over examples of finding
-indices for more complciated SQL queiries.
+Next, we will go over the indices
+rquired for harder SQL queries.
 
-First is the situation where we have
-multiple conditions in the `WHERE` clause.
-For example, we might be looking for row
-in `recipe_ingredients` with a known
+First, we will learn what to do
+when there are multiple 
+conditions in the `WHERE` clause.
+For example, we might be looking for a
+row in `recipe_ingredients` with an known
 recipe ID, ingredient ID, and amount.
 If so, we could run a query like:
 
@@ -147,20 +147,16 @@ SELECT *
  WHERE first='Steve'
    AND last='Smith'
    AND gender='m'
-   AND age=26
 ```
 
-In oder to efficiently run this query,
-we can build an index which sorts on 
-(last, first, age, gender)What this means is we first sort 
-on the last name.
-Whenver the last name is the same, we then
-sort on first name. Whenever both are the same, we sort on age.
-Finally, we sort on gender when all three are the same.
+In order to efficiently run this query, we can build an index which
+sorts on (last, first, gender). What this means is we first sort
+on the last name.  Whenver the last name is the same, we then sort
+on first name. Whenever both are the same, we finally sort on gender.
 
 ```sql
 CREATE INDEX amount_name
-ON recipe_ingredients (first,last,gender,age)
+ON recipe_ingredients (first,last,age,gender)
 ```
 
 And will create an index like:
@@ -176,13 +172,11 @@ Similarly,
 
 This leads to a natural question. When we define our index, in what
 order should we list the columns in the index. The rule here is
-that we want to order our columns from the most-rapidly varying to
-the least-rapidly varying.  The reason for this is because we can
-narrow down the the list of potential rows by first searching for
-all the rows which match the first query term.
-
-So for our example, we assume there are many more ingredients than
-recipies and many more recipies than possible maounts.
+that we want to order our columns from the column with
+the most distinct values to the column with the fewest
+distinct values.  The reason for this is because we can
+narrow down the possible search results fastest if we 
+fist select only rows matching the fastest-varying column.
 
 As a simple analogy to understand this, suppose you were to design
 a phone book for quickly looking up a person.  Would you first sort
@@ -192,16 +186,23 @@ then by first name? Because there are typically a lot more last
 names than first names, it is usually going to be faster to first
 find everybody with a specific last name and then, for all the
 people with that given last name, find the person with the first
-name you are looking for. The same concept applies with
-indexing in SQL.
+name you are looking for. 
 
-# Indexing on inequalities
+For our example, we assume there are many more first
+names than last names, many more last names than ages,
+and many more ages than genders.
 
-Indexing on inequalities requires a somewhat different
-logic than equality indexing.
-For example, if we wanted to find all the men
-who were older than 25, we would
-use the query
+In SQL, we refer to the amount of distint values as the
+[cardinality](http://en.wikipedia.org/wiki/Cardinality_(SQL_statements)) of
+a table. The rule is therefore to put columns with higher cardinailty
+first in an index.
+
+
+# Indexing on Inequalities
+
+Indexing on inequalities requires a somewhat different logic than
+equality indexing.  For example, if we wanted to find all the men
+who were older than 25, we would use the query
 
 ```sql
 SELECT *
@@ -211,20 +212,40 @@ SELECT *
 ```
 
 Despite the rule from above that there are more ages than genders,
-it is better to make age the final index.  The reason for this is
-because we can first select all men and then binary search the lis
-tof all men for the people older than 25 who are store contigiously
-in memory.  The alternative would be to have to go through all ages
-greater than 25 and for each of them to find all men.
+it is better to make age the final index.  The reason is 
+for this index, after filering on men all of the ages are
+already sorted in the index so the inequality can be easily applied.
+
+The alternative index would require first going through
+each of the allowed ages and for each of them applying another
+search for the other query terms.
 
 # Function-based Indexing
 
-Suppose we wanted 
+SQL has troulbe using indicies when there
+are functions of parameters in the query.
 
-# Indexing on Regular Expressions
+Maybe a query which pulls out the year from the table.
+Find people born in 1980.
+
+Find query to do this.
+
+## Deterministic Functions
+
+A simple query we might be interested in is finding
+all the people born after 1980.
+To do that, we migth be tempted to run the query:
+
+## Non-deterministic Functions
+
+Can't index on the age of somebody...
+
+## Queries With Pattern Matching
 
 ...
-
+Find people whose first name starts with the 'Al'
+is easy. Finding people whose names end with 'Ax'
+is hard.
 
 # Indexing for the GROUP BY clause
 
@@ -258,21 +279,19 @@ notes is
 
 # Indexing in SQL Cheat Sheet
 
-I will end this post post with a list of recipies, summarized
-from the earlier discussion, which can be referred to later when building
-indicies:
+Here are the major takeaways about indexing in SQL:
 
 1. An index is a sorted list of columns in a database.
-1. Indexing in SQL improves query efficiency at the expense
+2. Indexing in SQL improves query efficiency at the expense
    of table alteration efficiency.
-2. When querying on multiple columns, make an index on all of them,
-   sorting the columns in the index based on the cardinality of the
-   columns.
-3. A query can use all the columns in an index until a column
+3. When querying on multiple columns, it is most efficient to
+   make an index on all of them, sorting the columns
+   from highest to lowest cardinality.
+4. A query can use all the columns in an index until a column
    in the index which is not part of the query.
-2. When indexing on an inequality, it is most efficient to 
+5. When indexing on an inequality, it is most efficient to 
    put the inequlaity expression as the last column in the index.
-3. When possible, avoid querying on functions of parameters 
+6. When possible, avoid querying on functions of parameters 
    becuase they break indexing. When necessary,
    some databases allow function-based indexing
 
