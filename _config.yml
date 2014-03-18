@@ -31,3 +31,9 @@ pages_list:
   About: '/about/'
   Archive: '/archive/'
   Feed: '/atom.xml'
+
+# Allow URL Redirects: 
+#  * https://help.github.com/articles/redirects-on-github-pages
+gems:
+  - jekyll-redirect-from
+
