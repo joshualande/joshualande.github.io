@@ -6,7 +6,7 @@ redcarpet:
 pygments:         true
 
 # Permalinks
-permalink:        pretty
+permalink:        none
 
 # Setup
 title:            Joshua Lande
