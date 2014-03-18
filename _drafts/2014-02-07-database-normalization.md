@@ -12,8 +12,10 @@ normalization](http://en.wikipedia.org/wiki/Database_normalization).
 Finally, I will go over the commands required to set up this database
 in MySQL.
 
+<!--
 In the next post in this series, I will discuss the commands
 required to query information from a database.
+-->
 
 # A Simple Example SQL Database
 
@@ -358,9 +360,11 @@ values to ensure uniqueness.
 [Here](http://dev.mysql.com/doc/refman/5.0/en/example-auto-increment.html)
 is the documentation on this command.
 
+<!--
 # Next Time: Querying the Database
 
 In the next post, I will discuss the commands required to ask
 very sophistical questions about data in this database.
+-->
 
 {% include twitter_plug.html %}
