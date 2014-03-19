@@ -20,7 +20,7 @@ Univeristy](http://stanford.edu) studying [pulsar wind
 Nebulae](http://en.wikipedia.org/wiki/Pulsar_wind_nebula).  I have
 written about my PhD research experince 
 [here]({% post_url 2013-02-14-stanford-university-research %}), and software I helped
-develope during my PhD [here]({% post_url 2013-02-01-pointlike %}).
+develope during my PhD [here]({% post_url 2013-02-01-pointlike-fitting-package %}).
 
 Before that, I was an undergraduate at [Marlboro
 College](http://www.marlboro.edu/) in Vermont.  I wrote about my

@@ -51,7 +51,7 @@ Studying the spatial structure of a Fermi source is important because it is ofte
 
 ![This monte-carlo simulation was used to show that we could use pointlike to study spatially-extended sources. Each curve represents ~90,000 independent simulations.](/assets/ts_ext_simulation-580x562.jpg)
 
-In the paper, we developed a new method to study spatially-extended Fermi sources. We used the Fermi data fitting-fitting package called pointlike (described [here]({% post_url 2013-02-01-pointlike %})) and added functionality to the program to fit the shape of an assumed spatially-extended Fermi source. We then defined a test for the statistical significance of the detection of extension and validated this test with an involved monte-carlo simulation. Next, we computed the sensitivity of Fermi to detected spatially-extended sources. We then validated this test by applying it to a [active galactic nucleus](http://en.wikipedia.org/wiki/Active_galactic_nucleus), Fermi sources which are known to be pointlike.
+In the paper, we developed a new method to study spatially-extended Fermi sources. We used the Fermi data fitting-fitting package called pointlike (described [here]({% post_url 2013-02-01-pointlike-fitting-package %})) and added functionality to the program to fit the shape of an assumed spatially-extended Fermi source. We then defined a test for the statistical significance of the detection of extension and validated this test with an involved monte-carlo simulation. Next, we computed the sensitivity of Fermi to detected spatially-extended sources. We then validated this test by applying it to a [active galactic nucleus](http://en.wikipedia.org/wiki/Active_galactic_nucleus), Fermi sources which are known to be pointlike.
 
 ![The source HESS J1616-508 (left) and HESS J1615-518 (right). The source on the left is likely a pulsar wind nebula.](/assets/hess_j1614_and_j1616-580x581.jpg)
 
@@ -61,7 +61,7 @@ Finally, we took this new method and applied it to two years of Fermi data to se
 
 # The pointlike maximum-likelihood package
 
-During my PhD, I have been involved with the development of a maximum-likelihood package to fit LAT data. In the process, I have learned about software management, code refactoring, interface design, version control, and issue tracking. I have written about the program [here]({% post_url 2013-02-01-pointlike %}).
+During my PhD, I have been involved with the development of a maximum-likelihood package to fit LAT data. In the process, I have learned about software management, code refactoring, interface design, version control, and issue tracking. I have written about the program [here]({% post_url 2013-02-01-pointlike-fitting-package %}).
 
 # PhD Thesis
 
