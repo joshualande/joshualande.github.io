@@ -6,8 +6,8 @@ redcarpet:
 pygments:         true
 
 # Permalinks
-permalink:        pretty
-#permalink:        none
+#permalink:        pretty
+permalink:        /:title/index.html
 
 # Setup
 title:            Joshua Lande
@@ -35,5 +35,5 @@ pages_list:
 
 # Allow URL Redirects: 
 #  * https://help.github.com/articles/redirects-on-github-pages
-# gems:
-#   - jekyll-redirect-from
+gems:
+  - jekyll-redirect-from
