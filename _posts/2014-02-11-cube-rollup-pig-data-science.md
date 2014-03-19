@@ -2,7 +2,8 @@
 layout: post
 title: "CUBE and ROLLUP: Two Apache Pig Functions That Every Data Scientist Should Know"
 comments: true
-redirect_from: "/2014/02/11/cube-rollup-pig-data-science"
+redirect_from: "/2014/02/11/cube-rollup-pig-data-science/"
+permalink: cube-rollup-pig-data-science
 ---
 
 ![The Apache Pig Logo](/assets/pig_logo.jpg)
