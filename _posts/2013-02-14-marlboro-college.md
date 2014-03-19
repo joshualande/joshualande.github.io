@@ -26,7 +26,7 @@ During the summer after my senior year of high school (2005) and
 again after my first year of college (2006), I participated in a
 [SEAP](http://seap.asee.org/program_details) internship at
 [ANSER](http://www.anser.org/). I have written about the
-internship [here]({% post_url 2013-02-14-seap-internship %}).
+internship [here]({% post_url 2013-02-14-solar-particle-events-sstorm.md %}).
 
 
 After my sophomore year (2006), I participated in a [physics REU
