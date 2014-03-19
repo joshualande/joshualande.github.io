@@ -2,6 +2,7 @@
 layout: post
 title: "Quantifying the Health Impact of Solar Particle Events on Astronauts With SStoRM: The Solar Storm Radiation Model"
 comments: true
+permalink: solar-particle-events-sstorm
 ---
 
 ![My SEAP internship adviser Ron Turner in front of a poster for SStoRM.](/assets/ron_turner_anser_2007-580x872.jpg)

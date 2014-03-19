@@ -7,8 +7,6 @@ pygments:         true
 
 # Permalinks
 permalink:        pretty
-#permalink:        "/:title/index.html"
-#permalink:        none
 
 # Setup
 title:            Joshua Lande
