@@ -6,8 +6,8 @@ redcarpet:
 pygments:         true
 
 # Permalinks
-permalink:        pretty
-#permalink:        /:title/index.html
+#permalink:        pretty
+permalink:        "/:title/index.html"
 
 # Setup
 title:            Joshua Lande
