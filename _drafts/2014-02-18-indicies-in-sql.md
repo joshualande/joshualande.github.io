@@ -29,11 +29,12 @@ a simple table of people:
 
 | person_id | First |  Last | gender |  birthdate |
 | --------- | ----- | ----- | ------ | ---------- |
-|         0 |  Alex | Smith |      m | 1985-05-27 |
-|         1 | Steve | Smith |      m | 1991-03-57 |
-|         2 |  Alex | Young |      m |            |
+|         0 |  Alex | Smith |      m |   19850527 |
+|         1 | Steve | Smith |      m |   19910317 |
+|         2 |  Alex | Young |      m |   19701201 |
 |         3 |  Alex | Smith |      m |            |
 |         4 | Sarah | Young |      f |            |
+|         4 | Sarah | Young |      f |   19890314 |
 
 PUT A NOTE ABOUT HOW DATES ARE STORED HERE.
 
@@ -233,8 +234,56 @@ Find query to do this.
 ## Deterministic Functions
 
 A simple query we might be interested in is finding
-all the people born after 1980.
+all the people born after 1981.
+
+First, we would have to index on birthdate:
+
+```sql
+CREATE INDEX birthdate_name
+ON recipe_ingredients (first,last,age,gender)
+```
+
 To do that, we migth be tempted to run the query:
+
+
+```sql
+SELECT *
+FROM people
+WHERE date(birthdate) > date('1981-00-00')
+```
+
+Or atlernately, we could do 
+
+```sql
+SELECT *
+FROM people
+WHERE ROUND(birthdate/10000) > 1981
+```
+
+Neither of thse correctly work because MySQL
+because functions of indexed columns
+are not proprely indexed. That is because
+the database is not smart enough to
+determine any relation between the sorting
+of the underlying data and the sorting
+of the function of the data.
+
+For our example above, the right query
+would be:
+
+```sql
+SELECT *
+FROM people
+WHERE birthdate > 19810000
+```
+
+Two alternative solutions
+
+* Function-based indexing
+* Chagning the table to store date objects
+* Creating a dimension table mapping date ints to date objects
+  and join on that first.
+
 
 ## Non-deterministic Functions
 
