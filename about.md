@@ -27,7 +27,7 @@ College](http://www.marlboro.edu/) in Vermont.  I wrote about my
 undergraduate research
 [here]({% post_url 2013-02-14-physics-marlboro-college-vermont %}), as
 well as my research during two undergraduate physics internships
-[here]({% post_url 2013-02-14-solar-particle-events-sstorm %}), and
+[here]({% post_url 2013-02-14-health-impact-solar-particle-events-sstorm %}), and
 [here]({% post_url 2013-02-12-simulating-deep-lens-survey-davis %}).
 
 If you like my website, you can follow me on twitter [@joshualande](https://twitter.com/joshualande).
