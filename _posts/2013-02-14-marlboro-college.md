@@ -2,6 +2,7 @@
 layout: post
 title: Studying Physics at Marlboro College in the Hills of Vermont
 comments: true
+redirect_from: "/2013/02/14/marlboro-college/"
 permalink: physics-marlboro-college-vermont
 ---
 

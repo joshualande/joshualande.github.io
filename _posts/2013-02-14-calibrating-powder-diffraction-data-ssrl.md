@@ -2,6 +2,7 @@
 layout: post
 title: Calibrating X-ray Powder Diffraction Data at the Stanford Synchrotron Radiation Laboratory
 comments: true
+redirect_from: "/2013/02/14/slac-suli-internship/"
 permalink: calibrating-powder-diffraction-data-ssrl
 ---
 

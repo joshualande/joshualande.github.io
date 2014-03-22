@@ -2,6 +2,7 @@
 layout: post
 title: Simulating the Deep Lens Survey at UC Davis
 comments: true
+redirect_from: "/2013/02/12/2006-uc-davis-reu/"
 permalink: simulating-deep-lens-survey-davis
 ---
 

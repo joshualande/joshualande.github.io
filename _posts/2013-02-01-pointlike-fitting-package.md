@@ -2,6 +2,7 @@
 layout: post
 title: The pointlike Maximum-likelihood Fitting Package For Analysis Fermi-LAT Data
 comments: true
+redirect_from: "/2013/02/01/pointlike/"
 permalink: pointlike-fitting-package
 ---
 

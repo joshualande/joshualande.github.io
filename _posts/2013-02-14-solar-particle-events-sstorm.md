@@ -2,6 +2,7 @@
 layout: post
 title: "Quantifying the Health Impact of Solar Particle Events on Astronauts With SStoRM: The Solar Storm Radiation Model"
 comments: true
+redirect_from: "/2014/02/14/solar-particle-events-sstorm"
 permalink: solar-particle-events-sstorm
 ---
 
