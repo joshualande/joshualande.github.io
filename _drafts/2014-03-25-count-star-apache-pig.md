@@ -21,6 +21,9 @@ not really null
 data = LOAD 'data.dat' AS (row);
 
 group_all = GROUP data all;
-nrows_count = FOREACH group_all GENERATE COUNT(data.value);
-nrows_count_star = FOREACH group_all GENERATE COUNT_STRA(data.value);
+nrows_count = FOREACH group_all GENERATE COUNT(data);
+nrows_count_star = FOREACH group_all GENERATE COUNT_STAR(data);
 ```
+
+`nrows_count`
+`nrows_count_star`
