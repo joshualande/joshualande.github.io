@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "COGROUP in Apache Pig"
+title: "A Simple Explanation of COGROUP in Apache Pig"
 comments: true
 permalink: cogroup-in-pig
 ---
@@ -89,6 +89,6 @@ this example, we get:
 |  fish |               {(alex,fish)} |              {(nemo,fish)} |
 
 In summary, you can use `COGROUP` when you need to group two tables
-and then join on the grouped column.
+by a column and then join on the grouped column.
 
 {% include twitter_plug.html %}
