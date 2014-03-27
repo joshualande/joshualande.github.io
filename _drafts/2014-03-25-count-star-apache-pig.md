@@ -23,7 +23,6 @@ last,final
 data = LOAD 'data.csv' 
     USING PigStorage(',') 
     AS (col1:chararray, col2:chararray);
-DUMP data
 ```
 
 Data is
@@ -38,7 +37,6 @@ Data is
 
 ```
 group_all = GROUP data all;
-DUMP group_all
 ```
 
 
@@ -49,8 +47,8 @@ nrows_count = FOREACH group_all GENERATE COUNT(data);
 
 `nrows_count` has a value of 3.
 
+```
 nrows_count_star = FOREACH group_all GENERATE COUNT_STAR(data);
 ```
 
-`nrows_count`
-`nrows_count_star`
+`nrows_count_star` has a value of 4
