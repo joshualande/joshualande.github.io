@@ -84,7 +84,6 @@ this example, we get:
 | group |                      owners |                       pets | 
 | ----- | --------------------------- | -------------------------- | 
 |  cat  |    {(adam,cat),(alice,cat)} | {(paws,cat),(wiskers,cat)} |
-|  cat  |    {(adam,cat),(alice,cat)} | {(paws,cat),(wiskers,cat)} |
 |  dog  |    {(adam,dog),(steve,dog)} |     {(fido,dog),(rex,dog)} |
 |  fish |               {(alex,fish)} |              {(nemo,fish)} |
 
