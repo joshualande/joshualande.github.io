@@ -20,7 +20,7 @@
       <priority>0.5</priority>
     </url>
   {% endfor %}
-  {% for page in site.pages %}
+  {% for page in site.pages %}{% if page.layout != nil %}
   <url>
     <loc>{{ site.url }}{{ page.url }}</loc>
     {% if page.sitemap.lastmod %}
@@ -43,5 +43,5 @@
       <priority>0.3</priority>
     {% endif %}
   </url>
-  {% endfor %}
+  {% endif %}{% endfor %}
 </urlset>
