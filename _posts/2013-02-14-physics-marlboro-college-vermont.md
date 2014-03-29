@@ -2,6 +2,8 @@
 layout: post
 title: Studying Physics at Marlboro College in the Hills of Vermont
 comments: true
+redirect_from: "/2013/02/14/marlboro-college/"
+permalink: physics-marlboro-college-vermont
 ---
 
 ![The Marlboro College 2008 Community Photo. I am on the very right
@@ -26,18 +28,18 @@ During the summer after my senior year of high school (2005) and
 again after my first year of college (2006), I participated in a
 [SEAP](http://seap.asee.org/program_details) internship at
 [ANSER](http://www.anser.org/). I have written about the
-internship [here]({% post_url 2013-02-14-solar-particle-events-sstorm %}).
+internship [here]({% post_url 2013-02-14-health-impact-solar-particle-events-sstorm %}).
 
 
 After my sophomore year (2006), I participated in a [physics REU
 at UC Davis](http://london.ucdavis.edu/~reu/REU06/reu06.html). I
 have written about the
-internship [here]({% post_url 2013-02-12-2006-uc-davis-reu %}).
+internship [here]({% post_url 2013-02-12-simulating-deep-lens-survey-davis %}).
 
 After my Junior year (2007), I participated in a [SULI Internship
 at SLAC](http://www-group.slac.stanford.edu/aao/suli.asp). I have
 written about the
-internship [here]({% post_url 2013-02-14-slac-suli-internship %}).
+internship [here]({% post_url 2013-02-14-calibrating-powder-diffraction-data-ssrl %}).
 
 # Senior Thesis
 

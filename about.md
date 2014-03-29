@@ -19,15 +19,15 @@ Before that, I got a PhD in physics from [Stanford
 Univeristy](http://stanford.edu) studying [pulsar wind
 Nebulae](http://en.wikipedia.org/wiki/Pulsar_wind_nebula).  I have
 written about my PhD research experince 
-[here]({% post_url 2013-02-14-stanford-university-research %}), and software I helped
+[here]({% post_url 2013-02-14-searching-pulsar-wind-nebulae-kiapc %}), and software I helped
 develope during my PhD [here]({% post_url 2013-02-01-pointlike-fitting-package %}).
 
 Before that, I was an undergraduate at [Marlboro
 College](http://www.marlboro.edu/) in Vermont.  I wrote about my
 undergraduate research
-[here]({% post_url 2013-02-14-marlboro-college %}), as
+[here]({% post_url 2013-02-14-physics-marlboro-college-vermont %}), as
 well as my research during two undergraduate physics internships
-[here]({% post_url 2013-02-14-solar-particle-events-sstorm %}), and
-[here]({% post_url 2013-02-12-2006-uc-davis-reu %}).
+[here]({% post_url 2013-02-14-health-impact-solar-particle-events-sstorm %}), and
+[here]({% post_url 2013-02-12-simulating-deep-lens-survey-davis %}).
 
 If you like my website, you can follow me on twitter [@joshualande](https://twitter.com/joshualande).

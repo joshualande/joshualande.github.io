@@ -2,6 +2,8 @@
 layout: post
 title: Simulating the Deep Lens Survey at UC Davis
 comments: true
+redirect_from: "/2013/02/12/2006-uc-davis-reu/"
+permalink: simulating-deep-lens-survey-davis
 ---
 
 ![The simulated stars and galaxies from my DLS simulation I created during my 2006 physics REU.](/assets/2006_reu_internship_simulated_data-940x544.jpg)
