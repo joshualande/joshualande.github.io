@@ -1,8 +1,8 @@
 ---
 layout: post
-title: How to Redirect Old Permalinks in Jekyll Using Github Pages and the jekyll-redirect-from Plugin
+title: How to Redirect Old URLs in Jekyll Using Github Pages and the jekyll-redirect-from Plugin
 comments: true
-permalink: redirect-permalink-jekyll-github
+permalink: redirect-urls-jekyll-github
 ---
 
 Often, when changing the permalink structure of your blog or migrating
