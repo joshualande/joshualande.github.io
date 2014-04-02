@@ -1,48 +1,56 @@
 ---
 layout: post
-title: How to Get Minimial URLs in Jekyll with Github Pages
+title: How to Get Short Minimial URLs in Jekyll with Github Pages
 comments: true
 permalink: minimal-urls-jekyll
 ---
 
-Since I don't post that often and also don't intend to use my domain
-[joshualande.com](joshualande.com) for other projects, I decided I
-wanted to make the URLs (or what Jekyll calls permalinks) for my
-blog URLs super minimial.  For example, for this post, I wanted the
-URL to be [joshualande.com/minimial-urls-jekyll](joshualande.com/minimial-urls-jekyll).
-
-This url is short, looks good, and is easy to share.  And I read
-[some
+In this post, I will describe how to make the URLs for your blog
+posts (what Jekyll calls permalinks) short and minimial.  For
+Example, I wanted the URL for this post to be
+[joshualande.com/minimial-urls-jekyll](joshualande.com/minimial-urls-jekyll)
+without any tags, dates, or other extra characters.  This url is
+short, looks nice, and is easy to share. I also read [some
 speculation](http://davidtuite.com/posts/how-to-manage-permalinks-in-jekyll)
 that smaller URLs help with
 [SEO](http://en.wikipedia.org/wiki/Search_engine_optimization).
 
-As is docuemnted [here](http://jekyllrb.com/docs/permalinks/), I
-though I could do this by just setting the permalink to `none` in `_config.yml`
-```yml
+The [Jekyll documentation](http://jekyllrb.com/docs/permalinks/),
+discusses the ability to set permalink to `none` in `_config.yml`
+file:
+
+```yaml
 permalink: none
 ```
 
 But this created URLs like
 [joshualande.com/beautiful-minimal-urls-jekyll.html](joshualande.com/beautiful-minimal-urls-jekyll.html)
-and I didn't want them ending in ".html".
+and I didn't want my URLs ending in ".html".
 
-Next, I tried setting the permalink value to "/:title", but this
-broke the static pages I had setup (like
+Next, I tried setting the permalink value to "/:title" in `_config.yml`:
+
+```yaml
+permalink: "/:title"
+```
+
+This appeared to work, but broke the static pages I had setup (like
 [joshualande.com/about](joshualande.com/about)).  I could move all
-the static pages to just be blog posts, but that would break my
-archive of blog posts
-([http://joshualande.com/archive/](http://joshualande.com/archive/)).
+the static pages to just be blog posts, but that would have broken
+[ my archive](http://joshualande.com/archive/) of blog posts which
+does not include static pages.
 
-Finally, I relized that I could get my desired result without messing
-up static pages by explicitly setting the permalink in each blog
-post.  For example, for this post I set at the top of the markdown
-file:
+Finally, I realized that I could get my desired result without messing
+up static pages by explicitly setting the `permalink` key
+in the YAML metadata of each post.
 
-> permalink: minimal-urls-jekyll
+```yaml
+permalink: minimal-urls-jekyll
+```
 
-It is unfortunately that you have to explicilty set this at the top
+It is unfortunately that you have to explicitly set this at the top
 of each blog post. But this does work, giving me beautiful URLs
 like
-[joshualande.com/minimal-urls-jekyll](joshualande.com/minimal-urls-jekyll).
-Please comment below if you know a better way to do this.
+[joshualande.com/minimal-urls-jekyll](joshualande.com/minimal-urls-jekyll)!
+Please comment below if you know of a better way to do this.
+
+{% include twitter_plug.html %}
