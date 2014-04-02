@@ -1,13 +1,13 @@
 ---
 layout: post
-title: How to Redirect Old URLs in Jekyll Using Github Pages and the jekyll-redirect-from Plugin
+title: How to Redirect URLs in Jekyll Using Github Pages and the jekyll-redirect-from Plugin
 comments: true
 permalink: redirect-urls-jekyll-github
 ---
 
-Often, when changing the permalink structure of your blog or migrating
-your blog from a different blogging platform to Jekyll, you may want to
-change the permalink structure of your plog but keep the old
+When changing the permalink structure of your blog or migrating
+your blog from one blogging platform to another, you often want to
+change the permalink structure of your blog but keep the old
 URLs and have them redirect to the new pages.
 This will allow you to preserve your 
 Google search rankings, tweet history, SEO, etc.
