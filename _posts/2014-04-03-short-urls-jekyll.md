@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to Get Short URLs in Jekyll with Github Pages
+title: How to Set Short URLs in Jekyll with Github Pages
 comments: true
 permalink: short-urls-jekyll
 ---
