@@ -1,14 +1,14 @@
 ---
 layout: post
-title: How to Get Short Minimial URLs in Jekyll with Github Pages
+title: How to Get Short URLs in Jekyll with Github Pages
 comments: true
-permalink: minimal-urls-jekyll
+permalink: short-urls-jekyll
 ---
 
 In this post, I will describe how to make the URLs for your blog
-posts (what Jekyll calls permalinks) short and minimial.  For
-Example, I wanted the URL for this post to be
-[joshualande.com/minimial-urls-jekyll](joshualande.com/minimial-urls-jekyll)
+posts (what Jekyll calls permalinks) short and minimal.  For
+example, I wanted the URL for this post to be
+[joshualande.com/short-urls-jekyll](http://joshualande.com/short-urls-jekyll)
 without any tags, dates, or other extra characters.  This url is
 short, looks nice, and is easy to share. I also read [some
 speculation](http://davidtuite.com/posts/how-to-manage-permalinks-in-jekyll)
@@ -16,7 +16,7 @@ that smaller URLs help with
 [SEO](http://en.wikipedia.org/wiki/Search_engine_optimization).
 
 The [Jekyll documentation](http://jekyllrb.com/docs/permalinks/),
-discusses the ability to set permalink to `none` in `_config.yml`
+discusses the ability to set permalink to `none` in the `_config.yml`
 file:
 
 ```yaml
@@ -24,7 +24,7 @@ permalink: none
 ```
 
 But this created URLs like
-[joshualande.com/beautiful-minimal-urls-jekyll.html](joshualande.com/beautiful-minimal-urls-jekyll.html)
+[joshualande.com/short-urls-jekyll.html](http://joshualande.com/short-urls-jekyll.html)
 and I didn't want my URLs ending in ".html".
 
 Next, I tried setting the permalink value to "/:title" in `_config.yml`:
@@ -34,23 +34,27 @@ permalink: "/:title"
 ```
 
 This appeared to work, but broke the static pages I had setup (like
-[joshualande.com/about](joshualande.com/about)).  I could move all
+[joshualande.com/about](http://joshualande.com/about)).  I could move all
 the static pages to just be blog posts, but that would have broken
 [ my archive](http://joshualande.com/archive/) of blog posts which
-does not include static pages.
+should not include static pages.
 
 Finally, I realized that I could get my desired result without messing
 up static pages by explicitly setting the `permalink` key
-in the YAML metadata of each post.
+in the YAML metadata of each post. For this post, I set:
 
 ```yaml
-permalink: minimal-urls-jekyll
+permalink: short-urls-jekyll
 ```
 
 It is unfortunately that you have to explicitly set this at the top
 of each blog post. But this does work, giving me beautiful URLs
 like
-[joshualande.com/minimal-urls-jekyll](joshualande.com/minimal-urls-jekyll)!
-Please comment below if you know of a better way to do this.
+[joshualande.com/short-urls-jekyll](http://joshualande.com/short-urls-jekyll).
+Please comment below if you know of a simpler way to way to do this.
+
+Finally, if you already have existing permalinks and want them
+to redirect to your new url, you can do this by following the
+instructions on [this blog post]({% post_url 2014-04-02-redirect-permalink-jekyll-github %}).
 
 {% include twitter_plug.html %}
