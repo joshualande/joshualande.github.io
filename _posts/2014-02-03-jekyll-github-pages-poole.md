@@ -256,7 +256,18 @@ Whenever I want to include the Twitter plug on a post, I just add the liquid tag
 {% endraw %}
 ```
 
+# Followup Posts
 
+In [this post]({% post_url 2014-04-03-short-urls-jekyll %}),
+I describe how to set short and minimil URLs for your blog posts
+(like how the URL for this post is
+[{{ site.shorturl }}/jekyll-github-pages-poole]({{ site.url }}/jekyll-github-pages-poole)
+instead of
+[{{ site.shorturl }}/2014/02/03/jekyll-github-pages-poole]({{ site.url }}/2014/02/03/jekyll-github-pages-poole)).
+
+In [this post]({% post_url 2014-04-02-redirect-permalink-jekyll-github %}),
+I describe how to redirect existing URLs from an old permalink structure to a
+new permalink structure.
 
 # Links:
 
