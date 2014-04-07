@@ -74,6 +74,22 @@ because there are 5 rows,
 
 # Count in SQL
 
-# Cheat Sheet
 
-In SQL
+
+```sql
+CREATE TABLE data_with_nulls (
+  col1 varchar NOT NULL,
+  col2 varchar NOT NULL,
+);
+INSERT INTO recipe_ingredients 
+    (col1, col2)
+VALUES
+    (0,1),
+    (first,second),
+    (third,),
+    (,),
+    (,fourth),
+    (fifth,final)
+```
+
+
