@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Design a Better Database With Database Normalization "
+title: "Design a Better Database With Database Normalization"
 comments: true
 ---
 
@@ -9,8 +9,8 @@ relational database like [SQL](http://en.wikipedia.org/wiki/SQL).
 By way of a simple example, I will then go over the basics of how
 to design a robust database and the concept of [database
 normalization](http://en.wikipedia.org/wiki/Database_normalization).
-Finally, I will go over the commands required to set up a simple
-database in MySQL.
+Finally, I will go over the actual commands required to set up a
+simple database in MySQL.
 
 <!--
 In the next post in this series, I will discuss the commands
@@ -20,15 +20,15 @@ required to query information from a database.
 # A Simple Example SQL Database
 
 We begin with a simple example.  Suppose that we wanted to store
-information about recipes in a cookbook.  Each recipe will have a
-list of ingredients.
+information about recipes in a cookbook.  
 
 The fundamental building block of SQL databases are two-dimensional
 tables. This may seem like a limited design, but as you will
 see, this limitation will become incredibly powerful.
 
-For our example, in order to store our recipes in the database we
-can first create a table of recipe names.  Our `recipes` table is:
+For our cookbook, each recipe will have a list of ingredients.  To
+store our recipes, we can first create a table of recipe names.
+Our `recipes` table is:
 
 | recipe_id |    recipe_name |
 | --------- | -------------- |

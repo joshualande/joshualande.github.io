@@ -4,43 +4,50 @@ title: Indexing in SQL for the Rest of Us
 comments: true
 ---
 
+In this post, we will discuss indexising in SQL which is a caching
+mechanism that is often necessary to obtain acceptable read performance
+on a database.
+
 One of the biggest benefits of relational databases is that they
-abstract the logical layout of our data from the underlying
-implementation of how the data should be stored. Furthemore, they
-abstract the queries you ask of the database from the details about
-how the queriies shoudl be run.  Databases then use the the [Query
+separate layout of our data from the underlying implementation of
+how the data should be stored.
+
+Furthemore, they separate the logic of the questions (queries) you
+want to ask of the database from details about how the queries
+should be run.  Databases then use the the [Query
 optimizer](http://en.wikipedia.org/wiki/Query_optimization)/[Query
 execution plan](http://en.wikipedia.org/wiki/Query_plan) to find
 an efficient way to write the query.
 
-But this picture is a bit naieve because SQL cannot without help
-find an efficient algorithm for every query you can could come up with.
-In pactice, SQL quierie scan often be very slow, and one has
-to introduce indicies to speed up queries and improve read
-performance of the database.
+But this picture is a bit naieve because SQL often does not have
+enough information to find a fast way to run a query and often
+resorts to inefficient things like scaning the entire table.
+
+To improve the efficiency of querying data from a database, one can
+use indices which are separate sorted lists of rows in the table
+that can be used for more efficient query algorithms.
 
 # Sorting a Table in SQL Using an Index
 
 An index in SQL is just a sorted list of all of our data in a table
-where the index specifies in the column order in which to sort rows.
+where the index specifies the column order in which to sort rows.
 
 It is illustrative to consider querying from
-a simple table of people:
+a simple table of `people`:
 
-| person_id | First |  Last | gender |  birthdate |
-| --------- | ----- | ----- | ------ | ---------- |
-|         0 |  Alex | Smith |      m |   19850527 |
-|         1 | Steve | Smith |      m |   19910317 |
-|         2 |  Alex | Young |      m |   19701201 |
-|         3 |  Alex | Smith |      m |            |
-|         4 | Sarah | Young |      f |            |
-|         4 | Sarah | Young |      f |   19890314 |
+| person_id | First |      Last | gender |  birthdate |
+| --------- | ----- |     ----- | ------ | ---------- |
+|         0 |  Alex | Garfunkle |      m |   19850527 |
+|         1 | Steve |     Smith |      m |   19910317 |
+|         2 |  Alex |     Young |      m |   19701201 |
+|         3 |  Alex |  Williams |      m |            |
+|         4 | Sarah | Fredricks |      f |            |
+|         4 | Sarah |     Young |      f |   19890314 |
 
 PUT A NOTE ABOUT HOW DATES ARE STORED HERE.
 
-Suppose we wanted to compute, for example, all
-the people with a given last name.
-The query for this is straightforward:
+Suppose we wanted to compute, for example, all the people with a
+given last name.  The query is straightforward:
 
 ```sql
 SELECT *
@@ -48,51 +55,49 @@ SELECT *
  WHERE last = 'Young'
 ```
 
-Given that SQL does not internally sort the table by any particular
-column, the only way that SQL can issue this query is to loop over
-every row in the table and check the amount value.  This is called
-a [full table
-scan](https://dev.mysql.com/doc/refman/5.5/en/glossary.html#glos_full_table_scan)
-and is not very efficient. It has a run-time efficiency of O(n)
-where n is the nubmer of rows, so it become increasly costly for
-larger tables.
+But SQL does not automatically have any great way to run this query
+since tables in SQL are inherently unsorted, so the database would
+have to inefficiently look through every row in the table.  This is
+called a [full table
+scan](https://dev.mysql.com/doc/refman/5.5/en/glossary.html#glos_full_table_scan).
+It has a run-time efficiency of O(n) where n is the nubmer of rows,
+so it become increasly costly for larger tables.
 
-Instead, we could imagine creating an index on the amount column.
-The index is just a list of the indicies for each row in the table
-sorted by column specified. For our example, it would look like:
+To improve query efficiency, we could pre-sort our table based on
+the last names and then [binary
+search](http://en.wikipedia.org/wiki/Binary_search_algorithm) through
+the names for the rows we are looking for.  Because binary searching
+is O(log(n)), this algorithm woudl be significantly faster than a
+full table scan.
+
+In practice sorting the actual data would be very costly and would
+limit this algorithmic improvement to only one kind of query.
+Instead, it would be better to leave the underlying table in place
+and instead store a sorted list of all of the row indicies.  This
+sorted list coudl be used for algorithm improvements without altering
+the underlyibgn data.
+
+This is exactly what an index in SQL does.
+For our example, we would index on the `last` column to
+sorted list the row indicies sorted by last name.
+For our example, the index would look like:
 
 | index |
 | ----- |
 |   ... |
 
-Note that the index does not contain any information about the value
-of the column at that index. In addition, for columns
-with the same value of `amount`, there is no guarantee about their
-order in the index.
+Note that the index in SQL only stores
+row indicies, nothing about the content in the rows.
+For rows with the same last name, there
+is no guarantee about their sorted order.
 
-Given this index, we could use it to [binary
-searching](http://en.wikipedia.org/wiki/Binary_search_algorithm)
-our table for the values we want.  For each index during our search,
-we could look up the row with that index in the `recipe_ingredients`
-table and check compare our desired value to the value of `amount`
-in that table.
+Given this index, we could binary search
+for people of a given last name. 
+At each point in the search,
+we would have to look up in the acutal table to see the particular
+last name for a given row index.
 
-For our particular example, the binary search would first check the
-middle of our index table. The index points to 1st row, which has
-`amount=2`, which is less than our desird amount.  Therefore, we
-would check the middle of the top half of the table.  This row
-points to the 5th row in the table, whcih has `amount=2`.  We have
-to  look higher, so we would next try the 8th row in our index,
-which points to the 3rd row in the table, which has the desired
-amount=3! 
-
-Because at each stage of the search we half the number of rows we
-need to check, this algorithm is O(log(n)). For example, if there
-were a million rows, the log of a million is only six.  So this is
-a huge efficiency gain over the full table scan.
-
-
-The syntax to create an index on this column is:
+The syntax to create an index is:
 
 ```sql
 CREATE INDEX index_name
@@ -101,46 +106,34 @@ ON table_name (column_name)
 
 For our exmaple, the query would be
 ```sql
-CREATE INDEX amount_name
-ON recipe_ingredients (amount)
+CREATE INDEX people_last_name_indx
+ON people (last)
 ```
-
-# Primary Key Indices
-
-Put a note about how a PK is also an index.
-How this makes sense for quickly deciding if a 
-PK constraint has been violated.
-
-"It has an associated index, for fast query 
-performance" -- http://dev.mysql.com/doc/refman/5.5/en/optimizing-primary-keys.html
 
 # Benefits of SQL indices
 
-Indices are great for several reasons.  First, they don't store any
-of the underlying underlying data so they are fairly memory-efficient.
-Second, they are automatically updated when the table is updated,
-so they don't have to be explicilty handled by a developer.  And
-finally, they are stored separately from the original table, which
-allows for a logical separation of the data from particular information
-about how the data will be queriied.
+Indices have several benefits.  First, they don't store any of the
+underlying underlying data so they are fairly memory-efficient.
+Second, you can have multiple indicies on a table to improve different
+kinds of querieies.  Third, they are automatically updated whenever
+the table is updated so they don't require any additional bookkeeping.
+And finally, they are stored separately from the original table,
+which allows for a logical separation of the actual data from
+particular information about how the data will be queriied.
 
-On the other hand, indicies have to be automatically updated by the
-database when tables are modified, and this additional overhead
-will degrate write performance.  So they should only be added as
-necesary when performance is an issue.
+On the other hand, indicies have to be automatically updated whenever
+tables are modified. This overhead will degrate the performance of
+modifying the database.  So indicies should only be added as necesary.
 
 # Multi-column Indices in SQL
 
-Next, we will go over the indices
-rquired for harder SQL queries.
+Indexing for querieis with 
+multiple conditions in the `WHERE` 
+cluase requires a little more though.
 
-First, we will learn what to do
-when there are multiple 
-conditions in the `WHERE` clause.
 For example, we might be looking for a
-row in `recipe_ingredients` with an known
-recipe ID, ingredient ID, and amount.
-If so, we could run a query like:
+person with a particular first name, last name, and gender
+using a query like:
 
 ```sql
 SELECT *
@@ -150,8 +143,12 @@ SELECT *
    AND gender='m'
 ```
 
+SQL allows for indexing on multiple columns. When you index on
+multiple columns, it sort by the first column and then for rows
+with the same value by it will sort by the second column, etc.
+
 In order to efficiently run this query, we can build an index which
-sorts on (last, first, gender). What this means is we first sort
+sorts on (first, last, gender). What this means is we first sort
 on the last name.  Whenver the last name is the same, we then sort
 on first name. Whenever both are the same, we finally sort on gender.
 
@@ -198,6 +195,15 @@ In SQL, we refer to the amount of distint values as the
 a table. The rule is therefore to put columns with higher cardinailty
 first in an index.
 
+
+# Primary Key Indices
+
+Put a note about how a PK is also an index.
+How this makes sense for quickly deciding if a 
+PK constraint has been violated.
+
+"It has an associated index, for fast query 
+performance" -- http://dev.mysql.com/doc/refman/5.5/en/optimizing-primary-keys.html
 
 # Indexing on Inequalities
 
@@ -296,11 +302,11 @@ Find people whose first name starts with the 'Al'
 is easy. Finding people whose names end with 'Ax'
 is hard.
 
-# Indexing for the GROUP BY clause
+# Indexing the GROUP BY Clause
 
-# Indexing for the JOIN clause
+# Indexing the JOIN Clause
 
-# Indexing for the ORDER BY clause
+# Indexing the ORDER BY Clause
 
 
 
