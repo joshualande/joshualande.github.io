@@ -78,18 +78,38 @@ because there are 5 rows,
 
 ```sql
 CREATE TABLE data_with_nulls (
-  col1 varchar NOT NULL,
-  col2 varchar NOT NULL,
+  col1 varchar(10),
+  col2 varchar(10)
 );
-INSERT INTO recipe_ingredients 
+INSERT INTO data_with_nulls
     (col1, col2)
 VALUES
-    (0,1),
-    (first,second),
-    (third,),
-    (,),
-    (,fourth),
-    (fifth,final)
+    ("first","second"),
+    ("third",NULL),
+    (NULL,NULL),
+    (NULL,"fourth"),
+    ("fifth","final")
 ```
 
+```sql
+SELECT COUNT(*)
+FROM data_with_nulls
+```
 
+-> Returns ???
+
+
+```sql
+SELECT COUNT(col1)
+FROM data_with_nulls
+```
+
+-> returns ???
+
+
+```sql
+SELECT COUNT(col2)
+FROM data_with_nulls
+```
+
+-> Returns ???
