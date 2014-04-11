@@ -36,13 +36,14 @@ It is illustrative to consider querying from
 a simple table of `people`:
 
 | person_id | First |      Last | gender |  birthdate |
-| --------- | ----- |     ----- | ------ | ---------- |
+| --------- | ----- | --------- | ------ | ---------- |
 |         0 |  Alex | Garfunkle |      m |   19850527 |
-|         1 | Steve |     Smith |      m |   19910317 |
-|         2 |  Alex |     Young |      m |   19701201 |
-|         3 |  Alex |  Williams |      m |            |
-|         4 | Sarah | Fredricks |      f |            |
-|         4 | Sarah |     Young |      f |   19890314 |
+|         1 |  Alex |     Young |      m |   19701201 |
+|         2 | Sarah |     Riley |      f |   19890314 |
+|         3 |  Alex |  Williams |      m |   19400105 |
+|         4 | Sarah |     Smith |      f |   19910317 |
+|         5 |  Jane | Fredricks |      f |   19920731 |
+|         6 |  Alex |     Young |      f |   19920731 |
 
 PUT A NOTE ABOUT HOW DATES ARE STORED HERE.
 
@@ -82,20 +83,25 @@ For our example, we would index on the `last` column to
 sorted list the row indicies sorted by last name.
 For our example, the index would look like:
 
-| index |
-| ----- |
-|   ... |
+|          index (last) |
+| --------------------- |
+|         5 (Fredricks) |
+|         0 (Garfunkle) |
+|             2 (Riley) |
+|             4 (Smith) |
+|          3 (Williams) |
+|             1 (Young) |
+|             6 (Young) |
 
-Note that the index in SQL only stores
-row indicies, nothing about the content in the rows.
-For rows with the same last name, there
-is no guarantee about their sorted order.
 
-Given this index, we could binary search
-for people of a given last name. 
-At each point in the search,
-we would have to look up in the acutal table to see the particular
-last name for a given row index.
+Note that the index in SQL only stores row indicies and nothing
+about the content in the rows.  I have included the last names
+paranthetically just for clarity.  For rows with the same last name,
+there is no guarantee about their sorted order.
+
+Given this index, we could binary search for people of a given last
+name.  At each point in the search, we would have to look up in the
+acutal table to see the particular last name for a given row index.
 
 The syntax to create an index is:
 
@@ -138,13 +144,18 @@ using a query like:
 ```sql
 SELECT *
   FROM people
- WHERE first='Steve'
-   AND last='Smith'
+ WHERE first='Alex'
+   AND last='Williams'
    AND gender='m'
 ```
 
 SQL allows for indexing on multiple columns. When you index on
-multiple columns, it sort by the first column and then for rows
+multiple columns, it first sort the rows by the
+first column in the index. In situations where there are
+identical rows with that column, it will then sort by
+the second column.
+
+first column and then for rows
 with the same value by it will sort by the second column, etc.
 
 In order to efficiently run this query, we can build an index which
@@ -154,69 +165,80 @@ on first name. Whenever both are the same, we finally sort on gender.
 
 ```sql
 CREATE INDEX amount_name
-ON recipe_ingredients (first,last,age,gender)
+ON recipe_ingredients (first,last,gender)
 ```
 
-And will create an index like:
+This will create a index which sorts first on first name,
+then on last name, and finally on gender.
 
-| index |
-| ----- |
-|   ... |
+| index (first,last,gender) |
+|-------------------------- |
+|      0 (Alex,Garfunkle,m) |
+|       3 (Alex,Williams,m) |
+|          6 (Alex,Young,f) |
+|          1 (Alex,Young,m) |
+|      5 (Jane,Fredricks,f) |
+|         2 (Sarah,Riley,f) |
+|         4 (Sarah,Smith,f) |
 
-Given that we have sorted by all four columns, it is easy binary
-search or data for people of a given first name, last name, age, and gender.
-Similarly,
-
+As was discussed above, indicies only contain the row number and
+not any data from the table rows. But I include the data in
+this table paranthetically for clarity.
 
 This leads to a natural question. When we define our index, in what
-order should we list the columns in the index. The rule here is
-that we want to order our columns from the column with
-the most distinct values to the column with the fewest
-distinct values.  The reason for this is because we can
-narrow down the possible search results fastest if we 
-fist select only rows matching the fastest-varying column.
+order should we list the columns in the index. 
 
-As a simple analogy to understand this, suppose you were to design
-a phone book for quickly looking up a person.  Would you first sort
-the book by first name and then, for people with the same first
-name, sort by last name? Or would you first sort by last name and
-then by first name? Because there are typically a lot more last
-names than first names, it is usually going to be faster to first
-find everybody with a specific last name and then, for all the
-people with that given last name, find the person with the first
-name you are looking for. 
+For our previous query (finding the male named Alex Williams), 
+it is somewhat painful to index 
+first on first name because there are a lot more people
+with first name alex than last name Williams.
 
-For our example, we assume there are many more first
-names than last names, many more last names than ages,
-and many more ages than genders.
+Since there is much more variety in last names,
+a more efficent index would be (last,first,gender):
+
+| person_id(last,first,gender) |
+| ---------------------------- |
+|         5 (Fredricks,Jane,f) |
+|         0 (Garfunkle,Alex,m) |
+|            2 (Riley,Sarah,f) |
+|            4 (Smith,Sarah,f) |
+|          3 (Williams,Alex,m) |
+|             6 (Young,Alex,f) |
+|             1 (Young,Alex,m) |
+
+That way, finding all people will last name Williams immediately
+shrinks the list to only one person!
+
+The general rule here is that we want to order our columns from the
+column with the most distinct values to the column with the fewest
+distinct values.  This allows the databae to narrow down the list
+of potential matches as fast as possible.
 
 In SQL, we refer to the amount of distint values as the
 [cardinality](http://en.wikipedia.org/wiki/Cardinality_(SQL_statements)) of
-a table. The rule is therefore to put columns with higher cardinailty
-first in an index.
-
-
-# Primary Key Indices
-
-Put a note about how a PK is also an index.
-How this makes sense for quickly deciding if a 
-PK constraint has been violated.
-
-"It has an associated index, for fast query 
-performance" -- http://dev.mysql.com/doc/refman/5.5/en/optimizing-primary-keys.html
+a table. Because last names has higher cardinality than first names,
+and first names has higher cardinality than gender, the most efficient
+index is (last,first,gender).
 
 # Indexing on Inequalities
 
 Indexing on inequalities requires a somewhat different logic than
-equality indexing.  For example, if we wanted to find all the men
-who were older than 25, we would use the query
+equality indexing.  For example, supposed we wanted
+to find all people with first name Alex born after 1970.
+We would run the query:
 
 ```sql
 SELECT *
   FROM people
- WHERE gender = 'm'
-   AND age > 25
+ WHERE first = 'Alex'
+   AND birthdate > 19700000
 ```
+
+Given our rules about cardinality and the fact that birthdate has
+the highest cardinality, we might expect the optimal
+index for this query to be (first, birthdate).
+
+...
 
 Despite the rule from above that there are more ages than genders,
 it is better to make age the final index.  The reason is 
@@ -236,6 +258,16 @@ Maybe a query which pulls out the year from the table.
 Find people born in 1980.
 
 Find query to do this.
+
+# Primary Key Indices
+
+Put a note about how a PK is also an index.
+How this makes sense for quickly deciding if a 
+PK constraint has been violated.
+
+"It has an associated index, for fast query 
+performance" -- http://dev.mysql.com/doc/refman/5.5/en/optimizing-primary-keys.html
+
 
 ## Deterministic Functions
 
