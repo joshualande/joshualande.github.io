@@ -35,15 +35,15 @@ where the index specifies the column order in which to sort rows.
 It is illustrative to consider querying from
 a simple table of `people`:
 
-| person_id | First |      Last | gender |  birthdate |
-| --------- | ----- | --------- | ------ | ---------- |
-|         0 |  Alex | Garfunkle |      m |   19850527 |
-|         1 |  Alex |     Young |      m |   19701201 |
-|         2 | Sarah |     Riley |      f |   19890314 |
-|         3 |  Alex |  Williams |      m |   19400105 |
-|         4 | Sarah |     Smith |      f |   19910317 |
-|         5 |  Jane | Fredricks |      f |   19920731 |
-|         6 |  Alex |     Young |      f |   19920731 |
+| person_id | First |      Last | gender | birthdate |
+| --------- | ----- | --------- | ------ | --------- |
+|         0 |  Alex | Garfunkle |      m |  19930527 |
+|         1 |  Alex |     Young |      m |  19701201 |
+|         2 | Sarah |     Riley |      f |  19890314 |
+|         3 |  Alex |  Williams |      m |  19400105 |
+|         4 | Sarah |     Smith |      f |  19910317 |
+|         5 |  Jane | Fredricks |      f |  19920731 |
+|         6 |  Alex |     Young |      f |  19920731 |
 
 PUT A NOTE ABOUT HOW DATES ARE STORED HERE.
 
@@ -220,119 +220,154 @@ a table. Because last names has higher cardinality than first names,
 and first names has higher cardinality than gender, the most efficient
 index is (last,first,gender).
 
+Before we move on, we note that it is perfectly harmless to add
+additional rows to an index which are not used in a query.  Conversely,
+a query will can only use an index if the first columns in the index
+are constrained in the query. For example, you can not index on
+(first,last) and then use that index to search for people of a given
+last name.
+
+# Primary Key Indices
+
+In SQL, [primary
+keys](http://dev.mysql.com/doc/refman/5.5/en/optimizing-primary-keys.html)
+also perform as indicies on a table. This makes sense when you
+realize that a primary key constrains duplicate rows from being
+inserted into a row, which requires quickly looking for duplicate
+rows. Although the columns in a primary key are dictated by teh
+logical correctness of a table, it is good to think about the best
+order to place the columns based on the queries which you plan to
+run and the cardianity of the columns.
+
 # Indexing on Inequalities
 
 Indexing on inequalities requires a somewhat different logic than
-equality indexing.  For example, supposed we wanted
-to find all people with first name Alex born after 1970.
-We would run the query:
+equality indexing.  For example, supposed we wanted to find all
+people with first name Alex born after 1967.  We would run the
+query:
 
 ```sql
 SELECT *
   FROM people
  WHERE first = 'Alex'
-   AND birthdate > 19700000
+   AND birthdate > 19670000
 ```
 
-Given our rules about cardinality and the fact that birthdate has
-the highest cardinality, we might expect the optimal
+Given the rules about cardinality from above and the fact that
+birthdate has the highest cardinality, we might expect the optimal
 index for this query to be (first, birthdate).
 
-...
+| index |    birthdate |    First |
+| ----- | ------------ | -------- |
+|     3 |     19400105 |     Alex |
+| **1** | **19701201** | **Alex** |
+|     2 |     19890314 |    Sarah |
+|     4 |     19910317 |    Sarah |
+| **6** | **19920731** | **Alex** |
+|     5 |     19920731 |     Jane |
+| **0** | **19930527** | **Alex** |
 
-Despite the rule from above that there are more ages than genders,
-it is better to make age the final index.  The reason is 
-for this index, after filering on men all of the ages are
-already sorted in the index so the inequality can be easily applied.
+As you can see from this example, this is not especially helpful.
+We can easily find all of the people who were born after 1967, but
+people with first name Alex are spread throughout the table.
 
-The alternative index would require first going through
-each of the allowed ages and for each of them applying another
-search for the other query terms.
+Instead, it would be more efficient to index first on Alex, and
+second on birthdate.
+
+| index |    First |    birthdate |
+| ----- | -------- | ------------ |
+|     3 |     Alex |     19400105 |
+| **1** | **Alex** | **19701201** |
+| **6** | **Alex** | **19920731** |
+| **0** | **Alex** | **19930527** |
+|     5 |     Jane |     19920731 |
+|     2 |    Sarah |     19890314 |
+|     4 |    Sarah |     19910317 |
+
+Given this index, we could easily select all people named Alex and
+then for those people their birthdates are all contiguous so we
+could easily scan through to find all the people born after 1967.
+
+The general rule here is that when you are indexing for an inequality,
+it is better to but the inequality column at the end of the index.
 
 # Function-based Indexing
 
-SQL has troulbe using indicies when there
-are functions of parameters in the query.
+Indexing when the were clause contains function of parameters can complicated.
+To SQL, it has no general way to know how the sorting of a function of a column
+relates to the sorting of the underlying column, and therefore
+the function of a column will naturally break the sorting.
 
-Maybe a query which pulls out the year from the table.
-Find people born in 1980.
+As a concrete example, we could imagine trying to find all people who are at least
+21 years old. This is easy to do by adding 21 years to the birthday and seeing if
+that is after today. In MySQL, the command would be:
 
-Find query to do this.
-
-# Primary Key Indices
-
-Put a note about how a PK is also an index.
-How this makes sense for quickly deciding if a 
-PK constraint has been violated.
-
-"It has an associated index, for fast query 
-performance" -- http://dev.mysql.com/doc/refman/5.5/en/optimizing-primary-keys.html
-
-
-## Deterministic Functions
-
-A simple query we might be interested in is finding
-all the people born after 1981.
-
-First, we would have to index on birthdate:
-
-```sql
-CREATE INDEX birthdate_name
-ON recipe_ingredients (first,last,age,gender)
+```
+SELECT *
+FROM people
+WHERE date(birthdate) + interval 21 YEAR < DATE()
 ```
 
-To do that, we migth be tempted to run the query:
+Assuming we had an index which began with birthdate, you might
+expect this query to be bast. But because it computes a function of
+the column, SQL cannot use the index.
 
+The easiset way to solve this problem would be to shuffle
+the logic to the other side of the equation:
+
+
+```
+SELECT *
+FROM people
+WHERE birthdate < CAST(DATE() - interval 21 YEAR AS UNSIGNED INTEGER)
+```
+
+Although logically the same, this query can be much more efficient
+becaues the right hand side is only computed once and the index on
+birthday can properly be used.
+
+
+As a similar challenege, imagine if we wanted to find all people
+born in 1981. We could do so by running a query like:
 
 ```sql
 SELECT *
 FROM people
-WHERE date(birthdate) > date('1981-00-00')
+WHERE FLOOR(birthdate/10000) = 1981
 ```
 
-Or atlernately, we could do 
+A few solutions in SQL:
 
-```sql
-SELECT *
-FROM people
-WHERE ROUND(birthdate/10000) > 1981
-```
+* If possible, we could rebuild our table to have year as its own
+column and then index on that column.
+* We could require the query as an inequality match:
 
-Neither of thse correctly work because MySQL
-because functions of indexed columns
-are not proprely indexed. That is because
-the database is not smart enough to
-determine any relation between the sorting
-of the underlying data and the sorting
-of the function of the data.
+  ```sql
+  SELECT *
+  FROM people
+  WHERE birthdate > 19810000 AND birthdate < 19820000
+  ```
+* In some databases, you can actually index on functions of
+  columns. For exmple, in PostgreSQL, the syntax would 
+  look like:
 
-For our example above, the right query
-would be:
+  ```sql
+  CREATE INDEX birthyear_people
+  ON people FLOOR(birthdate/10000)
+  ```
 
-```sql
-SELECT *
-FROM people
-WHERE birthdate > 19810000
-```
+  Function-based indexing is supported by Oracle, PostgreSQL,
+  and SQL Server, but not by MySQL. 
 
-Two alternative solutions
+More stuff:
 
-* Function-based indexing
-* Chagning the table to store date objects
-* Creating a dimension table mapping date ints to date objects
-  and join on that first.
-
-
-## Non-deterministic Functions
-
-Can't index on the age of somebody...
-
-## Queries With Pattern Matching
-
-...
-Find people whose first name starts with the 'Al'
-is easy. Finding people whose names end with 'Ax'
-is hard.
+* Non-deterministic Functions -> Can't index on the age of somebody...
+* Queries With Pattern Matching
+  
+  ...
+  Find people whose first name starts with the 'Al'
+  is easy. Finding people whose names end with 'Ax'
+  is hard.
 
 # Indexing the GROUP BY Clause
 
