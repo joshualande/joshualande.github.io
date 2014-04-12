@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to Querying in SQL Witht he SELECT Statement
+title: How to Querying in SQL With the SELECT Statement
 comments: true
 ---
 
