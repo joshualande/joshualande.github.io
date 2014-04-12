@@ -30,7 +30,8 @@ the schema of the data we are reading into Pig. For our example, the schema
 is `col1:chararray`.
 
 ```
-first_table = LOAD 'first_table.json' USING JsonLoader('col1:chararray');
+first_table = LOAD 'first_table.json' 
+    USING JsonLoader('col1:chararray');
 ```
 
 This creates the table:
@@ -74,15 +75,17 @@ The next is: `third_table.json`:
  "ingredients": [
     {"name":"Beef"},
     {"name":"Lettuce"},
-    {"name":"Cheese"},
-  "inventor": {"name":"Alex, "age": 25}
-]}
+    {"name":"Cheese"}
+  ],
+  "inventor": {"name":"Alex", "age": 25}
+}
 {"recipe":"Tomato Soup",
  "ingredients": [
     {"name":"Tomatoes"},
     {"name":"Milk"}
-  "inventor": {"name":"Steve, "age": 23}
-]}
+  ],
+  "inventor": {"name":"Steve", "age": 23}
+}
 ```
 
 ```
@@ -92,3 +95,31 @@ recipes_denormalized = LOAD 'recipes_denormalized.json'
 
 
 # Writing JSON-Formatted Data in Pig
+
+Writing data from Pig to JSON is just as easy.
+You can directly dump any table in Pig to JSON using the `JsonStorage` command.
+
+As a simple example, imagine loading in a simple table in Pig:
+
+```
+cat > first_table.dat
+Tacos
+Tomato Soup
+Grilled Cheese
+```
+
+
+```
+first_table = LOAD 'first_table.dat' Using PigStorage() AS (col1:chararray);
+
+STORE first_table INTO 'first_table.json' USING JsonStorage();
+```
+
+The file written by `JsonStorage` has the same schema as the format described above:
+
+```json
+{"col1":"Tacos"}
+{"col1":"Tomato Soup"}
+{"col1":"Grilled Cheese"}
+```
+

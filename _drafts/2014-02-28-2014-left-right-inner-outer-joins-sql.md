@@ -4,17 +4,13 @@ title: Left, Right, Inner, and Outer Joins in SQL
 comments: true
 ---
 
-SQL has the concept of INNER, LEFT, RIGHT, and OUTER joins.
-They are all similar, but provide slightly different behavior
-in the situation where rows are missing in a table.
-
-# Explanation
-
-This will all make more sense with a simple exmaple
+SQL has several different JOIN operators (INNER, LEFT, RIGHT, and
+OUTER) which behave differently in situations where there is data
+missing in either the left or right table.
 
 # JOINing with a Simple Exmaple
 
-The easiest way to understand this is by way of another example.
+The easiest way to understand this is by way of example.
 
 Suppse we have a database storing information about people. For each
 person, we know their name, their height, and their age. But for
