@@ -4,6 +4,12 @@ title: Indexing in SQL for the Rest of Us
 comments: true
 ---
 
+<!--
+* [Table Indicies](http://en.wikipedia.org/wiki/Database_index) are a concept in
+  database design where sorted indicies of a table can be cached to
+  improve performance of particular queries on a table.
+-->
+
 In this post, we will discuss indexising in SQL which is a caching
 mechanism that is often necessary to obtain acceptable read performance
 on a database.

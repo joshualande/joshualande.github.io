@@ -484,26 +484,13 @@ to issue queries on a database using the `SELECT` statement. Finally,
 we saw the power of filtering, joining, and aggregating multiple
 tables in order to ask advanced questions about your data.
 
-# Links
-
-This was just a whirlwind tour of what's so great
-about SQL databases. There are tons of advanced topics left to explore.
-Here is some further reading to get you started:
+# Further SQL Reading
 
 * SQL databases go through great lenghts to deal with `NULL` values
   in a sensible way. [Here](http://dev.mysql.com/doc/refman/5.0/en/working-with-null.html)
   is some documentation in the way MySQL handles `NULL` values.
-* SQL has the concept of `INNER`, `LEFT`, `RIGHT`, and `OUTER` joins,
-  which behave different in the situation where you are joining on 
-  columns with `NULL` values in them.
-  [Here](http://dev.mysql.com/doc/refman/5.0/en/join.html)
-  is some documentation on different joins.
-* SQL supports set operations like `UNION` and `INTERSECTION` XXXXXXX FIND LINK
-* [Table Indicies](http://en.wikipedia.org/wiki/Database_index) are a concept in
-  database design where sorted indicies of a table can be cached to
-  improve performance of particular queries on a table.
 * [Views](http://dev.mysql.com/doc/refman/5.0/en/create-view.html) in
-  SQL act as temporary tables, able to both simplify queiries in MySQL
+  SQL act as temporary tables, able to both simplify queries in MySQL
   as well as abstract the end user from the underlying implementation
   of a database.
 * Beyond [MySQL](http://www.mysql.com/), there are some really great

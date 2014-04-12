@@ -4,6 +4,14 @@ title: Left, Right, Inner, and Outer Joins in SQL
 comments: true
 ---
 
+<!--
+* SQL has the concept of `INNER`, `LEFT`, `RIGHT`, and `OUTER` joins,
+  which behave different in the situation where you are joining on 
+  columns with `NULL` values in them.
+  [Here](http://dev.mysql.com/doc/refman/5.0/en/join.html)
+  is some documentation on different joins.
+-->
+
 SQL has several different JOIN operators (INNER, LEFT, RIGHT, and
 OUTER) which behave differently in situations where there is data
 missing in either the left or right table.
