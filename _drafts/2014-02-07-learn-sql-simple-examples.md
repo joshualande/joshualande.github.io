@@ -1,10 +1,12 @@
 ---
 layout: post
-title: Learn SQL With Simple Examples
+title: An Introduction to SQL For Data Scientists
 comments: true
 ---
 
-In this series of posts, I will 
+In a series of posts, I will provide a broad overview
+of the key topics in using SQL databases for.
+
 I will go over many of the benefits of relational
 databases like [SQL](http://en.wikipedia.org/wiki/SQL) and describe
 the ways in which they are better than other programming languages

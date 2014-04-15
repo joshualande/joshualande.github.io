@@ -10,7 +10,7 @@ comments: true
   improve performance of particular queries on a table.
 -->
 
-In this post, we will discuss indexising in SQL which is a caching
+In this post, I will discuss indexing in SQL. Indexing is a caching
 mechanism that is often necessary to obtain acceptable read performance
 on a database.
 
@@ -375,11 +375,13 @@ More stuff:
   is easy. Finding people whose names end with 'Ax'
   is hard.
 
+# Indexing the ORDER BY Clause
+
+Proper index for the `ORDER BY` clause is straightforward.
+
 # Indexing the GROUP BY Clause
 
 # Indexing the JOIN Clause
-
-# Indexing the ORDER BY Clause
 
 
 
