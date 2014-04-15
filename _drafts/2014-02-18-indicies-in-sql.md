@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Indexing in SQL for the Rest of Us
+title: "Indexing in SQL for the Rest of Us"
 comments: true
 ---
 
