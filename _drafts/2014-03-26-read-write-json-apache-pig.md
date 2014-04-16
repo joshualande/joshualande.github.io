@@ -1,51 +1,24 @@
 ---
 layout: post
-title: "How to Read and Write JSON-formatted Data Using Apache Pig"
+title: "How to Read and Write JSON-formatted Data With Apache Pig"
 comments: true
 permalink: read-write-json-apache-pig
 ---
 
 In this post, I will explain how to use the `JsonStorage` and
-`JsonLoader` objects in Apache Pig to read and write 
-[JSON](www.json.org)-formatted data.
+`JsonLoader` objects in [Apache Pig](http://pig.apache.org) to read
+and write [JSON](www.json.org)-formatted data.
 
-# Loading JSON-Formatted Data With JsonLoader
+# Reading JSON-Formatted Data With JsonLoader
 
-The JSON format required by Pig to read and write data
-is straightforward.  Each row in the file is
-a JSON object where the keys specify the column names and 
-the values specify the content.
+Apache Pig can read JSON-formatted data if it is in a particular
+format.  Each row in the file has to be a JSON dictionary where the
+keys specify the column names and the values specify the table
+content.
 
-For example, supposed our table had one column
-called `col1`. This data could be stored in `first_table.json` as:
-
-```json
-{"col1":"Tacos"}
-{"col1":"Tomato Soup"}
-{"col1":"Grilled Cheese"}
-```
-
-We could load the file using the `JsonLoader`. To do so,
-we need to specify the Pig schema of the data as `'col1:chararray'`.
-For our example, we would read the data as:
-
-```
-first_table = LOAD 'first_table.json' 
-    USING JsonLoader('col1:chararray');
-```
-
-This creates the table:
-
-|           col1 |
-| -------------- |
-|          Tacos |
-|    Tomato Soup |
-| Grilled Cheese |
-
-# Loading Multi-Column Data:
-
-We can load a file with multiple columns just as easily. For example,
-if we had the file `second_table.json`
+For example, supposed our data had three columns called `food`,
+`person`, and `amount`. We can store this data in `first_table.json`
+as:
 
 ```json
 {"food":"Tacos", "person":"Alice", "amount":3}
@@ -53,14 +26,17 @@ if we had the file `second_table.json`
 {"food":"Grilled Cheese", "person":"Alex", "amount":5}
 ```
 
-We could load it by specifying a more complicated schema:
+We can then load the file using `JsonLoader` as: 
 
 ```
 second_table = LOAD 'second_table.json' 
     USING JsonLoader('food:chararray, person:chararray, amount:int');
 ```
 
-This creates the table:
+Here, `'food:chararray, person:chararray, amount:int'` is the Pig
+schema for the data.
+
+This creates the expected table:
 
 |           food | person | amount |
 | -------------- | ------ | ------ |
@@ -68,39 +44,45 @@ This creates the table:
 |    Tomato Soup |  Sarah |      2 |
 | Grilled Cheese |   Alex |      5 |
 
-
 # Reading Nested Data
 
-What is nice is that both JSON and Pig support nested data.
-For the final example, we will read in a file where each row contains
-both a bag of ingredinets and a nested tuple of values.
-Reading a bag requires creating a list of dictionaries where
-each has the same name. Reading a tuple requires nesting
-JSON structs.
-For our example, we want to read the file `third_table.json`:
+What is nice is that JSON and Pig both support nesting data.  We
+can store both bags of data and tuples in JSON and have them read
+into Pig.  Pig expects tuples to be stored in JSON as dictionaries
+and bags as lists of dictionaries. In our next example, `third_table.json`
+contains rows with both a bag and a tuple:
 
 ```json
-{"recipe":"Tacos", "ingredients": [ {"name":"Beef"}, {"name":"Lettuce"}, {"name":"Cheese"} ], "inventor": {"name":"Alex", "age": 25}}
-{"recipe":"Tomato Soup", "ingredients": [ {"name":"Tomatoes"}, {"name":"Milk"} ], "inventor": {"name":"Steve", "age": 23}}
+{"recipe":"Tacos","ingredients":[{"name":"Beef"},{"name":"Lettuce"},{"name":"Cheese"}],"inventor":{"name":"Alex","age":25}}
+{"recipe":"TomatoSoup","ingredients":[{"name":"Tomatoes"},{"name":"Milk"}],"inventor":{"name":"Steve","age":23}}
 ```
 
-We read it as before:
+Notice that for the first row, the `ingredients` bag is stored as
+a list of dictionaries (`[{"name":"Beef"},{"name":"Lettuce"},{"name":"Cheese"}]`).
+Similarly, the `inventor` tuple is stored as a dictionary (`{"name":"Alex","age":25}`).
+
+We can read this data in Pig by specifying a more complicated schema:
 
 ```
-third_table = LOAD 'third_table.json' USING JsonLoader('recipe:chararray, ingredients: {(name:chararray)}, inventor: (name:chararray, age:int)');
+third_table = LOAD 'third_table.json' 
+    USING JsonLoader('recipe:chararray, 
+                      ingredients: {(name:chararray)}, 
+                      inventor: (name:chararray, age:int)');
 ```
 
-We can see that Pig correctly read in this data with the `DUMP` command:
+We can `DUMP` this data using Pig to ensure that the data is loaded
+correctly:
+
 ```
 (Tacos,{(Beef),(Lettuce),(Cheese)},(Alex,25))
 (Tomato Soup,{(Tomatoes),(Milk)},(Steve,23))
 ```
 
-# Writing JSON-Formatted Data in Pig
+# Writing JSON-Formatted Data With JsonStorage
 
-Finally, it is easy to store data from Pig to JSON using the
-`JsonStorage` command. As a simple example, imagine loading in the
-table `first_table.dat`:
+Finally, we can write JSON-formatted data using `JsonStorage`.  Imagine we
+had a simple [CSV](http://en.wikipedia.org/wiki/Comma-separated_values)
+file `first_table.dat`:
 
 ```
 cat > first_table.dat
@@ -109,18 +91,24 @@ Tomato Soup
 Grilled Cheese
 ```
 
-We can read it in Pig using `PigStorage`, and then save the table
-to JSON using `JsonStorage`:
+We can read it into Pig using `PigStorage` and then save it out
+using `JsonStorage`:
 
 ```
-first_table = LOAD 'first_table.dat' Using PigStorage() AS (col1:chararray);
+first_table = LOAD 'first_table.dat' 
+    USING PigStorage() 
+    AS (col1:chararray);
 
-STORE first_table INTO 'first_table.json' USING JsonStorage();
+...
+
+STORE first_table 
+    INTO 'first_table.json' 
+    USING JsonStorage();
 ```
 
-As is the convetion of HDFS, the output by Pig is a folder called
-'first_table.json'. Inside the folder is a file called `part-m-00000`
-which contains the data with the expected schema:
+As is the convention in HDFS, the output is a folder called
+`first_table.json`. Inside the folder is a file called `part-m-00000`
+that contains the data in JSON format:
 
 ```json
 {"col1":"Tacos"}
@@ -128,13 +116,18 @@ which contains the data with the expected schema:
 {"col1":"Grilled Cheese"}
 ```
 
-Note that Pig wrote out an intermediate file into `first_table.json`
-folder called: called `.pig_schema`:
+If the job had lots of output data, it would be spread across
+additional files like `part-m-00001`.
+
+Pig also wrote out an intermediate file in the folder called
+`.pig_schema` that explicitly specifies the schema of the output
+data:
+
 ```
 {"fields":[{"name":"col1","type":55,"description":"autogenerated from Pig Field Schema","schema":null}],"version":0,"sortKeys":[],"sortKeyOrders":[]}
 ```
 
 This file allows the table to be read in by subsequent Pig jobs
-without explicitly specifying the schema with the `JsonLoader`
-command.
+without explicitly specifying the schema.
 
+{% include twitter_plug.html %}
