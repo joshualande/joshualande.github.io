@@ -80,21 +80,8 @@ JSON structs.
 For our example, we want to read the file `third_table.json`:
 
 ```json
-{"recipe":"Tacos",
- "ingredients": [
-    {"name":"Beef"},
-    {"name":"Lettuce"},
-    {"name":"Cheese"}
-  ],
-  "inventor": {"name":"Alex", "age": 25}
-}
-{"recipe":"Tomato Soup",
- "ingredients": [
-    {"name":"Tomatoes"},
-    {"name":"Milk"}
-  ],
-  "inventor": {"name":"Steve", "age": 23}
-}
+{"recipe":"Tacos", "ingredients": [ {"name":"Beef"}, {"name":"Lettuce"}, {"name":"Cheese"} ], "inventor": {"name":"Alex", "age": 25}}
+{"recipe":"Tomato Soup", "ingredients": [ {"name":"Tomatoes"}, {"name":"Milk"} ], "inventor": {"name":"Steve", "age": 23}}
 ```
 
 We read it as before:
