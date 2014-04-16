@@ -9,7 +9,7 @@ In this post, I will explain how to use the `JsonStorage` and
 `JsonLoader` objects in [Apache Pig](http://pig.apache.org) to read
 and write [JSON](www.json.org)-formatted data.
 
-# Reading JSON-Formatted Data With JsonLoader
+## Reading JSON-Formatted Data With JsonLoader
 
 Apache Pig can read JSON-formatted data if it is in a particular
 format.  Each row in the file has to be a JSON dictionary where the
@@ -44,7 +44,7 @@ This creates the expected table:
 |    Tomato Soup |  Sarah |      2 |
 | Grilled Cheese |   Alex |      5 |
 
-# Reading Nested Data
+## Reading Nested Data
 
 What is nice is that JSON and Pig both support nesting data.  We
 can store both bags of data and tuples in JSON and have them read
@@ -78,7 +78,7 @@ correctly:
 (Tomato Soup,{(Tomatoes),(Milk)},(Steve,23))
 ```
 
-# Writing JSON-Formatted Data With JsonStorage
+## Writing JSON-Formatted Data With JsonStorage
 
 Finally, we can write JSON-formatted data using `JsonStorage`.  Imagine we
 had a simple [CSV](http://en.wikipedia.org/wiki/Comma-separated_values)
