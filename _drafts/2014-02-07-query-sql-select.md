@@ -11,7 +11,7 @@ and use it to ask successfuly harder SQL queriies.  This querieis
 will allow me to introduce the basic operators in SQL like filtering,
 joining and aggregating.
 
-# THE SELECT, FROM, and WHERE Statements in SQL
+## THE SELECT, FROM, and WHERE Statements in SQL
 
 In our recipes database,
 we had three tables. One
@@ -70,7 +70,7 @@ This returns:
 | Milk            |
 
 
-# The JOIN operator in SQL
+## The JOIN operator in SQL
 
 Because our data is spread across three
 tables, having to perform multiple successive
@@ -140,7 +140,7 @@ WHERE a.recipe_name = 'Tomato Soup'
 This is functionally equivalent, but somewhat easier to understand.
 
 
-# JOIN Three Tables in SQL
+## JOIN Three Tables in SQL
 
 What's  cool about SQL is that we can JOIN multiple tables.
 To find the ingredient names for the 'Tomato Soup' recipe,
@@ -189,7 +189,7 @@ As expected, this returns:
 | Tomato Soup |
 
 
-# The GROUP BY Operator In SQL
+## The GROUP BY Operator In SQL
 
 The next major command to learn in SQL is `GROUP BY`, which can be
 used to aggregate rows in a table.
@@ -261,7 +261,7 @@ This returns a nicer formated table:
 |    Tomato Soup |               2 |           5 |
 | Grilled Cheese |               2 |           7 |
 
-# The HAVING Operator in SQL
+## The HAVING Operator in SQL
 
 The `HAVING` clause in SQL is almost exactly like the `WHERE`
 clause, but filters the table after the aggregation has been
@@ -287,7 +287,7 @@ This creates the table
 
 PUT A NOTE ABOUT HAVING IS THE SAME AS A FILTER AFTER THE SUBQUERY
 
-# Subqueries in SQL
+## Subqueries in SQL
 
 As an example of a harder
 SQL query, we could imaging trying to
@@ -361,7 +361,7 @@ flexible about the structure of queries. Similar to how we
 can JOIN as many tables together as needed, we can also
 nest multiple subquieries together.
 
-# The DISTINT Operator
+## The DISTINT Operator
 
 In SQL, `DISTINCT` can be used to
 find all of the unique elements in a set.
@@ -391,7 +391,7 @@ COUNT(DISTINCT XX)
 WHICH IS SURPRISINGLY USEFUL
 
 
-# The ORDER BY operator in SQL
+## The ORDER BY operator in SQL
 
 The next command we will cover is `ORDER BY`.
 `ORDER BY` can be used to sort the rows based on
@@ -438,7 +438,7 @@ This creates the table:
 | 1             |         Lettuce |                1 |
 | 5             |            Milk |                1 |
 
-# The LIMIT operator in SQL
+## The LIMIT operator in SQL
 
 We can use the `LIMIT` operator to limit the number of results returend
 by the query. For example, to get only the most expensive ingredient, we could use
@@ -458,7 +458,7 @@ This returns the table:
 | 0             |            Beef |                5 |
 
 
-# Query Optimization
+## Query Optimization
 
 Now that we have seen several examples of the `SELECT` statement,
 I will mention one final benefit of using relational databases
@@ -476,7 +476,7 @@ often not clear to a user the fastest way to perform a calculation.
 Furthermore, the SQL implementation has the benefit that best method
 could change over time as the size of the database evolves.
 
-# Thanks for Reading
+## Thanks for Reading
 
 In this post, we went over the key concepts of good database design
 and dateabase normalization. Then, we went over the topics of how
@@ -484,7 +484,7 @@ to issue queries on a database using the `SELECT` statement. Finally,
 we saw the power of filtering, joining, and aggregating multiple
 tables in order to ask advanced questions about your data.
 
-# Further SQL Reading
+## Further SQL Reading
 
 * SQL databases go through great lenghts to deal with `NULL` values
   in a sensible way. [Here](http://dev.mysql.com/doc/refman/5.0/en/working-with-null.html)

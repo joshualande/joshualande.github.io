@@ -10,7 +10,7 @@ join, filter, aggregate, and use subqueries when querying
 databases. By working through these examples, you should
 be able to improve your SQL skills.
 
-# Database Schema
+## Database Schema
 
 To be concrete,
 for this post we will use the `world` database provided on
@@ -88,14 +88,14 @@ Notice how the threet ables are related by the `Country.Code`,
 
 
 
-# Question 1: Minimum Surface Area
+## Question 1: Minimum Surface Area
 
 For each region, find the minimum surface area
 for countries that are in the top five for best life expectancy.
 
 [Click Here for the answer](https://gist.github.com/joshualande/9166779)
 
-# Question 2: Number of shared langauges.
+## Question 2: Number of shared langauges.
 
 Find the top ten countries countries with the most shared languages.
 Return the full country names as well as the number of shared
@@ -103,7 +103,7 @@ languages. Sort in descending order by the number of shared lanuages.
 
 [Answer ...]
 
-# Question 3: Calculate the number of countries in life expectancy age bins
+## Question 3: Calculate the number of countries in life expectancy age bins
 
 In buckets of 0-9 years, 10-19 years, 20-29 years, etc, calculate
 the number of countries in each age bucket.

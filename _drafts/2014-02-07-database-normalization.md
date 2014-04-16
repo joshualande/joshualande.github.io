@@ -17,7 +17,7 @@ In the next post in this series, I will discuss the commands
 required to query information from a database.
 -->
 
-# A Simple Example SQL Database
+## A Simple Example SQL Database
 
 We begin with a simple example.  Suppose that we wanted to store
 information about recipes in a cookbook.  
@@ -93,7 +93,7 @@ A [query](http://en.wikipedia.org/wiki/SQL#Queries) in SQL is a command
 which retrivies data from a database. For example, we might
 want to query the number of recipies in our database.
 
-# Database Normalization
+## Database Normalization
 
 At this point, I would expect you to be confused about why we laid
 out the database across three tables. 
@@ -158,7 +158,7 @@ Finally, if the extra data only existed for a limited number of
 rows, this would be another win becasue we wouldn't have to store
 additional `NULL` rows for all the missing data.
 
-# Why Do Tables Have to be Flat?
+## Why Do Tables Have to be Flat?
 
 The limitation that SQL tables have to be flat may at first seem very
 seem strange.  Although it should be clear that there
@@ -226,7 +226,7 @@ the caveats mentioned above, for pragmatic reasons sometimes in
 real-world situations it is more convenient to store data inside
 in nested structures.
 
-# Setting up SQL On Your local Machine
+## Setting up SQL On Your local Machine
 
 Before getting further, I would recommend setting up SQL on your
 local computer. My examples will assume you are using the free and
@@ -240,7 +240,7 @@ If you are using an Apple computer, I recommend using the free and
 open-source graphical program [Sequel Pro](http://www.sequelpro.com/)
 to test out the MySQL commands in this example.
 
-# Creating the Recipies Database in SQL
+## Creating the Recipies Database in SQL
 
 To wrap up this post, I will
 go through the commands required to create
@@ -341,7 +341,7 @@ values to ensure uniqueness.
 is the documentation on this command in MySQL.
 
 <!--
-# Next Time: Querying the Database
+## Next Time: Querying the Database
 
 In the next post, I will discuss the commands required to ask
 very sophistical questions about data in this database.

@@ -33,7 +33,7 @@ To improve the efficiency of querying data from a database, one can
 use indices which are separate sorted lists of rows in the table
 that can be used for more efficient query algorithms.
 
-# Sorting a Table in SQL Using an Index
+## Sorting a Table in SQL Using an Index
 
 An index in SQL is just a sorted list of all of our data in a table
 where the index specifies the column order in which to sort rows.
@@ -122,7 +122,7 @@ CREATE INDEX people_last_name_indx
 ON people (last)
 ```
 
-# Benefits of SQL indices
+## Benefits of SQL indices
 
 Indices have several benefits.  First, they don't store any of the
 underlying underlying data so they are fairly memory-efficient.
@@ -137,7 +137,7 @@ On the other hand, indicies have to be automatically updated whenever
 tables are modified. This overhead will degrate the performance of
 modifying the database.  So indicies should only be added as necesary.
 
-# Multi-column Indices in SQL
+## Multi-column Indices in SQL
 
 Indexing for querieis with 
 multiple conditions in the `WHERE` 
@@ -233,7 +233,7 @@ are constrained in the query. For example, you can not index on
 (first,last) and then use that index to search for people of a given
 last name.
 
-# Primary Key Indices
+## Primary Key Indices
 
 In SQL, [primary
 keys](http://dev.mysql.com/doc/refman/5.5/en/optimizing-primary-keys.html)
@@ -245,7 +245,7 @@ logical correctness of a table, it is good to think about the best
 order to place the columns based on the queries which you plan to
 run and the cardianity of the columns.
 
-# Indexing on Inequalities
+## Indexing on Inequalities
 
 Indexing on inequalities requires a somewhat different logic than
 equality indexing.  For example, supposed we wanted to find all
@@ -297,7 +297,7 @@ could easily scan through to find all the people born after 1967.
 The general rule here is that when you are indexing for an inequality,
 it is better to but the inequality column at the end of the index.
 
-# Function-based Indexing
+## Function-based Indexing
 
 Indexing when the were clause contains function of parameters can complicated.
 To SQL, it has no general way to know how the sorting of a function of a column
@@ -375,17 +375,17 @@ More stuff:
   is easy. Finding people whose names end with 'Ax'
   is hard.
 
-# Indexing the ORDER BY Clause
+## Indexing the ORDER BY Clause
 
 Proper index for the `ORDER BY` clause is straightforward.
 
-# Indexing the GROUP BY Clause
+## Indexing the GROUP BY Clause
 
-# Indexing the JOIN Clause
+## Indexing the JOIN Clause
 
 
 
-# Database Implementation of Indicies in SQL
+## Database Implementation of Indicies in SQL
 
 Despite giving all the right intuition,
 the simple picture of an index being a sorted array is a bit
@@ -407,7 +407,7 @@ To get all three benefits, SQL has to resport to a more complicated
 data structure called a balanced B-tree where each of the 
 notes is 
 
-# Indexing in SQL Cheat Sheet
+## Indexing in SQL Cheat Sheet
 
 Here are the major takeaways about indexing in SQL:
 
@@ -425,7 +425,7 @@ Here are the major takeaways about indexing in SQL:
    becuase they break indexing. When necessary,
    some databases allow function-based indexing
 
-# Further resources
+## Further resources
 
 * http://use-the-index-luke.com/
 

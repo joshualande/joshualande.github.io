@@ -18,7 +18,7 @@ programming language used to write Pig job.  And I will do all of
 this by way of a simple example which you can easily run on your
 local computer.
 
-# Introduction to Hadoop, HDFS, MapReduce, and Apache Pig
+## Introduction to Hadoop, HDFS, MapReduce, and Apache Pig
 
 In this section, I will give an overview of hadoop, MapReduce, and
 the situaions where Apache Pig.  If you are already farmilliar with
@@ -73,7 +73,7 @@ allow Pig to do its best to optimize the order of analyzing data
 to find a very efficient algoirhtm.
 
 
-# Key Differences Between SQL and Pig
+## Key Differences Between SQL and Pig
 
 Although conceptually similar, SQL and Pig are have several practical
 differences from SQL. In this section, I will describe how it is
@@ -103,7 +103,7 @@ create tables.
 
 Also note about how
 
-# Example Data Set
+## Example Data Set
 
 In this post, I will introduce the
 major synax constructs of PigLatin using a simple example.
@@ -180,7 +180,7 @@ language of Apache Pig using our small data sources run in local mode.
 $ pig -x local
 ```
 
-# Loading Data in Pig
+## Loading Data in Pig
 
 As our first script,
 
@@ -235,11 +235,11 @@ This shows that the table itself contains:
 |         1 |    Tomato Soup |      Homemade Tomato soup |
 |         2 | Grilled Cheese | Delicious Cheese Sandwich |
 
-# Saving out tables to a file
+## Saving out tables to a file
 
 XXX.
 
-# The FILTER and FOREACH Operator in Apache Pig
+## The FILTER and FOREACH Operator in Apache Pig
 
 Suppose we want to find the recipe_id for the recipe named "Tomato Soup".
 To do this, we would issue the Pig command:
@@ -269,7 +269,7 @@ The `soup_recipe_id` contains the `recipe_id` column, as expected:
 | --------- |
 |         1 |
 
-# The ORDER BY Operator in Pig
+## The ORDER BY Operator in Pig
 
 Suppose we wanted to sort the ingredients table
 by price in descending order. In Pig we could use
@@ -291,7 +291,7 @@ The `ingredients_sorted` table contains:
 | 1             |         Lettuce |                1 |
 | 5             |            Milk |                1 |
 
-# The LIMIT Operator
+## The LIMIT Operator
 
 Similarly, if we wanted to find only the most expensive ingredient,
 we could
@@ -306,7 +306,7 @@ The `most_expensive` table contains only the first row:
 | ------------- | --------------- | ---------------- |
 | 0             |            Beef |                5 |
 
-# Joins in Pig
+## Joins in Pig
 
 Joins in Pig are very similar to SQL.
 When we join the `recipes` table with the `recipe_ingredients` table, we get:
@@ -384,7 +384,7 @@ As expected, the table `tomato_soup_ingredients` table contains
 |            Milk |
 
 
-# Nested Data Structures in Pig
+## Nested Data Structures in Pig
 
 So far, everything we have seen about Pig probably seems fairly similar
 to SQL. 
@@ -525,7 +525,7 @@ Creates:
 ```
 
 
-# The GROUP BY Operator in Apache Pig
+## The GROUP BY Operator in Apache Pig
 
 ```
 grouped_ingredients = GROUP recipe_ingredients 
@@ -588,17 +588,17 @@ temp3 = LOAD 'temp2'
 ```
 
 
-# The DISTINCT Operator
+## The DISTINCT Operator
 
-# Set Operations: UNION and INTERSECTION
+## Set Operations: UNION and INTERSECTION
 
-# Advanced Pig:
+## Advanced Pig:
 
 * Ternary expressions
 * Skew `JOIN`
 * replicated `JOIN`
 
-# Links
+## Links
 
 ...
 

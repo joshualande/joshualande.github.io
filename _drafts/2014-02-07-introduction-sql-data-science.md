@@ -1,6 +1,6 @@
 ---
 layout: post
-title: An Introduction to SQL For Data Scientists
+title: What Every Data Scientist Needs to Know about SQL
 comments: true
 ---
 

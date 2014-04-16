@@ -18,7 +18,7 @@ and excelled in the environment, majoring in Physics and minoring
 in Computer Science.  I participated in three summer physics
 internships and wrote a senior thesis (described below).
 
-# Undergraduate Research
+## Undergraduate Research
 
 ![I am excited to successfully defended my plan of concentration.
 I am next to my college physics professor Travis
@@ -41,7 +41,7 @@ at SLAC](http://www-group.slac.stanford.edu/aao/suli.asp). I have
 written about the
 internship [here]({% post_url 2013-02-14-calibrating-powder-diffraction-data-ssrl %}).
 
-# Senior Thesis
+## Senior Thesis
 
 ![The cover page of my senior thesis.](/assets/Lande_Marlboro_Plan_Of_Concentration-940x1216.jpg)
 

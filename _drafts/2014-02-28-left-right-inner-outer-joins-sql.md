@@ -16,7 +16,7 @@ SQL has several different JOIN operators (INNER, LEFT, RIGHT, and
 OUTER) which behave differently in situations where there is data
 missing in either the left or right table.
 
-# JOINing with a Simple Exmaple
+## JOINing with a Simple Exmaple
 
 The easiest way to understand this is by way of example.
 
@@ -84,7 +84,7 @@ VALUES (1, 26),
        (4, 37);
 ```
 
-# Inner Joins
+## Inner Joins
 
 Suppose we want to get a table with
 the heights and ages of everybody
@@ -103,7 +103,7 @@ ON a.person_id = b.person_id;
 |           1 |      5.3 |           1 |    26 |
 
 
-# Left and Right Joins
+## Left and Right Joins
 
 A left join:
 
@@ -137,7 +137,7 @@ ON a.person_id = b.person_id;
 
 
 
-# Outer Join
+## Outer Join
 
 Conceptually, an OUTER JOIN is...
 

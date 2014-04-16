@@ -8,7 +8,7 @@ permalink: searching-pulsar-wind-nebulae-kiapc
 
 ![The Crab Nebula observed by Hubble.](/assets/crab_nebula_hubble-940x940.jpg)
 
-# Pulsar Wind Nebulae
+## Pulsar Wind Nebulae
 
 ![An artists rendering of the Fermi Gamma-ray Space Telescope. The image is from http://www.nasa.gov/mission_pages/GLAST/multimedia/glast_rendering3.html](/assets/fermi_gamma_ray_space_telescope-580x773.jpg)
 
@@ -25,11 +25,11 @@ electrons, which interacts with the interstellar medium. This forms
 a diffuse cloud called a pulsar wind nebulae that can be observed
 in gamma-rays.
 
-# The Fermi Gamma-ray Space Telescope
+## The Fermi Gamma-ray Space Telescope
 
 During my thesis, I observed pular wind nebulae with the [Large Area Telescope (LAT)](http://fermi.gsfc.nasa.gov/science/instruments/lat.html), the main scientific instrument on board the [Fermi Gamma-ray Space Telescope (Fermi)](http://fermi.gsfc.nasa.gov). Fermi, pictured on the right, is a pair-conversion gamma-ray telescope. Cosmic gamma-rays are interesting to study because they originate in the most extreme and energetic astrophysical environments. [Here](http://www-glast.stanford.edu/instrument.html) is a good description of the design of the instrument. Fermi was launched in June of 2008 with a designed mission length of 5 years and a goal of operating for 10 years. [Here](http://fermi.sonoma.edu/multimedia/GLASTPromoVideo.mp4) is an artist rendering of the mission launch.
 
-# ["Fermi-LAT Search for Pulsar Wind Nebulae around gamma-ray Pulsars"](http://iopscience.iop.org/0004-637X/726/1/35)
+## ["Fermi-LAT Search for Pulsar Wind Nebulae around gamma-ray Pulsars"](http://iopscience.iop.org/0004-637X/726/1/35)
 
 ![The distribution in energy of the gamma-ray emission from the source Westerlund 2 detected by Fermi.](/assets/pulsar_wind_nebulae_search_-HESS-J1023-575-580x580.jpg)
 
@@ -43,7 +43,7 @@ In this analysis, we discovered a new pulsar wind nebula associated with the [W
 
 The full text of the paper can be read for free at the [arXiv](http://arxiv.org/abs/1011.2076).
 
-# ["Search for Spatially Extended Fermi-LAT Sources Using Two Years of Data"](http://iopscience.iop.org/0004-637X/756/1/5/)
+## ["Search for Spatially Extended Fermi-LAT Sources Using Two Years of Data"](http://iopscience.iop.org/0004-637X/756/1/5/)
 
 ![The supernova remnant RX J1713.7-3946 observed by Fermi. The blue contours are the SNR as observed by H.E.S.S.](/assets/extended_source_search_RX_J1713.7_3946-580x581.jpg)
 
@@ -61,11 +61,11 @@ Finally, we took this new method and applied it to two years of Fermi data to se
 
 ![A map of the gamma-ray sky. Overlaid are the 21 spatially-extended sources observed by Fermi. The orange triangles represent new extended sources discovered by the analysis.](/assets/allsky_extended_sources_color-580x356.jpg)
 
-# The pointlike maximum-likelihood package
+## The pointlike maximum-likelihood package
 
 During my PhD, I have been involved with the development of a maximum-likelihood package to fit LAT data. In the process, I have learned about software management, code refactoring, interface design, version control, and issue tracking. I have written about the program [here]({% post_url 2013-02-01-pointlike-fitting-package %}).
 
-# PhD Thesis
+## PhD Thesis
 
 You can find my PhD thesis through the [Stanford Library](http://purl.stanford.edu/zj578kk6428) or on the [arXiv](http://arxiv.org/abs/1401.6718).
 

@@ -10,7 +10,7 @@ the `COUNT` and `COUNT_STAR` functions.
 They are especially confusing because
 `COUNT` in Apache Pig works different than in SQL.
 
-# COUNT in Apache Pig
+## COUNT in Apache Pig
 
 In Apache Pig, `COUNT` computes the number of rows with a non-null
 first column. `COUNT_STAR` computes all rows.
@@ -72,7 +72,7 @@ nrows_count_star = FOREACH group_all GENERATE COUNT_STAR(data); - returns
 because there are 5 rows,
 `nrows_count_star` has a value of 5.
 
-# Count in SQL
+## Count in SQL
 
 
 

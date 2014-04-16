@@ -15,7 +15,7 @@ these Controlled Experiments.  By the end of this post, you should
 be able design and run an A/B test on your website as well as
 understand the statistical principles underlying these the tests.
 
-# Proportions, the Simplest A/B Test
+## Proportions, the Simplest A/B Test
 
 The simplest A/B test tries to optimize the fraction or proportion
 of users who perform a given action on a website. For example, we
@@ -65,7 +65,7 @@ test if this change is statistically significant. This is to say
 that we are interested in learning if the change is unlikey to be
 attributable to random chance.
 
-# Measuring an Increase in Amounts
+## Measuring an Increase in Amounts
 
 The other common thing to test during A/B testing is if
 the amount of something changes. As an example, we might
@@ -76,9 +76,9 @@ Want to A/B test number of pages viewed.
 
 * Using the KS Test...
 
-# Power Calculations 
+## Power Calculations 
 
 
-# Other common cotchas about AB Testing
+## Other common cotchas about AB Testing
 
 * Statistical Significance is different from magnitude of effect

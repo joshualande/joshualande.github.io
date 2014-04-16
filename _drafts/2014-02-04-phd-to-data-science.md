@@ -4,7 +4,7 @@ title: "How I Transitions From a PhD in Physics to a Career in Data Scientist"
 comments: true
 ---
 
-# Useful References
+## Useful References
 
 Below are some useful references that helped me prepare to interview for jobs as a data scientist:
 

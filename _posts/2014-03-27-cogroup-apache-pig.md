@@ -8,7 +8,7 @@ permalink: cogroup-in-pig
 The `COGROUP` command in Apache Pig is somewhat confusing because
 it is sort of both a `GROUP` and a `JOIN`.
 
-# COGROUP One Table
+## COGROUP One Table
 
 In its simplest form, `COGROUP` is exactly the same as `GROUP`.  It
 groups rows based on a column, and creates bags for each group.
@@ -44,7 +44,7 @@ matching rows into bags.  The resulting table `grouped` is:
 |   dog | {(adam,dog),(steve,dog)} |
 |  fish |            {(alex,fish)} |
 
-# COGROUP Two Tables
+## COGROUP Two Tables
 
 Where `COGROUP` gets fancy is that you can `COGROUP` on two tables
 at once. Pig will group the two tables and then join the two tables

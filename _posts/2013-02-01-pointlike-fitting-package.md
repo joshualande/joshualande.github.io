@@ -10,7 +10,7 @@ permalink: pointlike-fitting-package
 
 During graduate school, I was involved with the development of pointlike, a package for fitting data observed by the [Fermi Gamma-ray space telescope](http://fermi.gsfc.nasa.gov).
 
-# Design
+## Design
 
 Pointlike was designed from the ground up with flexibility in mind:
 
@@ -19,7 +19,7 @@ Pointlike was designed from the ground up with flexibility in mind:
 * Leverage as much as possible [numpy](http://www.numpy.org), [scipy](http://www.scipy.org), [matplotlib](http://matplotlib.org), and [pywcsgrid2](http://leejjoon.github.com/pywcsgrid2).
 * python interface allows great flexibility and adaptability.
 
-# Interface
+## Interface
 
 The objects and functions described below have a variety of parameters that modify their behavior. The easist way to explore pointlike's features is interactivly in ipython using the [question mark functionality](http://ipython.org/ipython-doc/dev/interactive/tutorial.html#exploring-your-objects):
 
@@ -49,7 +49,7 @@ Docstring:
 ...
 {% endhighlight %}
 
-# Build the ROI
+## Build the ROI
 
 To perform a Fermi analysis, first create a DataSpecification object. This defines the Fermi data that will be used:
 
@@ -64,7 +64,7 @@ ds=DataSpecification(binfile="binned.fits",
 Next, set the binning and the [instrument response function](http://www.slac.stanford.edu/exp/glast/groups/canda/lat_Performance.htm) with the SpectralAnalysis object:
 
 {% highlight python %}
-# First, define the center of your desired analysis region
+## First, define the center of your desired analysis region
 from skymaps import SkyDir
 center=SkyDir(086.1111,-38.1838,SkyDir.GALACTIC)
 
@@ -87,7 +87,7 @@ roi=sa.roi(xmlfile="model.xml")
 
 This ROI object can be used to perform many common Fermi analyses.
 
-# Basic Fitting
+## Basic Fitting
 
 To print a summary of the sources in your model:
 
@@ -175,7 +175,7 @@ To get the ellipse values:
 ellipse=roi.get_ellipse()
 {% endhighlight %}
 
-# Plotting
+## Plotting
 Making plots in pointlike is easy.
 
 To plot the spectral energy distribution:
@@ -212,7 +212,7 @@ roi.plot_sources(which='name',
 
 ![A smoothed counts map computing using pointlike.](/assets/pointlike_smoothed_counts_map.png)
 
-# Pointlike without XML
+## Pointlike without XML
 
 You can build a pointlike ROI without a [gtlike-style XML file] (http://fermi.gsfc.nasa.gov/ssc/data/analysis/scitools/source_models.html) by programmatically specifying the background model and source catalog:
 
@@ -236,7 +236,7 @@ roi = sa.roi(
 )
 {% endhighlight %}
 
-# Modifying the Sky Model
+## Modifying the Sky Model
 Pointlike exposes functionality to easily modify the sky model of an ROI.
 
 To create a new spectral model:
@@ -306,7 +306,7 @@ roi.modify(which='source_name',free=False)
 roi.modify(which='source_name',free=True)
 {% endhighlight %}
 
-# Iterative Analyses
+## Iterative Analyses
 One of the major benefits of pointlike is that the underlying functions can be used in more complicated programs.
 
 For example, to delete all insignificant sources:
@@ -329,7 +329,7 @@ for source in roi.get_sources():
     roi.localize(which=source,update=True)
 {% endhighlight %}
 
-# File input/output
+## File input/output
 There are several methods for getting data out of pointlike:
 
 To save a [gtlike-style XML file](http://fermi.gsfc.nasa.gov/ssc/data/analysis/scitools/source_models.html):
@@ -361,13 +361,13 @@ To recreate the ROI from another script:
 {% highlight python %}
 from uw.like.roi_save import load
 roi=load('roi.dat')
-# play with it some more
+## play with it some more
 ...
 {% endhighlight %}
 
 This loading and saving functionality can be very useful for iterative analyses.
 
-# Extended Sources
+## Extended Sources
 
 Pointlike can natively support spatially-extended sources. Pointlike supports the Disk, Gaussian, EllipticalDisk, EllipticalGaussian, SpatialMap, and [NFW](http://en.wikipedia.org/wiki/Navarro%E2%80%93Frenk%E2%80%93White_profile) spatial models.
 
@@ -492,7 +492,7 @@ To convert an extended source into a point source:
 roi.modify(which='extended_source', skydir=...)
 {% endhighlight %}
 
-# References
+## References
 
 If you would like to learn more about pointlike:
 

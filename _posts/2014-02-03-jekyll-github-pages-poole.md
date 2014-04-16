@@ -16,7 +16,7 @@ So when I learned about [Jekyll](http://jekyllrb.com/), it seemed like a great a
 
 The fact that GitHub provides [free hosting for Jekyll blogs](http://pages.github.com) is just icing on the cake. It will save me ~$50 per year in hosting. GitHub provides automatic version control of my blog. I can use GitHub's web editor to write blog posts online. And I can still connect it to my custom domain ([joshualande.com](http://joshualande.com)).
 
-# Getting Started
+## Getting Started
 
 Instead of reading a lot of documentation, I found this really great git repo called [poole](https://github.com/poole/poole). poole provides:
 
@@ -28,7 +28,7 @@ Instead of reading a lot of documentation, I found this really great git repo ca
 
 To get started with my blog, all I had to do was create a new Git repo with the name [joshualande.github.io](http://joshualande.github.io), download the poole repository, and push it to my git repo. A few minutes later the website joshualande.github.io was ready! I only had a few posts on my previous website so I just copied them over manually. But there is [a package](http://jekyllrb.com/docs/migrations) for migrating blogs to Jekyll.
 
-# Blog Layout
+## Blog Layout
 
 The initial state of the poole repository is:
 
@@ -74,7 +74,7 @@ repo and poole will copy them to the _site folder when rendering the website.
 [_config](https://github.com/poole/poole/blob/master/_config.yml) 
 contains general configuration stuff for the website:
 {% highlight yaml %}
-# Setup
+## Setup
 title:            Poole
 tagline:          'The Jekyll Butler'
 description:      'Base theme for Jekyll themes by @mdo.'
@@ -95,7 +95,7 @@ head.html
 {% endhighlight %}
 I will describe next some tweaks I made to the base website.
 
-# Customizations 
+## Customizations 
 
 To get my blog to its current form, I made a few modifications to the base poole layout. 
 
@@ -109,7 +109,7 @@ layout: page
 title: Archive
 ---
 
-# Blog Posts
+## Blog Posts
 
 {% for post in site.posts %}
   * {{ post.date | date_to_string }} &raquo; [ {{ post.title }} ]({{ post.url }})
@@ -140,7 +140,7 @@ I then modify the file [_layouts/default.html](https://github.com/joshualande/jo
 {% endhighlight %}
 
 
-# Disqus Comments
+## Disqus Comments
 
 I wanted to enable [Disqus](http://disqus.com/) comments on the
 blog. To do that, I modified the file [_layouts/default.html](https://github.com/joshualande/joshualande.github.io/blob/64d03b883b64dd8aedf30b903ecaae92a282955a/_layouts/default.html) to include the line:
@@ -172,7 +172,7 @@ I then created a file [_includes/comments.html](https://github.com/joshualande/j
 {% endhighlight %}
 By setting up the code this way, I can enabled commenting on a page-by-page basis. All I have to do is set "comments: True" in the YAML header of the post.
 
-# Google Analytics
+## Google Analytics
 
 Finally, I enabled [Google Analytics](http://www.google.com/analytics) on the website. First, I had to register my website through
 Google Analytics. Google gave me this javascript tracking code to embed on every website:
@@ -199,14 +199,14 @@ to include the line:
 {% endraw %}
 {% endhighlight %}
 
-# Getting a Custom URL
+## Getting a Custom URL
 
 Once I got my blog up to speed on GitHub with the URL [joshualande.github.io](http://joshualande.github.io), it was easy to link my personal domain [joshualande.com](http://joshualande.com) to it. I use Namecheap to host my domain, so I followed the instructions [here](http://davidensinger.com/2013/03/setting-the-dns-for-github-pages-on-namecheap).
 
 I hope this blog will help you get up to speed quickly with GitHub Pages, Jekyll, and poole.
 If you have any questions about my implementation, you can view my entire website on [GitHub](https://github.com/joshualande/joshualande.github.io) or leave a question below.
 
-# Adding a Custom Twitter Plug To the Bottom of Each Post
+## Adding a Custom Twitter Plug To the Bottom of Each Post
 
 I was not thrilled by the idea of putting
 big Social Media buttons on my website.
@@ -256,7 +256,7 @@ Whenever I want to include the Twitter plug on a post, I just add the liquid tag
 {% endraw %}
 ```
 
-# Futher Reading
+## Futher Reading
 
 In [this post]({% post_url 2014-04-03-short-urls-jekyll %}),
 I describe how to set short and minimil URLs for your blog posts
@@ -269,7 +269,7 @@ In [this post]({% post_url 2014-04-02-redirect-permalink-jekyll-github %}),
 I describe how to redirect existing URLs from an old permalink structure to a
 new permalink structure.
 
-# More Links
+## More Links
 
 Here are some links which helped me along the way:
 

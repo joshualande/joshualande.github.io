@@ -17,7 +17,7 @@ aggregations of a data set. I found the documentation for these
 functions to be confusing, so I will work through
 a simple example to explain how they work.
 
-# Aggregating in Pig Using the GROUP Operator
+## Aggregating in Pig Using the GROUP Operator
 
 Before we get into `CUBE` and `ROLLUP`, I will describe how to do simple
 aggregations using the `GROUP BY` operator in pig.  If this is
@@ -132,7 +132,7 @@ The `heights` table now contains:
 This says, for example, that there are three men who play football with
 an average height of 6.0.
 
-# Multi-Level Aggregations in Pig the Hard Way
+## Multi-Level Aggregations in Pig the Hard Way
 
 What if both aggregations were important. Suppose we wanted
 to know both the average height by gender as well as the average
@@ -187,7 +187,7 @@ As you can see, this table nicely combines both data sets from above.
 The average height by gender for people of any sport
 can be found by looking for rows where sport equals '*'.
 
-# CUBE And ROLLUP For Multi-Level Aggregations
+## CUBE And ROLLUP For Multi-Level Aggregations
 
 This `UNION` approach above works, but it is not very elegant. It
 suffers from the limitations that it requires a lot of extra code, does not 
@@ -286,7 +286,7 @@ The `heights` table finally contains:
 (*,*,5,5.7)
 ```
 
-# CUBEing Over Multiple Dimensions
+## CUBEing Over Multiple Dimensions
 
 What is really great about `CUBE` is
 the ability to cube over multiple dimensions.
@@ -352,7 +352,7 @@ From this table, we see that the average height of all football
 players is 5.75, the average height of all people in the US is 6.0,
 and the average height of all football players in the US is 6.0.
 
-# The ROLLUP Operator
+## The ROLLUP Operator
 
 The `ROLLUP` operator is similar to `CUBE`,
 but will only perform hierarchical
@@ -406,7 +406,7 @@ hierarchical. For example, this
 would be useful if the data had the columns 
 continent, country, and city.
 
-# Not Aggregating Over Certain Columns
+## Not Aggregating Over Certain Columns
 
 The last situation is where you may
 not want to aggregation over a certain column.
@@ -493,7 +493,7 @@ This table has all possible combinations of
 aggregations over gender and sport, but does not aggregate over
 country.
 
-# Links
+## Links
 
 * [Prasanth Jayachandran](http://prasanthj.info) created the `CUBE`
 and `ROLLUP` functions
