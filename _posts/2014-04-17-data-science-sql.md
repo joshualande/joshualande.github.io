@@ -2,6 +2,7 @@
 layout: post
 title: What Every Data Scientist Needs to Know about SQL
 comments: true
+permalink: data-science-sql
 ---
 
 One of the most important tools required to be a successful data
