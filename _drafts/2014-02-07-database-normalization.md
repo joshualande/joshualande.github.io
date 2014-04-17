@@ -1,8 +1,11 @@
 ---
 layout: post
-title: "Design a Better Database With Database Normalization"
+title: "Design a Better SQL Database With Database Normalization"
 comments: true
 ---
+
+*This is the first post in a [series of posts]({% post_url 2014-04-17-data-science-sql %})
+on doing data science with SQL.*
 
 In this post, I will go over the benefits of laying out data in a
 relational database like [SQL](http://en.wikipedia.org/wiki/SQL).
@@ -11,11 +14,6 @@ to design a robust database and the concept of [database
 normalization](http://en.wikipedia.org/wiki/Database_normalization).
 Finally, I will go over the actual commands required to set up a
 simple database in MySQL.
-
-<!--
-In the next post in this series, I will discuss the commands
-required to query information from a database.
--->
 
 ## A Simple Example SQL Database
 
