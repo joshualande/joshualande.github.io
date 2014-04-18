@@ -22,7 +22,7 @@ possible, I will attempt to avoid theory in favor of practicality
 with the goal of getting you up to speed as quickly as possible.
 
 In these posts, I will focus on the [MySQL](http://www.mysql.com/)
-database because it is free, open source, and easy to get started
+database because it is popular, free, open source, and easy to get started
 with. But the concepts and most of the commands are easily transferable
 to other databases.
 
