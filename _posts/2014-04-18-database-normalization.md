@@ -2,6 +2,7 @@
 layout: post
 title: "Design a Better SQL Database With Database Normalization"
 comments: true
+permalink: database-normalization
 ---
 
 *This is the first post in a [series of posts]({% post_url 2014-04-17-data-science-sql %})
