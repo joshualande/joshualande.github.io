@@ -2,10 +2,12 @@
 layout: post
 title: "How to Create Tables and Insert Data into SQL Databases"
 comments: true
+permalink: create-tables-sql
 ---
 
 *This is the second post in a [series of posts]({% post_url 2014-04-17-data-science-sql %})
-about doing data science with SQL.*
+about doing data science with SQL. The [previous post]{% post_url 2014-04-18-database-normalization %} 
+described the topics of database normalization.*
 
 In this post, I will describe how to setup [MySQL](http://www.mysql.com/)
 on your local machine.  MySQL is great because it is popular, open
