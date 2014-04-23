@@ -27,16 +27,39 @@ or
 In particular, you can get the installer
 [here](http://dev.mysql.com/downloads/mysql/).
 
+# Sequel Pro on OS X
+
 If you are using an Apple computer, I recommend using the free and
 open-source graphical program [Sequel Pro](http://www.sequelpro.com/).
 Sequel Pro allows you to interact with the database through
 a friendly graphical user interface and simplifies the process
 of viewing tables.
 
+Once you set up your database and install Sequel Pro, you can
+connect to the database through the GUI 
+
+![Sequel Pro Query Tab](/assets/sequel_pro_query_tab.jpg)
+
+XXX Other GUI Sequel Programs...
+
 ## Creating the Recipies Database in SQL
 
 To create the recipies database, we need
 to first create a database to work in:
+
+To run SQL commands, you can either connect to SQL
+through the command line with the command
+
+XXXX
+
+Alternately, you can connect to Sequel Pro
+or go to the Query menu in 
+Sequel Pro
+
+
+![Sequel Pro Connect Tab](/assets/sequel_pro_connect_tab.jpg)
+![Sequel Pro Content Tab](/assets/sequel_pro_content_tab.jpg)
+
 
 ```sql
 CREATE DATABASE recipes_database
@@ -57,7 +80,7 @@ To create the recipes table, we can use the `CREATE TABLE` command:
 CREATE TABLE recipes (
   recipe_id int(11) NOT NULL,
   recipe_name varchar(30) NOT NULL,
-  PRIMARY KEY (recipe_id)
+  PRIMARY KEY (recipe_id),
   UNIQUE (recipe_name)
 );
 
@@ -106,9 +129,10 @@ Finally, we can create the recipe-ingredient-mapping table:
 CREATE TABLE recipe_ingredients (
   recipe_id int(11) NOT NULL, 
   ingredient_id int(11) NOT NULL, 
-  amount int(11) NOT NULL
-  PRIMARY KEY (recipe_id,ingredient_id),  
+  amount int(11) NOT NULL,
+  PRIMARY KEY (recipe_id,ingredient_id)
 );
+
 INSERT INTO recipe_ingredients 
     (recipe_id, ingredient_id, amount)
 VALUES
