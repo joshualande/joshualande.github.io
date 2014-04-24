@@ -5,8 +5,13 @@ comments: true
 permalink: create-tables-sql
 ---
 
+*This is the second post in a [series of posts]({% post_url 2014-04-17-data-science-sql %})
+about doing data science with SQL.
 
-![Sequel Pro Connect Tab](/assets/sequel_pro_connect_tab.jpg)
+I will then go over the
+commands required to set up the example recpie database from the
+[previous post]({% post_url 2014-04-18-database-normalization %}).
+By the end of this post, you will have a working database!
 
 
 
@@ -20,14 +25,6 @@ to first create a database to work in:
 To run SQL commands, you can either connect to SQL
 through the command line with the command
 
-XXXX
-
-Alternately, you can connect to Sequel Pro
-or go to the Query menu in 
-Sequel Pro
-
-
-![Sequel Pro Content Tab](/assets/sequel_pro_content_tab.jpg)
 
 
 ```sql
@@ -133,7 +130,7 @@ To view the table
 SELECT * FROM recipe_ingredients
 ```
 
-![Sequel Pro Query Tab](/assets/sequel_pro_query_tab.jpg)
+![Sequel Pro Content Tab](/assets/sequel_pro_content_tab.jpg)
 
 
 <!--
