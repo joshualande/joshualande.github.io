@@ -5,40 +5,10 @@ comments: true
 permalink: create-tables-sql
 ---
 
-*This is the second post in a [series of posts]({% post_url 2014-04-17-data-science-sql %})
-about doing data science with SQL. The [previous post]({% post_url 2014-04-18-database-normalization %})
-described the topic of database normalization and good database design.*
 
-In this post, I will describe how to setup [MySQL](http://www.mysql.com/)
-on your local machine.  MySQL is great because it is popular, open
-source, and easy to get started with.
-I will then go over the command required to actually set up the example
-recpie database from the [previous post]({% post_url 2014-04-18-database-normalization %}).
-By the end of this post, you will have a working database you can play around with!
+![Sequel Pro Connect Tab](/assets/sequel_pro_connect_tab.jpg)
 
-## Setting up SQL On Your local Machine
 
-Setting up a local copy of MySQL on your local machine is not too hard.
-Here
-is some documentation for installing MySQL on
-[Windows](https://dev.mysql.com/doc/refman/5.0/en/windows-installation.html)
-or 
-[Mac](https://dev.mysql.com/doc/refman/5.0/en/macosx-installation.html).
-In particular, you can get the installer
-[here](http://dev.mysql.com/downloads/mysql/).
-
-# Sequel Pro on OS X
-
-If you are using an Apple computer, I recommend using the free and
-open-source graphical program [Sequel Pro](http://www.sequelpro.com/).
-Sequel Pro allows you to interact with the database through
-a friendly graphical user interface and simplifies the process
-of viewing tables.
-
-Once you set up your database and install Sequel Pro, you can
-connect to the database through the GUI 
-
-![Sequel Pro Query Tab](/assets/sequel_pro_query_tab.jpg)
 
 XXX Other GUI Sequel Programs...
 
@@ -57,7 +27,6 @@ or go to the Query menu in
 Sequel Pro
 
 
-![Sequel Pro Connect Tab](/assets/sequel_pro_connect_tab.jpg)
 ![Sequel Pro Content Tab](/assets/sequel_pro_content_tab.jpg)
 
 
@@ -156,6 +125,16 @@ pick the `recipe_id` and `ingredient_id`
 values to ensure uniqueness.
 [Here](http://dev.mysql.com/doc/refman/5.0/en/example-auto-increment.html)
 is the documentation on this command in MySQL.
+
+# Browse the Tables
+
+To view the table
+```sql
+SELECT * FROM recipe_ingredients
+```
+
+![Sequel Pro Query Tab](/assets/sequel_pro_query_tab.jpg)
+
 
 <!--
 ## Next Time: Querying the Database
