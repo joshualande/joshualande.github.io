@@ -28,7 +28,7 @@ to other databases.
 
 The posts in this series are:
 
-1. **"Design a Better Database With Database Normalization"**
+1. **[Design a Better Database With Database Normalization]({% post_url 2014-04-18-database-normalization %})**
 
    In this post, we will go over the design decisions behind
    databases, how they are different from other programming languages
@@ -39,6 +39,12 @@ The posts in this series are:
    a bit abstract and theoretical, these topics are absolutely
    essential to understanding how databases work and why they are
    so good at what they do. So this is a must read.
+
+2. **[How to Setup MySQL On Your Local Machine]({% post_url 2014-04-24-setup-mysql %})**
+
+   In this post, I will describe how to install MySQL on our local
+   machine. This will allow you to test out SQL by running SQL
+   queries against a test database.
 
 <!--
 
