@@ -40,7 +40,7 @@ The posts in this series are:
    essential to understanding how databases work and why they are
    so good at what they do. So this is a must read.
 
-2. **[How to Install MySQL On Your Local Machine]({% post_url 2014-04-24-install-mysql %})**
+2. **[How to Install MySQL On Your Local Machine]({% post_url 2014-04-25-install-mysql %})**
 
    In this post, I will describe how to install MySQL on our local
    machine. This will allow you to test out SQL by running SQL
