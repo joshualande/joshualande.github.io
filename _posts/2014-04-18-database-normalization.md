@@ -233,8 +233,9 @@ As a final note, some newer databases like
 mentioned above, in real-world situations sometimes this is a
 necessity.
 
-*In the [next post]]({% post_url 2014-04-25-install-mysql %}),
-I will explain how to install MySQL on your local machine to
-test out SQL.*
+*In the [next post]({% post_url 2014-04-25-install-mysql %}) 
+in this [series of posts]({% post_url 2014-04-17-data-science-sql %}), 
+I will explain how to install MySQL on your local machine to test out 
+SQL commands.*
 
 {% include twitter_plug.html %}
