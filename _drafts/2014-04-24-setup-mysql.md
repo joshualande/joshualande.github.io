@@ -10,38 +10,42 @@ about doing data science with SQL. The [previous post]({% post_url 2014-04-18-da
 described the topic of database normalization and good database design.*
 
 In this post, I will describe how to setup [MySQL](http://www.mysql.com/)
-on your local machine.  MySQL is great for learning about SQL because
-it is popular, open source, and easy to get started with.
+on your local machine.  MySQL is great for learning about SQL and
+relational databases because it is popular, open source, and easy
+to get started with.  By the end of this post, you will be able to
+issue SQL queries against a MySQL database on your local machine.
 
 ## Setting up SQL On Your local Machine
 
-Here is some documentation for installing MySQL on
+[mysql.com](mysql.com) documents the steps required
+to install MySQL on
 [Windows](https://dev.mysql.com/doc/refman/5.0/en/windows-installation.html)
-or 
+and
 [Mac](https://dev.mysql.com/doc/refman/5.0/en/macosx-installation.html).
-In particular, you can get the installer
+To install MySQL, you can get the installer
 [here](http://dev.mysql.com/downloads/mysql/).
+On a Mac, it is as easy as downloading a disk image, double clicking to install,
+and then stepping through the installation process.
 
-On a Mac, you can download a DMG, double click to install,
-and then step through the installation process.
-Also, the Mac DMG comes with a startup package which will automatically
-launch MySQL when you turn on your computer and adds
-a convenient menu in the System Preferences for managing MySQL:
+The Mac disk image also comes with a startup package which will
+automatically launch MySQL when you start your computer.  Additionally,
+it adds a convenient menu in the System Preferences for managing
+MySQL:
 
 ![MySQL System Preferences](/assets/mysql_system_preferences.jpg)
 
-After you setup MySQL, you can set up the root MySQL account 
-from the terminal using the command:
+After you setup MySQL, you can set the root MySQL account 
+from the command line by issuing the command:
 
-```
-$mysqladmin -u root password: XXXXXXXXXXXX
+```bash
+$ mysqladmin -u root password: XXXXXXXXXXXX
 ```
 
 SQL has robust permissions so that different accounts can have
-different access/privealges. This is good in a production
-environment, but for now logging in as root is fine.
+different permissions. This is good in production environments, but
+for now logging in as root with full permissions is fine.
 
-You can connect to the MySQL database from the commandline:
+You can connect to the MySQL database from the command line:
 
 ```bash
 $ mysql -u root --host=localhost --password
@@ -61,31 +65,30 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 mysql> ...
 ```
 
-From the terimal, you are ready to issue SQL commands.
+Now you are ready to issue SQL commands!
 
 # The Sequel Pro SQL Client on OS X
 
 If you are using an Apple computer, I recommend using the free and
-open-source graphical program [Sequel Pro](http://www.sequelpro.com/).
-Sequel Pro allows you to interact with the database through
-a friendly graphical user interface instaed of the commandline.
-It also simplifies the process of viewing tables and inspecting
-other database properties.
+open-source graphical program [Sequel Pro](http://www.sequelpro.com/)
+to connect to the database and to run SQL commands.  Sequel Pro also
+simplifies the process of viewing tables and inspecting other
+database properties. The sign-in screen looks like:
 
 ![Sequel Pro Connect Tab](/assets/sequel_pro_connect_tab.jpg)
 
-Once you install Sequel Pro, you connect to it with your username
+Once you install Sequel Pro, you connect to it with your user name
 and password as above.
 
-Inside of SQL Pro, there is a query menu
-where you can issue SQL commands.
+Inside of Sequel Pro, there is a query menu
+where you can issue SQL commands against the database:
 
 ![Sequel Pro Query Tab](/assets/sequel_pro_query_tab.jpg)
 
-# Other MySQL Programs
+# Other MySQL Clients
 
 If you prefer, there are several other programs for connecting to 
-a MySQL database.
+MySQL databases.
 
 * MySQL Workbench ([link](http://dev.mysql.com/downloads/tools/workbench/))
 * DBVisualizer ([link](http://www.dbvis.com/))
