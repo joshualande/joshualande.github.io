@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "How to Setup MySQL On Your Local Machine"
+title: "How to Install MySQL On Your Local Machine"
 comments: true
-permalink: setup-mysql
+permalink: install-mysql
 ---
 
 *This is the second post in a [series of posts]({% post_url 2014-04-17-data-science-sql %})
