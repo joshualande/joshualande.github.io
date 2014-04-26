@@ -5,17 +5,17 @@ comments: true
 permalink: create-tables-sql
 ---
 
-*This is the second post in a [series of posts]({% post_url 2014-04-17-data-science-sql %})
-about doing data science with SQL.
+*This is the third post in a [series of posts]({% post_url 2014-04-17-data-science-sql %})
+about doing data science with SQL. The 
+[previous post]({% post_url 2014-04-25-install-mysql %})
+covered the steps required to install MySQL on on your
+local machine.*
 
-I will then go over the
-commands required to set up the example recpie database from the
-[previous post]({% post_url 2014-04-18-database-normalization %}).
-By the end of this post, you will have a working database!
-
-
-
-XXX Other GUI Sequel Programs...
+In this post, I will 
+go over the commands required to set up the example recpie database from the
+[first post]({% post_url 2014-04-18-database-normalization %}) in
+this series.  By the end of this post, you will have a working
+database to issue queries on!
 
 ## Creating the Recipies Database in SQL
 
@@ -123,7 +123,7 @@ values to ensure uniqueness.
 [Here](http://dev.mysql.com/doc/refman/5.0/en/example-auto-increment.html)
 is the documentation on this command in MySQL.
 
-# Browse the Tables
+## Browse the Tables
 
 To view the table
 ```sql
