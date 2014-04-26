@@ -172,7 +172,7 @@ to graphically browse the tables:
 ![Sequel Pro Content Tab](/assets/sequel_pro_content_tab.jpg)
 
 
-*In the [next post](...) in the series, I will
+*In the [next post](...) in this series, I will
 go over the basics of quering for data in the database.*
 
 {% include twitter_plug.html %}
