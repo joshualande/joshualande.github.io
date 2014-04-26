@@ -24,7 +24,7 @@ to first create a database to work in.
 To do that, we run the SQL command:
 
 ```sql
-CREATE DATABASE recipes_database
+CREATE DATABASE recipes_database;
 ```
 
 Having multiple databases is useful to separate
@@ -35,7 +35,7 @@ will always use this particular database.
 We select this database with the command:
 
 ```sql
-USE recipes_database
+USE recipes_database;
 ```
 
 # Creating Tables in SQL
@@ -137,7 +137,7 @@ CREATE TABLE recipes (
 );
 
 INSERT INTO recipes 
-    (recipe_id, recipe_name) 
+    (recipe_name) 
 VALUES 
     ("Tacos"),
     ("Tomato Soup"),
@@ -146,19 +146,33 @@ VALUES
 
 ## Browse the Tables
 
-To view the table
+To browse the SQL tables that
+we have now created, we can
+use the `SELECT` command from the command line:
+
 ```sql
-SELECT * FROM recipe_ingredients
+  SELECT * 
+    FROM recipes
+ORDER BY recipe_id;
 ```
+
+```
++-----------+----------------+
+| recipe_id | recipe_name    |
++-----------+----------------+
+|         1 | Tacos          |
+|         2 | Tomato Soup    |
+|         3 | Grilled Cheese |
++-----------+----------------+
+```
+
+We can also use the content table in Sequel Pro
+to graphically browse the tables:
 
 ![Sequel Pro Content Tab](/assets/sequel_pro_content_tab.jpg)
 
 
-<!--
-## Next Time: Querying the Database
-
-In the next post, I will discuss the commands required to ask
-very sophistical questions about data in this database.
--->
+*In the [next post](...) in the series, I will
+go over the basics of quering for data in the database.*
 
 {% include twitter_plug.html %}
