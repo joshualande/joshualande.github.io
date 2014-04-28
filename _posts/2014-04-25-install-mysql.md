@@ -95,4 +95,11 @@ MySQL databases.
 * phpMyAdmin ([link](http://www.phpmyadmin.net/home_page/))
 * HeidiSQL ([link](http://www.heidisql.com/))
 
+*In the [next post]({% post_url 2014-04-28-create-tables-sql %}) in this
+[series of posts]({% post_url 2014-04-17-data-science-sql %}), 
+we will go over the SQL commands
+required to set up the example recipes database from the 
+[first post]({% post_url 2014-04-18-database-normalization %}) 
+in this series.*
+
 {% include twitter_plug.html %}
