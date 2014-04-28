@@ -53,9 +53,9 @@ CREATE TABLE recipes (
 INSERT INTO recipes 
     (recipe_id, recipe_name) 
 VALUES 
-    (0,"Tacos"),
-    (1,"Tomato Soup"),
-    (2,"Grilled Cheese");
+    (1,"Tacos"),
+    (2,"Tomato Soup"),
+    (3,"Grilled Cheese");
 ```
 
 The `PRIMARY KEY` forces every row to a unique value, stoppign the
@@ -77,13 +77,13 @@ CREATE TABLE ingredients (
 INSERT INTO ingredients
     (ingredient_id, ingredient_name, ingredient_price)
 VALUES 
-    (0, "Beef", 5),
-    (1, "Lettuce", 1),
-    (2, "Tomatoes", 2),
-    (3, "Taco Shell", 2),
-    (4, "Cheese", 3),
-    (5, "Milk", 1),
-    (6, "Bread", 2);
+    (1, "Beef", 5),
+    (2, "Lettuce", 1),
+    (3, "Tomatoes", 2),
+    (4, "Taco Shell", 2),
+    (5, "Cheese", 3),
+    (6, "Milk", 1),
+    (7, "Bread", 2);
 ```
 
 Similar to before, we ensure that ingredient names are unique to
@@ -103,16 +103,20 @@ CREATE TABLE recipe_ingredients (
 INSERT INTO recipe_ingredients 
     (recipe_id, ingredient_id, amount)
 VALUES
-    (0,0,1),
-    (0,1,2),
-    (0,2,2),
-    (0,3,3),
-    (0,4,1),
+    (1,1,1),
     (1,2,2),
+    (1,3,2),
+    (1,4,3),
     (1,5,1),
-    (2,4,1),
-    (2,6,2);
+    (2,3,2),
+    (2,6,1),
+    (3,5,1),
+    (3,7,2);
 ```
+
+The last row says, for example, that the recipe with an ID of 3
+("Grilled Cheese") has an amount 2 of the ingredient with ID 7
+("Bread").
 
 Here, our `PRIMARY KEY` is for `(recipe_id,ingredient_id)` pairs.
 This means that the combination of `recipe_id` and `ingredient_id`
@@ -126,7 +130,7 @@ and `ingredient_id` values to ensure uniqueness.
 is the documentation on this command in MySQL.
 
 Using this command, we could have created the same `recipes`
-table
+table as above in a less error-prone way:
 
 ```sql
 CREATE TABLE recipes (
@@ -146,15 +150,17 @@ VALUES
 
 ## Browse the Tables
 
-To browse the SQL tables that
-we have now created, we can
-use the `SELECT` command from the command line:
+If we want to browse tables in the
+database, we can use the `SELECT`
+command.
 
 ```sql
   SELECT * 
     FROM recipes
 ORDER BY recipe_id;
 ```
+
+From the command line, this query will will return
 
 ```
 +-----------+----------------+
