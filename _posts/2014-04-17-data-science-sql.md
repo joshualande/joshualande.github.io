@@ -52,8 +52,8 @@ The posts in this series are:
    In this post, I will go over the SQL commands required to create
    tables in MySQL and insert data into them.  I will go over the
    specific commands required to create the example database from
-   the [first post]({% post_url 2014-04-18-database-normalization
-   %}) of the series. By the end of this post, you will have an
+   the [first post]({% post_url 2014-04-18-database-normalization %}) 
+   of the series. By the end of this post, you will have an
    example database on you computer to run SQL queries against.
 
 <!--
