@@ -33,10 +33,10 @@ projects. We can select our database with the command:
 USE recipes_database;
 ```
 
-# Creating Tables in SQL
+## Creating Tables in SQL
 
-To create the `recipes` table inside the `recipes_database`, we can
-use the `CREATE TABLE` command:
+To create the `recipes` table inside `recipes_database`, we can use
+the `CREATE TABLE` command:
 
 ```sql
 CREATE TABLE recipes (
@@ -58,13 +58,12 @@ The `PRIMARY KEY` forces every row to be a unique value.  This stops
 several recipes from having the same ID.  In addition, we use the
 `UNIQUE` keyword to ensure that no two recipes have the same name.
 
-You will notice that different columns can have different
-types. Recipe IDs are integers and recipe names are variable length
-arrays of characters.
-`VARCHAR(30)` means that they can have up to 30 characters. 
-Other common types include `FLOAT`, `DOUBLE`,
-`DATE`, and `TIMESTAMP`. There is additional
-documented on types [here](http://dev.mysql.com/doc/refman/5.0/en/data-types.html).
+You will notice that different columns can have different types.
+Recipe IDs are integers and recipe names are variable length arrays
+of characters.  `VARCHAR(30)` means that the strings can store up
+to 30 characters.  Other common types include `FLOAT`, `DOUBLE`,
+`DATE`, and `TIMESTAMP`. There is additional documented on types
+[here](http://dev.mysql.com/doc/refman/5.0/en/data-types.html).
 
 Next, we can create the ingredients table:
 
@@ -92,7 +91,7 @@ VALUES
 Note that we do not ensure uniqueness of `ingredient_price` because
 multiple recipes can have the same price.
 
-Finally, to create the recipe-ingredient-mapping table:
+Finally, we can create the recipe-ingredient-mapping table:
 
 ```sql
 CREATE TABLE recipe_ingredients (
@@ -120,17 +119,16 @@ The last row says, for example, that the recipe with an ID of 3
 ("Grilled Cheese") has an amount 2 of the ingredient with ID 7
 ("Bread").
 
-Here, our `PRIMARY KEY` is for recipe ID, ingredient ID pairs.
+Notice that our `PRIMARY KEY` is for recipe ID and ingredient ID pairs.
 We require only that the combination is unique because
-each recipe should have an ingredient only once.
+each recipe can have a particular ingredient only once.
 
 ## AUTO_INCREMENT IDs
 
-There is an `AUTO_INCREMENT`
-command which can be used to let SQL automatically pick the recipe and
-ingredient IDs to ensure uniqueness.
-Using this command, we could have created the same `recipes`
-table in a less error-prone way:
+There is an `AUTO_INCREMENT` command which can be used to let SQL
+automatically pick the recipe and ingredient IDs to ensure uniqueness.
+Using this command, we can created the same `recipes` table in a
+less error-prone way:
 
 ```sql
 CREATE TABLE recipes (
@@ -150,19 +148,13 @@ VALUES
 
 ## Browse the Tables
 
-To browse the tables in the database, we can use the `SELECT`
-command:
-
-```sql
-  SELECT * 
-    FROM recipes
-ORDER BY recipe_id;
-```
-
-When we run this from the command line, it will display
-the table:
+To browse the tables in the database, we can run the `SELECT`
+command from the command line:
 
 ```
+mysql>   SELECT * 
+    ->     FROM recipes
+    -> ORDER BY recipe_id;
 +-----------+----------------+
 | recipe_id | recipe_name    |
 +-----------+----------------+
@@ -170,6 +162,7 @@ the table:
 |         2 | Tomato Soup    |
 |         3 | Grilled Cheese |
 +-----------+----------------+
+3 rows in set (0.00 sec)
 ```
 
 We can also use the content tab in Sequel Pro to graphically browse
