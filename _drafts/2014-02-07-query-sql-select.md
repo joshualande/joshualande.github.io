@@ -12,16 +12,13 @@ required to set up the example recipes database from the
 [first post]({% post_url 2014-04-18-database-normalization %}) 
 in this series.*
 
-In this post, we will use the take the example recipes database
-designed in the
+In this post, we will use the example recipes database
+from the
 [first post]({% post_url 2014-04-18-database-normalization %})
-to go over the basics of quering from a database using the SELECT
-statement.  We will use this to learn about the basic operators
-like filtering, joining and aggregating.  And as you will see, this
-simple command can be used to ask successufly more and challenging
-questions
-
-
+to go over the basics of quering in SQL with the SELECT statement.
+We will go over the basic operators like filtering, joining and
+aggregating and how we can combined them to ask complicated questions
+about our database.
 
 ## SELECT, FROM, and WHERE in SQL
 
