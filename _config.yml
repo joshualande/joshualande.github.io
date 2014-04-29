@@ -18,7 +18,7 @@ author:
   name:           'Joshua Lande'
   url:            https://twitter.com/joshualande
 
-paginate:         1
+paginate:         5
 
 # Custom vars
 version:          1.0.0
