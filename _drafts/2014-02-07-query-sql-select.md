@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Dive into Your Database With the SELECT Statement
+title: The basics of SQL Queries
 comments: true
 ---
 
