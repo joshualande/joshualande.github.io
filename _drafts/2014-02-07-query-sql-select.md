@@ -1,17 +1,29 @@
 ---
 layout: post
-title: How to Query in SQL With the SELECT Statement
+title: Dive into Your Database With the SELECT Statement
 comments: true
 ---
 
-In the previous post, I went over the benefits of database normalization
-for correctly organizing data in a database.  In this post, I will
-take the example recipes database worked out in the previous post
-and use it to ask successfuly harder SQL queriies.  This querieis
-will allow me to introduce the basic operators in SQL like filtering,
-joining and aggregating.
+*This is the fourth post in a [series of posts]({% post_url 2014-04-17-data-science-sql %})
+about doing data science with SQL. The 
+[previous post]({% post_url 2014-04-28-create-tables-sql %})
+went over the commands
+required to set up the example recipes database from the 
+[first post]({% post_url 2014-04-18-database-normalization %}) 
+in this series.*
 
-## THE SELECT, FROM, and WHERE Statements in SQL
+In this post, we will use the take the example recipes database
+designed in the
+[first post]({% post_url 2014-04-18-database-normalization %})
+to go over the basics of quering from a database using the SELECT
+statement.  We will use this to learn about the basic operators
+like filtering, joining and aggregating.  And as you will see, this
+simple command can be used to ask successufly more and challenging
+questions
+
+
+
+## SELECT, FROM, and WHERE in SQL
 
 In our recipes database,
 we had three tables. One
@@ -70,7 +82,7 @@ This returns:
 | Milk            |
 
 
-## The JOIN operator in SQL
+## The JOIN Operator in SQL
 
 Because our data is spread across three
 tables, having to perform multiple successive
@@ -140,7 +152,7 @@ WHERE a.recipe_name = 'Tomato Soup'
 This is functionally equivalent, but somewhat easier to understand.
 
 
-## JOIN Three Tables in SQL
+## JOINing Multiple Tables in SQL
 
 What's  cool about SQL is that we can JOIN multiple tables.
 To find the ingredient names for the 'Tomato Soup' recipe,
@@ -476,6 +488,7 @@ often not clear to a user the fastest way to perform a calculation.
 Furthermore, the SQL implementation has the benefit that best method
 could change over time as the size of the database evolves.
 
+<!--
 ## Thanks for Reading
 
 In this post, we went over the key concepts of good database design
@@ -511,5 +524,6 @@ tables in order to ask advanced questions about your data.
   [Introduction to Data Science](https://www.coursera.org/course/datasci)
   has a great discussion of database implmeenations in his lectures on
   "[Relational Databases, Relational Algebra](https://class.coursera.org/datasci-001/lecture/preview)".
+-->
 
 {% include twitter_plug.html %}
