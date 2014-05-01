@@ -1,6 +1,6 @@
 ---
 layout: post
-title: The basics of SQL Queries
+title: Uncover the Power of Querying in SQL
 comments: true
 ---
 
@@ -15,22 +15,20 @@ in this series.*
 In this post, we will use the example recipes database
 from the
 [first post]({% post_url 2014-04-18-database-normalization %})
-to go over the basics of quering in SQL with the SELECT statement.
-We will go over the basic operators like filtering, joining and
-aggregating and how we can combined them to ask complicated questions
-about our database.
+to go over the basics of quering in SQL with the `SELECT` statement.
+We will start with the basic operators like filtering, joining and
+aggregating and then combined them to ask really powerful questions
+about the database.
 
 ## SELECT, FROM, and WHERE in SQL
 
-In our recipes database,
-we had three tables. One
-had a list of recipes, one with a list of ingredients, and one mapped
-ingredients to recipies.  Given this schema, there are all kinds
-of interesting questions we could ask using our recipies.
+In our [first post]({% post_url 2014-04-18-database-normalization %}),
+we created an example database of recipies. We can use
+the `SELECT` statement in SQL to query data from it.
 
-If we wanted to find all the ingredients in the recipe for "Tomato Soup",
-we could first figure out the recipe ID for "Tomato Soup".
-We always query information from the database using the `SELECT` statement:
+For example, if we wanted to find all the ingredients in the
+"Tomato Soup" recipe, we could first figure out the recipe ID for
+"Tomato Soup":
 
 ```sql
 SELECT recipe_id 
@@ -38,17 +36,17 @@ FROM recipes
 WHERE recipe_name="Tomato Soup"
 ```
 
-This query says take the table of recipe names,
-filter for rows where the name is "Tomato Soup", 
-and select the recipe ID column.
+This says to take the recipes table and get
+out the `recipe_id` column for all the rows
+for one particular value of `recipe_name`.
 This query returns the table
 
 | recipe_id |
 | --------- |
 |         1 |
 
-We can get the `ingredient_id` values using a similar query
-on the `recipe_ingredients` table:
+Given this recipe ID, we can get the ingredient IDs
+using a similar query on the recipe-ingredients-mapping table:
 
 ```sql
 SELECT ingredient_id
