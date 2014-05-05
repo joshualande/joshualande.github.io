@@ -2,6 +2,7 @@
 layout: post
 title: Uncover the Power of Querying in SQL
 comments: true
+permalink: "power-querying-sql"
 ---
 
 *This is the fourth post in a [series of posts]({% post_url 2014-04-17-data-science-sql %})
@@ -12,61 +13,66 @@ required to set up the example recipes database from the
 [first post]({% post_url 2014-04-18-database-normalization %}) 
 in this series.*
 
-In this post, we will use the example recipes database
+In this post, I will use the example recipes database
 from the
 [first post]({% post_url 2014-04-18-database-normalization %})
 to go over the basics of quering in SQL with the `SELECT` statement.
-We will start with the basic operators like filtering, joining and
-aggregating and then combined them to ask really powerful questions
-about the database.
+I will start with the basic operators like filtering, joining and
+aggregating. Then I will show how these simple commands
+can be combined to create very powerful queries.
+By the end of this post you will be able to write advanced SQL queries.
 
 ## SELECT, FROM, and WHERE in SQL
 
-In our [first post]({% post_url 2014-04-18-database-normalization %}),
-we created an example database of recipies. We can use
-the `SELECT` statement in SQL to query data from it.
+We can use the `SELECT` statement in SQL to query data from a
+database.  For example, we might be interested in finding
+all of the ingredients in the "Tomato Soup" recipe
+from the 
+recipies database from the 
+[first post]({% post_url 2014-04-18-database-normalization %}) 
+in this series. 
 
-For example, if we wanted to find all the ingredients in the
-"Tomato Soup" recipe, we could first figure out the recipe ID for
-"Tomato Soup":
+This query is non-trivial because this
+information is spread across three tables.
+As a first, step we could query the recipe ID for the recipe as:
 
 ```sql
 SELECT recipe_id 
-FROM recipes
-WHERE recipe_name="Tomato Soup"
+  FROM recipes
+ WHERE recipe_name="Tomato Soup"
 ```
 
-This says to take the recipes table and get
-out the `recipe_id` column for all the rows
-for one particular value of `recipe_name`.
-This query returns the table
+This says to take the `recipes` table and select the `recipe_id`
+column for all the rows where the `recipe_name` column has a
+particular value.  This query returns the table
 
 | recipe_id |
 | --------- |
-|         1 |
+|         2 |
 
 Given this recipe ID, we can get the ingredient IDs
 using a similar query on the recipe-ingredients-mapping table:
 
 ```sql
 SELECT ingredient_id
-FROM recipe_ingredients
-WHERE recipe_id = 1
+  FROM recipe_ingredients
+ WHERE recipe_id = 2
 ```
 
 This returns
 
 | ingredient_id |
 | ------------- |
-| 2             |
-| 5             |
+| 3             |
+| 6             |
 
-Getting the ingredient names is similar:
+Finally, we can pull out the ingredient names similarly:
 
 ```sql
 SELECT ingredient_name
-FROM ingredients
-WHERE ingredient_id=2 OR ingredient_id=5
+  FROM ingredients
+ WHERE ingredient_id=3
+    OR ingredient_id=6
 ```
 
 This returns:
@@ -79,22 +85,22 @@ This returns:
 
 ## The JOIN Operator in SQL
 
-Because our data is spread across three
-tables, having to perform multiple successive
-queries is a hassle.
-To avoid this, we can join the tables
-to ask more complicated questions
-about our database.
+Because our data is spread across three tables, it
+is cubmersome to have to run multiple queries
+to find the information we want.  To avoid this, 
+SQL allows you to join tables to gether so we can query
+for information spread across mutliple table in the database.
 
 When we join two tables on a column, it will create a row in the
-joined table whenever that value is the same in both tables.  For
-example, if we joined `recipes` with `recipe_ingredients`:
+joined table whenever that value in the join column is the same in both tables.  For
+example, if we joined `recipes` with `recipe_ingredients` on
+the recipe ID:
 
 ```sql
 SELECT *
-FROM recipes
-JOIN recipe_ingredients
-ON recipes.recipe_id = recipe_ingredients.recipe_id
+  FROM recipes
+  JOIN recipe_ingredients
+    ON recipes.recipe_id = recipe_ingredients.recipe_id
 ```
 
 We get the table:
@@ -111,18 +117,16 @@ We get the table:
 |         2 | Grilled Cheese | 2         |             4 | 1      |
 |         2 | Grilled Cheese | 2         |             6 | 2      |
 
-Getting back to our example from above,
-we can compute the ingredient IDs for 
-for 'Tomato Soup' by joining 
-`recipes` with `recipe_ingredients` on
-the recipe ID.
+Getting back to our example from above, we can compute the ingredient
+IDs for for 'Tomato Soup' by joining `recipes` with `recipe_ingredients`
+on the recipe ID.
 
 ```sql
 SELECT recipe_ingredients.ingredient_id
-FROM recipes
-JOIN recipe_ingredients
-ON recipes.recipe_id = recipe_ingredients.recipe_id
-WHERE recipes.recipe_name = 'Tomato Soup'
+  FROM recipes
+  JOIN recipe_ingredients
+    ON recipes.recipe_id = recipe_ingredients.recipe_id
+ WHERE recipes.recipe_name = 'Tomato Soup'
 ```
 
 This returns:
@@ -139,10 +143,10 @@ a nickname:
 
 ```sql
 SELECT b.ingredient_id
-FROM recipes AS a
-JOIN recipe_ingredients AS b
-ON a.recipe_id = b.recipe_id
-WHERE a.recipe_name = 'Tomato Soup'
+  FROM recipes AS a
+  JOIN recipe_ingredients AS b
+    ON a.recipe_id = b.recipe_id
+ WHERE a.recipe_name = 'Tomato Soup'
 ```
 This is functionally equivalent, but somewhat easier to understand.
 
@@ -155,13 +159,12 @@ all we have to do is join all three tables on recipe ID:
 
 ```sql
 SELECT c.ingredient_name 
-FROM recipes AS a
-JOIN recipe_ingredients AS b
-ON a.recipe_id = b.recipe_id
-JOIN ingredients AS c
-ON b.ingredient_id = c.ingredient_id
-WHERE
-    a.recipe_name = "Tomato Soup"
+  FROM recipes AS a
+  JOIN recipe_ingredients AS b
+    ON a.recipe_id = b.recipe_id
+  JOIN ingredients AS c
+    ON b.ingredient_id = c.ingredient_id
+ WHERE a.recipe_name = "Tomato Soup"
 ```
 
 This returns the table:
@@ -179,13 +182,12 @@ For example, to find all the recipes that include 'tomatoes':
 
 ```sql
 SELECT a.recipe_name
-FROM recipes AS a
-JOIN recipe_ingredients AS b
-ON a.recipe_id = b.recipe_id
-JOIN ingredients AS c
-ON b.ingredient_id = c.ingredient_id
-WHERE
-    c.ingredient_name = "tomatoes"
+  FROM recipes AS a
+  JOIN recipe_ingredients AS b
+    ON a.recipe_id = b.recipe_id
+  JOIN ingredients AS c
+    ON b.ingredient_id = c.ingredient_id
+ WHERE c.ingredient_name = "tomatoes"
 ```
 
 As expected, this returns:
@@ -207,9 +209,9 @@ grouping the rows in the `recipe_ingredients` table by the
 recipe ID and count the number or grouped rows.
 
 ```sql
-SELECT recipe_id, 
-  COUNT(ingredient_id) as num_ingredients
-FROM recipe_ingredients
+  SELECT recipe_id, 
+         COUNT(ingredient_id) AS num_ingredients
+    FROM recipe_ingredients
 GROUP BY recipe_id
 ORDER BY num_ingredients DESC
 ```
@@ -228,12 +230,12 @@ out the price of each ingredient by joining with the ingredients table.
 This query would look like:
 
 ```sql
-SELECT recipe_id, 
-    COUNT(a.ingredient_id) as num_ingredients, 
-    SUM(a.amount*b.ingredient_price) as total_price
-FROM recipe_ingredients as a
-JOIN ingredients as b
-ON a.ingredient_id = b.ingredient_id
+  SELECT recipe_id, 
+         COUNT(a.ingredient_id) AS num_ingredients, 
+         SUM(a.amount*b.ingredient_price) AS total_price
+    FROM recipe_ingredients as a
+    JOIN ingredients as b
+      ON a.ingredient_id = b.ingredient_id
 GROUP BY a.recipe_id
 ```
 
@@ -249,14 +251,14 @@ Similarly, if we want to make plot the nicer recipe name
 we could also JOIN with the recipes tables:
 
 ```sql
-SELECT c.recipe_name, 
-    COUNT(a.ingredient_id) as num_ingredients, 
-    SUM(a.amount*b.ingredient_price) as total_price
-FROM recipe_ingredients as a
-JOIN ingredients as b
-ON a.ingredient_id = b.ingredient_id
-JOIN recipes AS c
-ON a.recipe_id = c.recipe_id
+  SELECT c.recipe_name, 
+         COUNT(a.ingredient_id) AS num_ingredients, 
+         SUM(a.amount*b.ingredient_price) AS total_price
+    FROM recipe_ingredients AS a
+    JOIN ingredients AS b
+      ON a.ingredient_id = b.ingredient_id
+    JOIN recipes AS c
+      ON a.recipe_id = c.recipe_id
 GROUP BY a.recipe_id
 ```
 
@@ -278,11 +280,11 @@ Suppose we wanted to find only recipes with 2 ingredients in it.
 We could use the `HAVING` clause:
 
 ```sql
-SELECT recipe_id, 
-  COUNT(ingredient_id) AS num_ingredients
-FROM recipe_ingredients
+  SELECT recipe_id, 
+         COUNT(ingredient_id) AS num_ingredients
+    FROM recipe_ingredients
 GROUP BY recipe_id
-HAVING num_ingredients = 2
+  HAVING num_ingredients = 2
 ```
 
 This creates the table
@@ -310,12 +312,12 @@ We could imagine doing this in two steps.
 First, we find the recipes that
 have tomatoes in it:
 
-```
+```sql
 SELECT a.recipe_id
-FROM recipe_ingredients AS a
-JOIN ingredients AS b
-ON a.ingredient_id = b.ingredient_id
-WHERE b.ingredient_name = 'Tomatoes' 
+  FROM recipe_ingredients AS a
+  JOIN ingredients AS b
+    ON a.ingredient_id = b.ingredient_id
+ WHERE b.ingredient_name = 'Tomatoes' 
 ```
 
 This creates the table:
@@ -339,20 +341,19 @@ Therefore, we can compute the desired table
 as follows
 
 ```sql
-SELECT b.recipe_name, 
-    COUNT(a.ingredient_id) as num_ingredients
-FROM recipe_ingredients as a
-JOIN recipes AS b
-ON a.recipe_id = b.recipe_id
-JOIN 
-    (
-        SELECT c.recipe_id
-        FROM recipe_ingredients AS c
-        JOIN ingredients AS d
-        ON c.ingredient_id = d.ingredient_id
-        WHERE d.ingredient_name = 'Tomatoes' 
-    ) as e
-ON b.recipe_id = e.recipe_id
+  SELECT b.recipe_name, 
+         COUNT(a.ingredient_id) AS num_ingredients
+    FROM recipe_ingredients AS a
+    JOIN recipes AS b
+      ON a.recipe_id = b.recipe_id
+    JOIN (
+             SELECT c.recipe_id
+             FROM recipe_ingredients AS c
+             JOIN ingredients AS d
+             ON c.ingredient_id = d.ingredient_id
+             WHERE d.ingredient_name = 'Tomatoes' 
+         ) AS e
+      ON b.recipe_id = e.recipe_id
 GROUP BY a.recipe_id
 ```
 
@@ -378,12 +379,12 @@ either beef or cheese, we could use the SQL query below:
 
 ```sql
 SELECT DISTINCT recipe_name
-FROM recipe_ingredients AS a
-JOIN ingredients AS b
-ON a.ingredient_id = b.ingredient_id
-JOIN recipes AS c
-ON a.recipe_id = c.recipe_id
-WHERE b.ingredient_name = 'Cheese' OR b.ingredient_name = 'Beef'
+  FROM recipe_ingredients AS a
+  JOIN ingredients AS b
+    ON a.ingredient_id = b.ingredient_id
+  JOIN recipes AS c
+    ON a.recipe_id = c.recipe_id
+ WHERE b.ingredient_name = 'Cheese' OR b.ingredient_name = 'Beef'
 ```
 
 Note that here the `DISTINT`
@@ -406,9 +407,9 @@ a particular column. For example, if we wanted
 to sort the ingredients by how expensive they are
 in order of descending price, we could run the query:
 
-```
-SELECT *
-FROM ingredients
+```sql
+  SELECT *
+    FROM ingredients
 ORDER BY ingredient_price DESC
 ```
 
@@ -427,10 +428,11 @@ Which returns
 If we wanted to sort columns of the same price alphabetically by name, we could
 use a similar query:
 
-```
-SELECT *
-FROM ingredients
-ORDER BY ingredient_price DESC,ingredient_name
+```sql
+  SELECT *
+    FROM ingredients
+ORDER BY ingredient_price DESC,
+         ingredient_name
 ```
 
 This creates the table:
@@ -452,10 +454,10 @@ by the query. For example, to get only the most expensive ingredient, we could u
 the query:
 
 ```sql
-SELECT *
-FROM ingredients
+  SELECT *
+    FROM ingredients
 ORDER BY ingredient_price DESC
-LIMIT 1
+   LIMIT 1
 ```
 
 This returns the table:
