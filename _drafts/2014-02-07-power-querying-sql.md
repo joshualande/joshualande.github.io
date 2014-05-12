@@ -17,10 +17,10 @@ In this post, I will use the example recipes database
 from the
 [first post]({% post_url 2014-04-18-database-normalization %})
 to go over the basics of quering in SQL with the `SELECT` statement.
-I will start with the basic operators like filtering, joining and
+I will start with the basic operators like filtering, joining, and
 aggregating. Then I will show how these simple commands
 can be combined to create very powerful queries.
-By the end of this post you will be able to write advanced SQL queries.
+By the end of this post, you will be able to write advanced SQL queries.
 
 ## SELECT, FROM, and WHERE in SQL
 
@@ -34,7 +34,8 @@ in this series.
 
 This query is non-trivial because this
 information is spread across three tables.
-As a first, step we could query the recipe ID for the recipe as:
+As a first, step we could query for the recipe ID of this
+recipe with:
 
 ```sql
 SELECT recipe_id 
@@ -42,8 +43,8 @@ SELECT recipe_id
  WHERE recipe_name="Tomato Soup"
 ```
 
-This says to take the `recipes` table and select the `recipe_id`
-column for all the rows where the `recipe_name` column has a
+This says to take the `recipes` table and take the `recipe_id`
+column for all rows where the `recipe_name` column has a
 particular value.  This query returns the table
 
 | recipe_id |
@@ -82,19 +83,16 @@ This returns:
 | Tomatoes        |
 | Milk            |
 
-
 ## The JOIN Operator in SQL
 
-Because our data is spread across three tables, it
-is cubmersome to have to run multiple queries
-to find the information we want.  To avoid this, 
-SQL allows you to join tables to gether so we can query
-for information spread across mutliple table in the database.
+Because our data is spread across three tables, it is cubmersome
+and error-prone to have to run multiple queries to find the information
+we want.  We can avoid this by joining the tables together.
 
 When we join two tables on a column, it will create a row in the
-joined table whenever that value in the join column is the same in both tables.  For
-example, if we joined `recipes` with `recipe_ingredients` on
-the recipe ID:
+joined table whenever that value in the join column is the same in
+both tables.  For example, if we joined `recipes` with `recipe_ingredients`
+on the recipe ID:
 
 ```sql
 SELECT *
@@ -136,10 +134,11 @@ This returns:
 | 3             |
 | 6             |
 
-As an aside, having to use the table names over
-and over again in a SQL query is cumbersome, and
-there is a shorthand where we can give each table
-a nickname:
+In the next section, we will show how we can also join with the
+`ingredients` table to directly get the ingredient names.
+
+Having to use the table names in our query repeatedly is cumbersome.
+SQL provides a shorthand for giving the tables a nickname:
 
 ```sql
 SELECT b.ingredient_id
@@ -148,14 +147,15 @@ SELECT b.ingredient_id
     ON a.recipe_id = b.recipe_id
  WHERE a.recipe_name = 'Tomato Soup'
 ```
-This is functionally equivalent, but somewhat easier to understand.
 
+This returns the same information as before.
 
 ## JOINing Multiple Tables in SQL
 
-What's  cool about SQL is that we can JOIN multiple tables.
-To find the ingredient names for the 'Tomato Soup' recipe,
-all we have to do is join all three tables on recipe ID:
+SQL allows us to join multiple tables for even more powerful queries.
+Getting back to our original example, we can find the ingredient
+names for the ingreidents in 'Tomato Soup' by joining all three
+tables together:
 
 ```sql
 SELECT c.ingredient_name 
@@ -167,18 +167,17 @@ SELECT c.ingredient_name
  WHERE a.recipe_name = "Tomato Soup"
 ```
 
-This returns the table:
+As expected, this returns the table:
 
 | ingredient_name |
 | --------------- |
 | Tomatoes        |
 | Milk            |
 
-Another great about SQL is that once we have laid out data across
-three normalized tables, it is just as easy to ask many other
-questions about our data.
-
-For example, to find all the recipes that include 'tomatoes':
+What is great about SQL is that by joining tables together,
+we can ask other very different questions about our data.
+For example, finding all the recipes that include 'tomatoes'
+is just as easy:
 
 ```sql
 SELECT a.recipe_name
@@ -190,7 +189,7 @@ SELECT a.recipe_name
  WHERE c.ingredient_name = "tomatoes"
 ```
 
-As expected, this returns:
+This returns:
 
 | recipe_name |
 | ----------- |
@@ -200,8 +199,8 @@ As expected, this returns:
 
 ## The GROUP BY Operator In SQL
 
-The next major command to learn in SQL is `GROUP BY`, which can be
-used to aggregate rows in a table.
+The next major command to learn in SQL is `GROUP BY`, which lets
+us aggregate rows in a table.
 
 Supposed for example that we wanted to list the number
 of ingredients in each recipe. We could do this by 
