@@ -107,15 +107,15 @@ We get the table:
 
 | recipe_id | recipe_name    | recipe_id | ingredient_id | amount |
 | --------- | -------------- | --------- | ------------- | ------ |
-|         0 | Tacos          | 0         |             0 | 1      |
-|         0 | Tacos          | 0         |             1 | 2      |
-|         0 | Tacos          | 0         |             2 | 2      |
-|         0 | Tacos          | 0         |             3 | 3      |
-|         0 | Tacos          | 0         |             4 | 1      |
-|         1 | Tomato Soup    | 1         |             2 | 2      |
-|         1 | Tomato Soup    | 1         |             5 | 1      |
-|         2 | Grilled Cheese | 2         |             4 | 1      |
-|         2 | Grilled Cheese | 2         |             6 | 2      |
+|         3 | Grilled Cheese | 3         | 5             | 1      |
+|         3 | Grilled Cheese | 3         | 7             | 2      |
+|         1 |          Tacos | 1         | 1             | 1      |
+|         1 |          Tacos | 1         | 2             | 2      |
+|         1 |          Tacos | 1         | 3             | 2      |
+|         1 |          Tacos | 1         | 4             | 3      |
+|         1 |          Tacos | 1         | 5             | 1      |
+|         2 |    Tomato Soup | 2         | 3             | 2      |
+|         2 |    Tomato Soup | 2         | 6             | 1      |
 
 Getting back to our example from above, we can compute the ingredient
 IDs for for 'Tomato Soup' by joining `recipes` with `recipe_ingredients`
@@ -133,8 +133,8 @@ This returns:
 
 | ingredient_id |
 | ------------- |
-| 2             |
-| 5             |
+| 3             |
+| 6             |
 
 As an aside, having to use the table names over
 and over again in a SQL query is cumbersome, and
@@ -220,9 +220,9 @@ The code returns:
 
 | recipe_id | num_ingredients |
 | --------- | --------------- |
-|         0 |               5 |
-|         1 |               2 |
+|         1 |               5 |
 |         2 |               2 |
+|         3 |               2 |
 
 We can combine the `GROUP BY` and `JOIN` operators in a single query.
 To compute in addition the price of each recipe, we would need to figure
@@ -243,9 +243,9 @@ And this returns
 
 | recipe_id | num_ingredients | total_price |
 | --------- | --------------- | ----------- |
-|         0 |               5 |          20 |
-|         1 |               2 |           5 |
-|         2 |               2 |           7 |
+|         1 |               5 |          20 |
+|         2 |               2 |           5 |
+|         3 |               2 |           7 |
 
 Similarly, if we want to make plot the nicer recipe name  
 we could also JOIN with the recipes tables:
@@ -291,8 +291,8 @@ This creates the table
 
 | recipe_id | num_ingredients |
 | --------- | --------------- |
-|         1 |               2 |
 |         2 |               2 |
+|         3 |               2 |
 
 PUT A NOTE ABOUT HAVING IS THE SAME AS A FILTER AFTER THE SUBQUERY
 
@@ -324,8 +324,8 @@ This creates the table:
 
 | recipe_id |
 | --------- |
-|         0 |
 |         1 |
+|         2 |
 
 Next, we could joining this table with
 the ingredients count table from above
@@ -384,19 +384,42 @@ SELECT DISTINCT recipe_name
     ON a.ingredient_id = b.ingredient_id
   JOIN recipes AS c
     ON a.recipe_id = c.recipe_id
- WHERE b.ingredient_name = 'Cheese' OR b.ingredient_name = 'Beef'
+ WHERE b.ingredient_name = 'Cheese' 
+    OR b.ingredient_name = 'Beef'
 ```
+
+This creates
+
+|    recipe_name |
+| -------------- |
+| Grilled Cheese |
+|          Tacos |
 
 Note that here the `DISTINT`
 keyword is required because otherwise two rows would
 be returned for tacos since they contain bhot
 cheese and beef.
 
-TODO: PUT A NOTE ABOUT 
+We can also count all distinct recipies by
+putting the `COUNT` keyword outside the `DISTINCT`
+keyword:
+
 ```sql
-COUNT(DISTINCT XX)
+SELECT COUNT(DISTINCT recipe_name) AS num_recipes
+  FROM recipe_ingredients AS a
+  JOIN ingredients AS b
+    ON a.ingredient_id = b.ingredient_id
+  JOIN recipes AS c
+    ON a.recipe_id = c.recipe_id
+ WHERE b.ingredient_name = 'Cheese' 
+    OR b.ingredient_name = 'Beef'
 ```
-WHICH IS SURPRISINGLY USEFUL
+
+This returns:
+
+| num_recipes |
+| ----------- |
+|           2 |
 
 
 ## The ORDER BY operator in SQL
@@ -413,17 +436,18 @@ in order of descending price, we could run the query:
 ORDER BY ingredient_price DESC
 ```
 
-Which returns 
+Which returns
 
 | ingredient_id | ingredient_name | ingredient_price |
 | ------------- | --------------- | ---------------- |
-| 0             |            Beef |                5 |
-| 4             |          Cheese |                3 |
-| 6             |           Bread |                2 |
-| 3             |      Taco Shell |                2 |
-| 2             |        Tomatoes |                2 |
-| 1             |         Lettuce |                1 |
-| 5             |            Milk |                1 |
+| 1             | Beef            | 5                |
+| 5             | Cheese          | 3                |
+| 3             | Tomatoes        | 2                |
+| 4             | Taco Shell      | 2                |
+| 7             | Bread           | 2                |
+| 2             | Lettuce         | 1                |
+| 6             | Milk            | 1                |
+
 
 If we wanted to sort columns of the same price alphabetically by name, we could
 use a similar query:
@@ -439,13 +463,14 @@ This creates the table:
 
 | ingredient_id | ingredient_name | ingredient_price |
 | ------------- | --------------- | ---------------- |
-| 0             |            Beef |                5 |
-| 4             |          Cheese |                3 |
-| 6             |           Bread |                2 |
-| 3             |      Taco Shell |                2 |
-| 2             |        Tomatoes |                2 |
-| 1             |         Lettuce |                1 |
-| 5             |            Milk |                1 |
+| 1             | Beef            | 5                |
+| 5             | Cheese          | 3                |
+| 7             | Bread           | 2                |
+| 4             | Taco Shell      | 2                |
+| 3             | Tomatoes        | 2                |
+| 2             | Lettuce         | 1                |
+| 6             | Milk            | 1                |
+
 
 ## The LIMIT operator in SQL
 
@@ -464,63 +489,7 @@ This returns the table:
 
 | ingredient_id | ingredient_name | ingredient_price |
 | ------------- | --------------- | ---------------- |
-| 0             |            Beef |                5 |
+| 1             |            Beef |                5 |
 
-
-## Query Optimization
-
-Now that we have seen several examples of the `SELECT` statement,
-I will mention one final benefit of using relational databases
-compared to programming languages.  As we saw above, a SQL query
-is a logical description of what should be done to the data, not
-a description of how or in what order to perform the operations 
-needed to get the desired data.  
-
-Because of this, SQL databases have [query
-optimizers](http://en.wikipedia.org/wiki/Query_optimization) which
-will logically inspect the query, think of different ways that the
-query could be executed, and guess at the most efficient way to
-perform the calculation. This is especially powerful because it is
-often not clear to a user the fastest way to perform a calculation.
-Furthermore, the SQL implementation has the benefit that best method
-could change over time as the size of the database evolves.
-
-<!--
-## Thanks for Reading
-
-In this post, we went over the key concepts of good database design
-and dateabase normalization. Then, we went over the topics of how
-to issue queries on a database using the `SELECT` statement. Finally,
-we saw the power of filtering, joining, and aggregating multiple
-tables in order to ask advanced questions about your data.
-
-## Further SQL Reading
-
-* SQL databases go through great lenghts to deal with `NULL` values
-  in a sensible way. [Here](http://dev.mysql.com/doc/refman/5.0/en/working-with-null.html)
-  is some documentation in the way MySQL handles `NULL` values.
-* [Views](http://dev.mysql.com/doc/refman/5.0/en/create-view.html) in
-  SQL act as temporary tables, able to both simplify queries in MySQL
-  as well as abstract the end user from the underlying implementation
-  of a database.
-* Beyond [MySQL](http://www.mysql.com/), there are some really great
-  high-performance parallel databases like
-  [Terradata](http://www.teradata.com/) and
-  [Vertica](http://www.vertica.com/). They allow for large data
-  sets then can traditionally be stored in MySQL.
-* For data sets of a large enough size, [hadoop](http://hadoop.apache.org/),
-  the [Hadoop Distributed File System (HDFS)](http://hadoop.apache.org/docs/r1.2.1/hdfs_design.html),
-  and [MapReduce](https://hadoop.apache.org/docs/r1.2.1/mapred_tutorial.html) 
-  are typically used to store and analyze the data. 
-  [Apache Hive](http://hive.apache.org/) is an implementation of
-  SQL on top of MapReduce capable of analyzing these exceptionally-large
-  data sets. [Apache Pig](https://pig.apache.org/) is a similar SQL-like
-  langauge which runs on top of MapReduce.
-* If you are interested in learning more about the implementaion of query
-  optimizers inf SQL, Bill Howe's coursera class 
-  [Introduction to Data Science](https://www.coursera.org/course/datasci)
-  has a great discussion of database implmeenations in his lectures on
-  "[Relational Databases, Relational Algebra](https://class.coursera.org/datasci-001/lecture/preview)".
--->
 
 {% include twitter_plug.html %}

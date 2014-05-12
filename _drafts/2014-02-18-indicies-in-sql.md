@@ -429,4 +429,54 @@ Here are the major takeaways about indexing in SQL:
 
 * http://use-the-index-luke.com/
 
+<--
+
+## Query Optimization
+
+Now that we have seen several examples of the `SELECT` statement,
+I will mention one final benefit of using relational databases
+compared to programming languages.  As we saw above, a SQL query
+is a logical description of what should be done to the data, not
+a description of how or in what order to perform the operations 
+needed to get the desired data.  
+
+Because of this, SQL databases have [query
+optimizers](http://en.wikipedia.org/wiki/Query_optimization) which
+will logically inspect the query, think of different ways that the
+query could be executed, and guess at the most efficient way to
+perform the calculation. This is especially powerful because it is
+often not clear to a user the fastest way to perform a calculation.
+Furthermore, the SQL implementation has the benefit that best method
+could change over time as the size of the database evolves.
+
+## Further SQL Reading
+
+* SQL databases go through great lenghts to deal with `NULL` values
+  in a sensible way. [Here](http://dev.mysql.com/doc/refman/5.0/en/working-with-null.html)
+  is some documentation in the way MySQL handles `NULL` values.
+* [Views](http://dev.mysql.com/doc/refman/5.0/en/create-view.html) in
+  SQL act as temporary tables, able to both simplify queries in MySQL
+  as well as abstract the end user from the underlying implementation
+  of a database.
+* Beyond [MySQL](http://www.mysql.com/), there are some really great
+  high-performance parallel databases like
+  [Terradata](http://www.teradata.com/) and
+  [Vertica](http://www.vertica.com/). They allow for large data
+  sets then can traditionally be stored in MySQL.
+* For data sets of a large enough size, [hadoop](http://hadoop.apache.org/),
+  the [Hadoop Distributed File System (HDFS)](http://hadoop.apache.org/docs/r1.2.1/hdfs_design.html),
+  and [MapReduce](https://hadoop.apache.org/docs/r1.2.1/mapred_tutorial.html) 
+  are typically used to store and analyze the data. 
+  [Apache Hive](http://hive.apache.org/) is an implementation of
+  SQL on top of MapReduce capable of analyzing these exceptionally-large
+  data sets. [Apache Pig](https://pig.apache.org/) is a similar SQL-like
+  langauge which runs on top of MapReduce.
+* If you are interested in learning more about the implementaion of query
+  optimizers inf SQL, Bill Howe's coursera class 
+  [Introduction to Data Science](https://www.coursera.org/course/datasci)
+  has a great discussion of database implmeenations in his lectures on
+  "[Relational Databases, Relational Algebra](https://class.coursera.org/datasci-001/lecture/preview)".
+-->
+
+
 {% include twitter_plug.html %}
