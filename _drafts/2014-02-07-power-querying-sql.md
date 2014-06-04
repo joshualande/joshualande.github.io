@@ -67,7 +67,8 @@ This returns
 | 3             |
 | 6             |
 
-Finally, we can pull out the ingredient names similarly:
+Finally, we can pull out the ingredient names knowing the ingredient
+IDs:
 
 ```sql
 SELECT ingredient_name
@@ -89,10 +90,10 @@ Because our data is spread across three tables, it is cubmersome
 and error-prone to have to run multiple queries to find the information
 we want.  We can avoid this by joining the tables together.
 
-When we join two tables on a column, it will create a row in the
-joined table whenever that value in the join column is the same in
-both tables.  For example, if we joined `recipes` with `recipe_ingredients`
-on the recipe ID:
+When we join two tables on a column in SQL, it will create a row
+in the joined table whenever that value in the join column is the
+same in both tables.  For example, if we joined `recipes` with
+`recipe_ingredients` on the recipe ID:
 
 ```sql
 SELECT *
@@ -115,8 +116,11 @@ We get the table:
 |         2 |    Tomato Soup | 2         | 3             | 2      |
 |         2 |    Tomato Soup | 2         | 6             | 1      |
 
+This joined table includes the recipe names along with the recipe
+IDs for each recipe-ingredient pair.
+
 Getting back to our example from above, we can compute the ingredient
-IDs for for 'Tomato Soup' by joining `recipes` with `recipe_ingredients`
+IDs for 'Tomato Soup' by joining `recipes` with `recipe_ingredients`
 on the recipe ID.
 
 ```sql
@@ -137,8 +141,9 @@ This returns:
 In the next section, we will show how we can also join with the
 `ingredients` table to directly get the ingredient names.
 
-Having to use the table names in our query repeatedly is cumbersome.
-SQL provides a shorthand for giving the tables a nickname:
+Having to use the full table names repeatedly in our query is
+cumbersome.  SQL provides a convenient shorthand where
+we can give each table a nickname:
 
 ```sql
 SELECT b.ingredient_id
@@ -148,7 +153,7 @@ SELECT b.ingredient_id
  WHERE a.recipe_name = 'Tomato Soup'
 ```
 
-This returns the same information as before.
+This is the same query as before, but slightly less verbose.
 
 ## JOINing Multiple Tables in SQL
 
@@ -175,7 +180,7 @@ As expected, this returns the table:
 | Milk            |
 
 What is great about SQL is that by joining tables together,
-we can ask other very different questions about our data.
+we can ask many diverse questions about our data.
 For example, finding all the recipes that include 'tomatoes'
 is just as easy:
 
@@ -199,13 +204,13 @@ This returns:
 
 ## The GROUP BY Operator In SQL
 
-The next major command to learn in SQL is `GROUP BY`, which lets
-us aggregate rows in a table.
+The next important concept in SQL is aggregating rows.
+This is done with the `GROUP BY` command.
 
 Supposed for example that we wanted to list the number
 of ingredients in each recipe. We could do this by 
 grouping the rows in the `recipe_ingredients` table by the
-recipe ID and count the number or grouped rows.
+recipe ID and counting the number or grouped rows:
 
 ```sql
   SELECT recipe_id, 
@@ -238,7 +243,7 @@ This query would look like:
 GROUP BY a.recipe_id
 ```
 
-And this returns
+This returns
 
 | recipe_id | num_ingredients | total_price |
 | --------- | --------------- | ----------- |
@@ -246,7 +251,7 @@ And this returns
 |         2 |               2 |           5 |
 |         3 |               2 |           7 |
 
-Similarly, if we want to make plot the nicer recipe name  
+Similarly, if we want to make the table the display recipe names,
 we could also JOIN with the recipes tables:
 
 ```sql
@@ -268,6 +273,36 @@ This returns a nicer formated table:
 |          Tacos |               5 |          20 |
 |    Tomato Soup |               2 |           5 |
 | Grilled Cheese |               2 |           7 |
+
+## Aggregation Functions in SQL
+
+As you saw above, SQL can apply different
+aggregation functions. This query demonstrates
+more of them:
+
+```sql
+SELECT COUNT(ingredient_price) as count,
+       AVG(ingredient_price) as avg,
+       SUM(ingredient_price) as sum,
+       MIN(ingredient_price) as min,
+       MAX(ingredient_price) as max,
+       STDDEV(ingredient_price) as stddev,
+       SUM(ingredient_price) as sum
+  FROM ingredients
+```
+
+This returns
+
+| count |    avg | sum | min | max |             stddev | sum |
+| ----- | ------ | --- | --- | --- | ------------------ | --- |
+|     7 | 2.2857 |  16 |   1 |   5 | 1.2777531299998797 |  16 |
+
+Note here that when you leave out the `GROUP BY` class, but include
+an aggregation function, SQL assumes that you want to group all
+rows together.
+
+You can find the full list of aggregation functions in MySQL
+[here](http://dev.mysql.com/doc/refman/5.0/en/group-by-functions.html).
 
 ## The HAVING Operator in SQL
 
@@ -293,23 +328,21 @@ This creates the table
 |         2 |               2 |
 |         3 |               2 |
 
-PUT A NOTE ABOUT HAVING IS THE SAME AS A FILTER AFTER THE SUBQUERY
+As you will see below, `HAVING`
+is really just a convenient shorthand to
+avoid having to use a subquery.
 
 ## Subqueries in SQL
 
-As an example of a harder
-SQL query, we could imaging trying to
-make a list of the number of ingredients for
-all recipes that include tomatoes.
+A more challenging query would be to make a list of the number of
+ingredients but only for recipes that include tomatoes.
 
-To do this, we first would need to
-find all the recipes which include tomatoes
-and then count the number of ingredients
-for each of those recipes.
+To do this, we first would need to find all the recipes which include
+tomatoes and then count the number of ingredients for each of those
+recipes.
 
-We could imagine doing this in two steps.
-First, we find the recipes that
-have tomatoes in it:
+We could imagine doing this in two steps.  First, we find the recipes
+that have tomatoes in it:
 
 ```sql
 SELECT a.recipe_id
@@ -326,18 +359,14 @@ This creates the table:
 |         1 |
 |         2 |
 
-Next, we could joining this table with
-the ingredients count table from above
-to filter out the recipes that aren't in
-this table.
+Next, we could joining this table with the ingredients count table
+from above to filter out the recipes that aren't in this table.
 
-This leads us to the idea of subqueries.
-In SQL. Because every SQL query returns a table,
-so wherever a table can be used in SQL,
-instead a subquery can be used.
+This leads us to the idea of subqueries.  In SQL. Because every SQL
+query returns a table, inside of a query a subquery can be used
+instead of a table.
 
-Therefore, we can compute the desired table
-as follows
+Therefore, we can compute this as follows
 
 ```sql
   SELECT b.recipe_name, 
@@ -363,10 +392,11 @@ This returns the expected table
 | Tacos       |               5 |
 | Tomato Soup |               2 |
 
-What's cool about SQL is that it is incredibly
+What's cool about SQL is that it is very
 flexible about the structure of queries. Similar to how we
 can JOIN as many tables together as needed, we can also
-nest multiple subquieries together.
+nest multiple subquieries together to create more powerful
+queries.
 
 ## The DISTINT Operator
 
@@ -396,10 +426,10 @@ This creates
 
 Note that here the `DISTINT`
 keyword is required because otherwise two rows would
-be returned for tacos since they contain bhot
+be returned for tacos since they contain both
 cheese and beef.
 
-We can also count all distinct recipies by
+We can count the number of distinct recipes by
 putting the `COUNT` keyword outside the `DISTINCT`
 keyword:
 
@@ -427,7 +457,7 @@ The next command we will cover is `ORDER BY`.
 `ORDER BY` can be used to sort the rows based on
 a particular column. For example, if we wanted
 to sort the ingredients by how expensive they are
-in order of descending price, we could run the query:
+in descending order of price, we could run the query:
 
 ```sql
   SELECT *
@@ -435,7 +465,7 @@ in order of descending price, we could run the query:
 ORDER BY ingredient_price DESC
 ```
 
-Which returns
+This returns
 
 | ingredient_id | ingredient_name | ingredient_price |
 | ------------- | --------------- | ---------------- |
@@ -473,7 +503,7 @@ This creates the table:
 
 ## The LIMIT operator in SQL
 
-We can use the `LIMIT` operator to limit the number of results returend
+We can use the `LIMIT` operator to limit the number of results returned
 by the query. For example, to get only the most expensive ingredient, we could use
 the query:
 
@@ -489,6 +519,23 @@ This returns the table:
 | ingredient_id | ingredient_name | ingredient_price |
 | ------------- | --------------- | ---------------- |
 | 1             |            Beef |                5 |
+
+# Inequality And Self Joins
+
+So far, all of our examples were equality joins, where we join two
+tables only on the condition of a row being equal. And so far,
+we have only joined different tables together.
+
+A challenging
+List Most expensive ingredient for each recipe.
+
+```
+SELECT *
+FROM recipe_ingredients AS a
+JOIN recipe_ingredients AS b
+ON a.recipe_id = b.recipe_id AND a.amount < b.amount
+```
+
 
 
 {% include twitter_plug.html %}
