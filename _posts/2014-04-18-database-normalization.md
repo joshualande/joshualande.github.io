@@ -105,7 +105,7 @@ has to take up an entire row in the `recipe_ingredients` table.
 This leads us to the concept of [database
 normalization](http://en.wikipedia.org/wiki/Database_normalization).
 Database normalization is the process of designing a database so
-that ever piece of information shows up in only one place in the
+that every piece of information shows up in only one place in the
 database.  This is the most important concept for designing effective
 databases.
 
@@ -224,7 +224,7 @@ that our data layout is not biased towards (or against) any particular
 kind of query.  Instead, the designers of SQL optimized their
 database to perform all kinds of different queries against flat
 tables efficiently.  There is a good chance that what we will want
-to querying tomorrow is different from today, so this is a huge
+to query tomorrow is different from today, so this is a huge
 advantage.
 
 As a final note, some newer databases like
