@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Uncover the Power of Querying in SQL
+title: "Filters, Joins, Aggregations, and All That: A Guide to Querying in SQL"
 comments: true
 permalink: "power-querying-sql"
 ---
@@ -28,7 +28,7 @@ We can use the `SELECT` statement in SQL to query data from a
 database.  For example, we might be interested in finding
 all of the ingredients in the "Tomato Soup" recipe
 from the 
-recipies database from the 
+recipes database from the 
 [first post]({% post_url 2014-04-18-database-normalization %}) 
 in this series. 
 
@@ -520,22 +520,63 @@ This returns the table:
 | ------------- | --------------- | ---------------- |
 | 1             |            Beef |                5 |
 
-# Inequality And Self Joins
+# Self Joins AND Inequality Joins
 
-So far, all of our examples were equality joins, where we join two
-tables only on the condition of a row being equal. And so far,
-we have only joined different tables together.
+We will end this post with one final example.
+Supposed we anted to 
+compute the number of shared ingredients 
+for recipes.
 
-A challenging
-List Most expensive ingredient for each recipe.
+This query will lead us to two final concepts.
+In SQL, you can join a table with itself just
+like you could with any other table. These
+joins are called self joins.
+
+Inequality joins is the idea that
+the condition in the `ON` clause of 
+the SQL query does not have be
+be two columns equality eachother.
+Instead, you can put any mathematical
+expression including inequalities.
+
+```sql
+  SELECT a.recipe_id, 
+         b.recipe_id, 
+         COUNT(*) as shared_ingredients
+    FROM recipe_ingredients AS a
+    JOIN recipe_ingredients AS b
+      ON a.recipe_id < b.recipe_id
+     AND a.ingredient_id = b.ingredient_id 
+GROUP BY a.recipe_id, b.recipe_id
+```
+
+We can clean up the output by 
+joining with the recipes table:
+
+
+```sql
+  SELECT c.recipe_name, 
+         d.recipe_name, 
+         COUNT(*) as shared_ingredients
+    FROM recipe_ingredients AS a
+    JOIN recipe_ingredients AS b
+      ON a.recipe_id < b.recipe_id
+     AND a.ingredient_id = b.ingredient_id 
+    JOIN recipes AS c
+      ON a.recipe_id = c.recipe_id
+    JOIN recipes AS d
+      ON b.recipe_id = d.recipe_id
+GROUP BY a.recipe_id, b.recipe_id
+```
+
+This returns:
 
 ```
-SELECT *
-FROM recipe_ingredients AS a
-JOIN recipe_ingredients AS b
-ON a.recipe_id = b.recipe_id AND a.amount < b.amount
+| recipe_name |    recipe_name | shared_ingredients |
+| ----------- | -------------- | ------------------ |
+|       Tacos |    Tomato Soup |                  1 |
+|       Tacos | Grilled Cheese |                  1 |
 ```
-
 
 
 {% include twitter_plug.html %}
