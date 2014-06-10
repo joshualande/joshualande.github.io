@@ -96,6 +96,9 @@ ON a.action_id = b.action_id
 GROUP BY a.action_id
 ```
 
+### Compute Most Active User 
+
+Compute Most Active User in a Given Day
 
 ### Compute Daily Active Users (DAUs)
 
@@ -131,13 +134,27 @@ FROM fact_engagement
 GROUP BY (date_id, user_id)
 ```
 
-### Compute Number of Unique Users on Each Pair of Clients
+### Number of Login Days
 
-...
+For each user in the last month, compute the number of days that the user logged in.
 
-### For each User, compute the day they Signed Up
+Next, for each rolling 30 day period, compute the number of login days.
+
+### Users on Multiple Clients
+
+For each client pair, compute the
+number of unique users
+
+### Compute Signups
+
+For each User, compute the day they signed up.
+This is defined as the first day they logged in.
 
 ### Compute Churn
 
-Fraction of users who logged in in a given month who did not log in a given month who did not log in in the next month
+Compute all fraction of users who in in the first month but didn't
+log in in the second month.
 
+If you can get this to work for static dates, compute a rolling
+count of churn (for every day, the fraction of users in the previous
+60-30 day period who didn't log in in the last 30 days).
