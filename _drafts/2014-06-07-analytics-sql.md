@@ -98,6 +98,11 @@ JOIN dim_actions AS b
 ON a.action_id = b.action_id
 GROUP BY a.action_id
 
+---
+action_name	num_action
+front_page	1881
+search	789
+profile	330
 -->
 
 Over all time, what actions are most popular.
