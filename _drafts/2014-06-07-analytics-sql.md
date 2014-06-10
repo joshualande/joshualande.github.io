@@ -111,6 +111,9 @@ Over all time, what actions are most popular.
 
 Compute Most Active User in a Given Day
 
+<!--
+
+SELECT date_id, user_id
 ### Compute Daily Active Users (DAUs)
 
 A user is active if they perform any engagement in a given day
@@ -138,9 +141,42 @@ ON XXX
 GROUP BY a.date_id DESC
 -->
 
+### Number of Login Days
+
+For each user in the last month, compute the number of days that the user logged in.
+
+<!--
+SELECT user_id, COUNT(DISTINCT date_id)
+FROM fact_engagement
+WHERE date_id <= 20130228 AND date_id > 20130228 - 30
+GROUP BY user_id
+-->
+
+Next, for each rolling 30 day period, compute the number of login days.
+
+
 ### Multiple Clients
 
-For each client pair, compute number of users who have both clients
+For each client pair, compute number of users who have used both clients
+
+<!--
+SELECT a.client_id, b.client_id, COUNT(distinct a.user_id)
+FROM fact_engagement AS a
+JOIN fact_engagement AS b
+ON a.user_id = b.user_id
+AND a.client_id <= b.client_id
+GROUP BY a.client_id,b.client_id
+
+---
+
+client_id	client_id	n_users
+0	0	10
+0	1	10
+0	2	10
+1	1	10
+1	2	10
+2	2	10
+-->
 
 For each action, compute number of actions per day and number of unique users who compute that action
 
@@ -154,11 +190,6 @@ FROM fact_engagement
 GROUP BY (date_id, user_id)
 -->
 
-### Number of Login Days
-
-For each user in the last month, compute the number of days that the user logged in.
-
-Next, for each rolling 30 day period, compute the number of login days.
 
 ### Filter Buggy Data
 
