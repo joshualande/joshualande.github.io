@@ -88,6 +88,16 @@ https://gist.github.com/joshualande/d194f84f1ce80e1a4e2e
 
 ### (Warm Up) Compute Most Popular Action
 
+
+<!--
+SELECT b.action_name, COUNT(a.action_id) AS num_action
+FROM fact_engagement AS a
+JOIN dim_actions AS b
+ON a.action_id = b.action_id
+GROUP BY a.action_id
+
+-->
+
 Over all time, what actions are most popular.
 
 ### Compute Most Active User 
@@ -99,6 +109,12 @@ Compute Most Active User in a Given Day
 A user is active if they perform any engagement in a given day
 Compute this number for every day
 
+<!--
+SELECT date_id, COUNT(distinct user_id)
+FROM fact_engagement
+GROUP BY date_id
+--->
+
 ### Compute Monthly Active Users (MAUs)
 
 A user counts as a MAU if they performed any engagement in any
@@ -106,6 +122,14 @@ day in the last 30 days. Compute this number for the most recent
 day in the database.
 
 Next, compute this for every day in the database.
+
+<!--
+SELECT date_id, COUNT(distinct user_id)
+FROM fact_engagement AS a
+JOIN fact_engagement AS b
+ON XXX
+GROUP BY a.date_id DESC
+-->
 
 ### Multiple Clients
 
@@ -116,6 +140,12 @@ For each action, compute number of actions per day and number of unique users wh
 ### Compute Top Client For Each User
 
 For the top client for each user for each day
+
+<!--
+SELECT *
+FROM fact_engagement
+GROUP BY (date_id, user_id)
+-->
 
 ### Number of Login Days
 
@@ -146,41 +176,5 @@ count of churn (for every day, the fraction of users in the previous
 
 ---
 
-<!--
-Popular Actions:
 
-```sql
-SELECT b.action_name, COUNT(a.action_id) AS num_action
-FROM fact_engagement AS a
-JOIN dim_actions AS b
-ON a.action_id = b.action_id
-GROUP BY a.action_id
-```
 
-DAUs:
-
-```sql
-SELECT date_id, COUNT(distinct user_id)
-FROM fact_engagement
-GROUP BY date_id
-```
-
-MAUs
-
-```sql
-SELECT date_id, COUNT(distinct user_id)
-FROM fact_engagement AS a
-JOIN fact_engagement AS b
-ON XXX
-GROUP BY a.date_id DESC
-```
-
-Top Client
-
-```sql
-SELECT *
-FROM fact_engagement
-GROUP BY (date_id, user_id)
-```
-
--->
