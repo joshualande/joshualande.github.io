@@ -125,21 +125,66 @@ FROM fact_engagement
 GROUP BY date_id
 --->
 
+### Engagement Summary Table
+
+For each action, compute number of actions per day and number of unique users who compute that action
+
+<!--
+SELECT date_id, action_id, COUNT(*), COUNT(DISTINCT user_id)
+FROM fact_engagement
+GROUP BY date_id, action_id
+ORDER BY date_id DESC
+---
+date_id	action_id	COUNT(*)	COUNT(DISTINCT user_id)
+20130228	0	81	8
+20130228	1	45	5
+20130228	2	12	3
+-->
+
 ### Compute Monthly Active Users (MAUs)
 
 A user counts as a MAU if they performed any engagement in any
 day in the last 30 days. Compute this number for the most recent
 day in the database.
 
-Next, compute this for every day in the database.
 
 <!--
-SELECT date_id, COUNT(distinct user_id)
+SELECT COUNT(distinct user_id)
+FROM fact_engagement
+WHERE date_id <= 20130228 AND date_id > 20130228 - 30
+---
+MAUs
+10
+-->
+
+Next, compute this for every day separately using one SQL query:
+
+<!--
+SELECT a.date_id, COUNT(DISTINCT b.user_id)
 FROM fact_engagement AS a
 JOIN fact_engagement AS b
-ON XXX
-GROUP BY a.date_id DESC
+ON b.date_id <= a.date_id
+AND a.date_id < CAST(DATE(b.date_id) + INTERVAL 30 DAY AS UNSIGNED INTEGER)
+GROUP BY a.date_id
+ORDER BY a.date_id DESC
+---
+20130228	10
+20130227	10
+20130226	10
+...
+20130111	10
+20130110	10
+20130109	10
+20130108	9
+20130107	9
+20130106	9
+20130105	9
+20130104	9
+20130103	8
+20130102	7
+20130101	3
 -->
+
 
 ### Number of Login Days
 
@@ -178,7 +223,6 @@ client_id	client_id	n_users
 2	2	10
 -->
 
-For each action, compute number of actions per day and number of unique users who compute that action
 
 ### Compute Top Client For Each User
 
