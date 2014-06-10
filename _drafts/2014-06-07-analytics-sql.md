@@ -7,22 +7,23 @@ permalink: "analytics-sql"
 
 ## Example Engagement Database Design
 
-The `dim_clients` table:
+We can imagine an example schema for a database which contains user engagement data. Our database has a list of clients, user actions, and users, and a table showing every engagement event for each users.
+
+First, we have a table of all clients (`dim_clients`):
 
 | client_id | client_name |
 | --------- | ----------- |
 |         0 |      iphone |
 |       ... |         ... |
 
-
-The `dim_action` page:
+Next, we have a table of all user actions (`dim_action`):
 
 | action_id | action_name |
 | --------- | ----------- |
 |         0 |  front_page |
 |       ... |         ... |
 
-The `dim_users` page:
+Next, we have a table of all users (`dim_users`):
 
 | user_id | user_name |
 | ------- | --------- |
@@ -30,7 +31,7 @@ The `dim_users` page:
 |     ... |       ... |
 
 
-The `fact_engagement` page:
+Finally, we have a table listing all engaements for all users (`fact_engagement`):
 
 |  date_id | user_id | client_id | action_id |
 | -------- | ------- | --------- | --------- |
@@ -39,14 +40,16 @@ The `fact_engagement` page:
 
 ## Create these tables:
 
-First, create the database
+Below are the commands to create this database in MySQL.
+
+First we have to create the database to work in:
 
 ```sql
-CREATE DATABASE analytics_example
-USE analytics_example
+CREATE DATABASE engagement_database
+USE engagement_database
 ```
 
-Now, create the tables
+Next, we can create the four tables we need:
 
 ```sql
 CREATE TABLE dim_clients (
@@ -75,18 +78,17 @@ CREATE TABLE fact_engagement (
 )
 ```
 Note, there is no PK on `fact_engagement`. This implies that a user can 
-perform an action multiple times per day.
-Typically, there would also be a timestamp column and the other columns would be part of a PK to 
+perform an action multiple times per day. Typically, there would also be a 
+timestamp column and the other columns would be part of a PK to 
 allow for duplicate actions in a day without allowing totally duplicate rows
 
-Now, add to tables:
-
-
-https://gist.github.com/joshualande/d194f84f1ce80e1a4e2e
+Finally, we can populate this table with made up data using the commands from [here](https://gist.github.com/joshualande/d194f84f1ce80e1a4e2e)
 
 ## Practice Analytics Questions
 
-### (Warm Up) Compute Most Popular Action
+Below are some practice analytics questions to get you into the habbit of thinking in terms of SQL:
+
+### Compute The Most Popular Action
 
 
 <!--
