@@ -200,6 +200,30 @@ GROUP BY user_id
 Next, for each rolling 30 day period, compute the number of login days.
 
 
+### Compute Signups
+
+For each User, compute the day they signed up.
+This is defined as the first day they logged in.
+
+<!--
+SELECT DISTINCT user_id, MIN(date_id) as signup
+FROM fact_engagement
+GROUP BY user_id
+ORDER BY user_id DESC
+---
+user_id	signup
+9	20130101
+8	20130102
+7	20130102
+6	20130109
+5	20130103
+4	20130102
+3	20130104
+2	20130102
+1	20130101
+0	20130101
+--->
+
 ### Multiple Clients
 
 For each client pair, compute number of users who have used both clients
@@ -234,19 +258,6 @@ FROM fact_engagement
 GROUP BY (date_id, user_id)
 -->
 
-
-### Filter Buggy Data
-
-### Users on Multiple Clients
-
-For each client pair, compute the
-number of unique users
-
-### Compute Signups
-
-For each User, compute the day they signed up.
-This is defined as the first day they logged in.
-
 ### Compute Churn
 
 Compute all fraction of users who in in the first month but didn't
@@ -256,7 +267,9 @@ If you can get this to work for static dates, compute a rolling
 count of churn (for every day, the fraction of users in the previous
 60-30 day period who didn't log in in the last 30 days).
 
----
 
+### Filter Buggy Data
+
+...
 
 
