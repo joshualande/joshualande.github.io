@@ -2,7 +2,7 @@
 layout: post
 title: "Filters, Joins, Aggregations, and All That: A Guide to Querying in SQL"
 comments: true
-permalink: "power-querying-sql"
+permalink: "filters-joins-aggregations"
 ---
 
 *This is the fourth post in a [series of posts]({% post_url 2014-04-17-data-science-sql %})
@@ -328,9 +328,8 @@ This creates the table
 |         2 |               2 |
 |         3 |               2 |
 
-As you will see below, `HAVING`
-is really just a convenient shorthand to
-avoid having to use a subquery.
+As you will see below, `HAVING` is really just a convenient shorthand
+to avoid using a subquery.
 
 ## Subqueries in SQL
 
@@ -520,29 +519,55 @@ This returns the table:
 | ------------- | --------------- | ---------------- |
 | 1             |            Beef |                5 |
 
-# Self Joins AND Inequality Joins
+# Self AND Inequality Joins
 
-We will end this post with one final example.
-Supposed we anted to 
-compute the number of shared ingredients 
-for recipes.
+The final concepts we will learn about are self and equality joins.  As
+a concrete example, supposed that we wanted to compute the number
+of shared ingredients for all of our recipe pairs.
 
-This query will lead us to two final concepts.
-In SQL, you can join a table with itself just
-like you could with any other table. These
-joins are called self joins.
+To compute this, we can join the ingredient-recipe mapping table
+with itself where we only keep rows that have the same ingredient.
+This will create a row for ever matching ingredient in every pair
+of recipes:
 
-Inequality joins is the idea that
-the condition in the `ON` clause of 
-the SQL query does not have be
-be two columns equality eachother.
-Instead, you can put any mathematical
-expression including inequalities.
+```sql
+  SELECT a.recipe_id, b.recipe_id, a.ingredient_id
+    FROM recipe_ingredients AS a
+    JOIN recipe_ingredients AS b
+      ON a.ingredient_id = b.ingredient_id
+     AND a.recipe_id != b.recipe_id
+ORDER BY a.recipe_id, b.recipe_id
+```
+
+Note that we have to filter for `a.recipe_id != b.recipe_id` to avoid
+matching recipe with themselves. Joins with an inequality
+condition are unsurprisingly called inequality joins.
+
+This returns
+
+| recipe_id | recipe_id | ingredient_id |
+| --------- | --------- | ------------- |
+| 1         |         2 |             3 |
+| 1         |         3 |             5 |
+| 2         |         1 |             3 |
+| 3         |         1 |             5 |
+
+This table shows the recipe 1 ("Tacos") and recipe 2 ("Tomato Soup")
+share ingredient 3 ("Tomatoes"). Similarly, recipe 1 ("Tacos") and
+recipe 3 ("Grilled Cheese") share ingredient 5 ("Cheese").
+
+One issue with this query is that it matches every pair of ingredients
+twice. To avoid this, we can modify the query to only
+return rows where one of the recipe IDs is less than
+the other recipe ID.
+
+Finally, we can can aggregate over the recipe IDs
+to compute the count of shared ingredients:
 
 ```sql
   SELECT a.recipe_id, 
          b.recipe_id, 
-         COUNT(*) as shared_ingredients
+         COUNT(*) as num_shared
     FROM recipe_ingredients AS a
     JOIN recipe_ingredients AS b
       ON a.recipe_id < b.recipe_id
@@ -550,14 +575,22 @@ expression including inequalities.
 GROUP BY a.recipe_id, b.recipe_id
 ```
 
-We can clean up the output by 
+As expected, this returns
+
+| recipe_id | recipe_id | num_shared |
+| --------- | --------- | ---------- |
+|         1 |         2 |          1 |
+|         1 |         3 |          1 |
+
+
+We can beautify the output by 
 joining with the recipes table:
 
 
 ```sql
-  SELECT c.recipe_name, 
-         d.recipe_name, 
-         COUNT(*) as shared_ingredients
+  SELECT c.recipe_name AS recipe_1, 
+         d.recipe_name AS recipe_2, 
+         COUNT(*) AS num_shared
     FROM recipe_ingredients AS a
     JOIN recipe_ingredients AS b
       ON a.recipe_id < b.recipe_id
@@ -567,16 +600,19 @@ joining with the recipes table:
     JOIN recipes AS d
       ON b.recipe_id = d.recipe_id
 GROUP BY a.recipe_id, b.recipe_id
+ORDER BY recipe_1, recipe_2
 ```
 
 This returns:
 
-```
-| recipe_name |    recipe_name | shared_ingredients |
-| ----------- | -------------- | ------------------ |
-|       Tacos |    Tomato Soup |                  1 |
-|       Tacos | Grilled Cheese |                  1 |
-```
+| recipe_1 |       recipe_2 | num_shared |
+| -------- | -------------- | ---------- |
+|    Tacos | Grilled Cheese |          1 |
+|    Tacos |    Tomato Soup |          1 |
+
+From these examples, I hope you can see that you can combined a few
+simple SQL operations to perform very powerful queries inside a
+database.
 
 
 {% include twitter_plug.html %}
