@@ -56,13 +56,14 @@ The posts in this series are:
    of the series. By the end of this post, you will have an
    example database on you computer to run SQL queries against.
 
-2. **"Filters, Joins, Aggregations, and All That: A Guide to Querying in SQL"**
+4. **["Filters, Joins, Aggregations, and All That: A Guide to Querying in SQL"]({% post_url 2014-08-14-filters-joins-aggregations %})**
 
    In this post, we will go over the basics of querying data from
    a database. Using the example from above, I will work through
    successively harder queries show how the simple operations can
    be combined write complicated queries.
 
+<!--
 3. **"Indexing in SQL for the Rest of Us"**
 
 4. **"How to Handle Missing Data in SQL Using NULL Values"**
