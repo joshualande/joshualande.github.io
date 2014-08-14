@@ -411,7 +411,7 @@ As expected, this returns
 What's cool about SQL is that it is very flexible and can allow
 multiple subqueries to be nested together.
 
-## The DISTINT Operator
+## The DISTINCT Operator
 
 In SQL, `DISTINCT` operator can be used to find all of the unique
 rows.
@@ -437,7 +437,7 @@ This creates
 | Grilled Cheese |
 |          Tacos |
 
-Note that here the `DISTINT`
+Note that here the `DISTINCT`
 keyword is required because otherwise two rows would
 be returned for tacos since they contain both
 cheese and beef.
