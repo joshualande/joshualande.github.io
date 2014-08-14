@@ -42,28 +42,26 @@ The posts in this series are:
 
 2. **[How to Install MySQL On Your Local Machine]({% post_url 2014-04-25-install-mysql %})**
 
-   In this post, I will describe how to install MySQL on our local
+   In this post, we will describe how to install MySQL on our local
    machine. This will allow you to test out SQL by running SQL
    queries against a test database. By the end of this post,
    you will have MySQL running on your local machine.
 
 3. **[How to Create Tables and Insert Data into SQL Databases]({% post_url 2014-04-28-create-tables-sql %})**
 
-   In this post, I will go over the SQL commands required to create
+   In this post, we will go over the SQL commands required to create
    tables in MySQL and insert data into them.  I will go over the
    specific commands required to create the example database from
    the [first post]({% post_url 2014-04-18-database-normalization %}) 
    of the series. By the end of this post, you will have an
    example database on you computer to run SQL queries against.
 
-<!--
-
-2. **"How to Query in SQL With the SELECT Statement"**
+2. **"Filters, Joins, Aggregations, and All That: A Guide to Querying in SQL"**
 
    In this post, we will go over the basics of querying data from
    a database. Using the example from above, I will work through
    successively harder queries show how the simple operations can
-   be used to ask complicated questions.
+   be combined write complicated queries.
 
 3. **"Indexing in SQL for the Rest of Us"**
 
