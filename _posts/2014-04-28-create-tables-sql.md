@@ -170,10 +170,9 @@ the tables:
 
 ![Sequel Pro Content Tab](/assets/sequel_pro_content_tab.jpg)
 
-
-<!--
-*In the [next post](...) in this series, I will
-go over the basics of quering for data in the database.*
--->
+*In the [next post]({% post_url 2014-08-14-filters-joins-aggregations %})
+in this 
+[series of posts]({% post_url 2014-04-17-data-science-sql %}), 
+I will go over the basics of quering for data in a SQL database.*
 
 {% include twitter_plug.html %}
