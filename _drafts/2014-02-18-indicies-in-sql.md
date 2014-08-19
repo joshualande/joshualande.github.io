@@ -1,42 +1,34 @@
 ---
 layout: post
-title: "Indexing in SQL for the Rest of Us"
+title: "Indexing in SQL for the Rest of Us: A Guide To Making Your SQL Queries Logarithmically Fast"
 comments: true
 ---
 
-<!--
-* [Table Indicies](http://en.wikipedia.org/wiki/Database_index) are a concept in
-  database design where sorted indicies of a table can be cached to
-  improve performance of particular queries on a table.
--->
-
 In this post, I will discuss indexing in SQL. Indexing is a caching
-mechanism that is often necessary to obtain acceptable read performance
+mechanism that is often necessary to achieve fast read performance
 on a database.
 
 One of the biggest benefits of relational databases is that they
-separate layout of our data from the underlying implementation of
-how the data should be stored.
+separate the layout of our data from the implementation of
+how the data should be stored. Similarly, they abstract
+away from the SQL query infomration about how the query should be performed.
 
-Furthemore, they separate the logic of the questions (queries) you
-want to ask of the database from details about how the queries
-should be run.  Databases then use the the [Query
-optimizer](http://en.wikipedia.org/wiki/Query_optimization)/[Query
-execution plan](http://en.wikipedia.org/wiki/Query_plan) to find
-an efficient way to write the query.
-
-But this picture is a bit naieve because SQL often does not have
-enough information to find a fast way to run a query and often
-resorts to inefficient things like scaning the entire table.
-
-To improve the efficiency of querying data from a database, one can
-use indices which are separate sorted lists of rows in the table
-that can be used for more efficient query algorithms.
+But unfortunately, often times the SQL
+[Query optimizer](http://en.wikipedia.org/wiki/Query_optimization)
+is unable to naively find an efficient algoirthm to query the data
+because tables in SQL are inherently unsorted.
+So instead, SQL has to resort to simple and innefficently algorithms like
+scanning every row.
 
 ## Sorting a Table in SQL Using an Index
 
-An index in SQL is just a sorted list of all of our data in a table
-where the index specifies the column order in which to sort rows.
+For a particular query, one can often significantly improve the
+efficiency of the querying using an index.  An index is a sorted
+lists of rows in the table that can be used for more efficient
+querying.  Typically, an appropriate index can convert an algorithm
+to run in logarithmic time.  What is convenient is that the index
+is stored aside from the original table since it is only a computational
+aid.  In addition, you can add as many indicies as are needed.
 
 It is illustrative to consider querying from
 a simple table of `people`:
@@ -50,8 +42,6 @@ a simple table of `people`:
 |         4 | Sarah |     Smith |      f |  19910317 |
 |         5 |  Jane | Fredricks |      f |  19920731 |
 |         6 |  Alex |     Young |      f |  19920731 |
-
-PUT A NOTE ABOUT HOW DATES ARE STORED HERE.
 
 Suppose we wanted to compute, for example, all the people with a
 given last name.  The query is straightforward:
@@ -375,13 +365,17 @@ More stuff:
   is easy. Finding people whose names end with 'Ax'
   is hard.
 
-## Indexing the ORDER BY Clause
+## Index-Only Scan
+
+## Indexing for the ORDER BY Clause
+
+SQL databases
 
 Proper index for the `ORDER BY` clause is straightforward.
 
-## Indexing the GROUP BY Clause
+## Indexing for the GROUP BY Clause
 
-## Indexing the JOIN Clause
+## Indexing for the JOIN Clause
 
 
 
