@@ -84,7 +84,7 @@ The posts in this series are:
 * Beyond [MySQL](http://www.mysql.com/), there are several
   high-performance parallel databases designed to deal with large data sets.
   Two popular ones are [Terradata](http://www.teradata.com/) and
-  [Vertica](http://www.vertica.com/).
+  [HP Vertica](http://www.vertica.com/).
 * For very large data sets, [hadoop](http://hadoop.apache.org/),
   the [Hadoop Distributed File System (HDFS)](http://hadoop.apache.org/docs/r1.2.1/hdfs_design.html),
   and [MapReduce](https://hadoop.apache.org/docs/r1.2.1/mapred_tutorial.html) 
