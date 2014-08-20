@@ -71,5 +71,31 @@ The posts in this series are:
 -->
 
 
+## Further SQL Reading
+
+* SQL databases are designed to deal with `NULL` values
+  in a sensible way. [Here](http://dev.mysql.com/doc/refman/5.0/en/working-with-null.html)
+  is some documentation about the way MySQL handles `NULL` values.
+* Views in
+  SQL act as temporary tables able to simplify queries 
+  as well as abstract a user from the underlying table implementations. 
+  [Here](http://dev.mysql.com/doc/refman/5.0/en/create-view.html) 
+  is some documenation about how they are handled by MySQL.
+* Beyond [MySQL](http://www.mysql.com/), there are several
+  high-performance parallel databases designed to deal with large data sets.
+  Two popular ones are [Terradata](http://www.teradata.com/) and
+  [Vertica](http://www.vertica.com/).
+* For very large data sets, [hadoop](http://hadoop.apache.org/),
+  the [Hadoop Distributed File System (HDFS)](http://hadoop.apache.org/docs/r1.2.1/hdfs_design.html),
+  and [MapReduce](https://hadoop.apache.org/docs/r1.2.1/mapred_tutorial.html) 
+  are typically used to store and analyze these large data sets. 
+  [Apache Hive](http://hive.apache.org/) is an implementation of
+  SQL on top of MapReduce which brings the power of SQL to hadoop.
+  [Apache Pig](https://pig.apache.org/) and [Scalding](https://github.com/twitter/scalding)
+  are similar competitors.
+* Bill Howe's coursera class 
+  [Introduction to Data Science](https://www.coursera.org/course/datasci)
+  has a good discussion of SQL query optimizers in his lectures on
+  "[Relational Databases, Relational Algebra](https://class.coursera.org/datasci-001/lecture/preview)".
 
 {% include twitter_plug.html %}

@@ -33,7 +33,7 @@ lists of rows in the table that can be used for more efficient
 querying.  Typically, an appropriate index can convert an algorithm
 to run in logarithmic time.  What is convenient is that the index
 is stored aside from the original table since it is only a computational
-aid.  In addition, you can add as many indicies as are needed.
+aid.  In addition, you can add as many indices as are needed.
 
 It is illustrative to consider querying from
 a simple table of `people`:
@@ -62,18 +62,18 @@ have any good way to know where these rows are. So the database
 would have to look through every row in the table, doing what it
 calls a [full table
 scan](https://dev.mysql.com/doc/refman/5.5/en/glossary.html#glos_full_table_scan).
-This has a run-time efficiency of O(n) where n is the nubmer of rows.
-For large tables, this can be prohibativly expensive.
+This has a run-time efficiency of O(n) where n is the number of rows.
+For large tables, this can be prohibatively expensive.
 
 To improve the query efficiency, we could imagine pre-sort our table based on
 the last names and then [binary
 searching](http://en.wikipedia.org/wiki/Binary_search_algorithm) through
 the rows to find what we are looking for.  This would have a run-time
-efficinecy of O(log(n)) which would be significantly faster.
+efficiency of O(log(n)) which would be significantly faster.
 
 Some databases allow for sorting the underlying tables
 (see Clustered Index in Oracle SQL or
-Index-organized table in Microsoft SQL Server).  But in partice
+Index-organized table in Microsoft SQL Server).  But in particular,
 this is uncommon because a good sort order for one popular query
 might be bad for another.
 
@@ -82,7 +82,7 @@ and would only speed up one kind of query.
 Instead, typically SQL tables are left unsorted and an accompanying
 index stores a sorted list of all the rows in the table.
 This allows for the original table to be unmodified while allowing
-accompanying information to allow for faster quering.
+accompanying information to allow for faster querying.
 
 For our example above, we would need a list of rows sorted by last name,
 so we would index on last name.
@@ -94,7 +94,7 @@ CREATE INDEX index_name
 ON table_name (column_name)
 ```
 
-For our exmaple, the command would be
+For our example, the command would be
 
 ```sql
 CREATE INDEX people_first_indx
@@ -104,31 +104,53 @@ ON people (last)
 This creates an accompanying table
 sorted by first name:
 
-| person_id | First |
-| --------- | ----- |
-|         0 |  Alex |
-|         1 |  Alex |
-|         3 |  Alex |
-|         6 |  Alex |
-|         5 |  Jane |
-|         4 | Sarah |
-|         2 | Sarah |
+| row_id | First |
+|------- | ----- |
+|      0 |  Alex |
+|      1 |  Alex |
+|      3 |  Alex |
+|      6 |  Alex |
+|      5 |  Jane |
+|      4 | Sarah |
+|      2 | Sarah |
 
-Here, the index column refers to the row index in the original 
-table and the index also contains a copy of the column
-we are indexing on.
+Here, the row ID column refers to the location in the original table
+where the row exists.  Note that the index also contains all of the
+columns from the table that exist in the index to allow for quick
+searching. But finding other information from the original table
+would require searching in the original table by row_id.
 
 Given this index, we could binary search for people of a given first
 name, and then linearly step through the index to find all following
 rows matching the query.
 
+# Upsides and Downsides of Indexing
+
+Indices have several benefits.  For a common type of query, they
+can make the query run much faster.  In addition, because they are
+not part of the underlying table data, multiple indices can be
+created to facilitate different kinds of queries.  Indices are
+automatically updated whenever the table is updated so they don't
+require extra book keeping by the user.  And finally, they are
+stored separately from the original table, which allows for a logical
+separation of the actual data from particular information about how
+the data will be queried.
+
+On the other hand, indices have to be automatically updated whenever
+tables are modified. This overhead will degrade the performance of
+modifying the database.  In addition, they can take up a lot of
+space since they have to store a copy of much of the original table.
+So the best practice is to only use indices for queries which are
+slow and which you plan to run frequently.
+
+
 # Multi-column Indices in SQL
 
-Indexing for querieis with multiple conditions in the `WHERE` cluase
-requires a little more though.
+For queries with multiple conditions in the WHERE clause, SQL can
+be more efficient by indexing on multiple columns.
 
 For example, we might be interested in the ID of all people with a
-particular first name, last name, and gender.  We coould retrieve
+particular first name, last name, and gender.  We could retrieve
 this using a query like:
 
 ```sql
@@ -139,20 +161,19 @@ SELECT recipe_id
    AND gender='f'
 ```
 
-For this query, our index from above (on last name) would work.
-We could use it to quickly find all of the people named Alex.
-But this index isn't optimal because there is no inherent
-sorting to all of the rows in the index with first name Alex.
-So given teh index, we would have to step through all
-of the rows to find the required IDs. This could be very
-inefficinet if there were many rows with first name Alex.
+For this query, our index from above (on last name) would work.  
+But it is not  optimal because there is no inherent sorting to
+all of the rows in the index with a given first name.  So given the
+index, we would have to step through all of the rows to find the
+required IDs. This could be very inefficinet if there were many
+rows with first name Alex.
 
-To avoid this, SQL allows for indexing on multiple columns. When you index on
-multiple columns, it will sort by the first column, and then
-for similar values by any successive columns.
+To avoid this, SQL allows for indexing on multiple columns. When
+you index on multiple columns, it will sort by the first column,
+and then for similar values by successive columns.
 
-Therefore, we could create an index on all three columns used
-in the WHERE clause
+Therefore, we could create an index on all three columns used in
+the WHERE clause:
 
 ```sql
 CREATE INDEX people_first_last_gender_indx
@@ -160,7 +181,7 @@ ON people (first,last,gender)
 ```
 
 This will create a index which sorts first on first name,
-then on last name, and finally on gender.
+then on last name for equal first names, and finally on gender.
 
 |     index | first |      last | gender |
 | --------- | ----- | --------- | ------ |
@@ -175,22 +196,21 @@ then on last name, and finally on gender.
 Given this sorting, we can then directly do a binary search for
 rows with a given first name, last name, and gender.
 
-One important question that arises is in which order we should
-list columns in the index.
+One important question that arises is in which order we should list
+columns in the index.  The benefit of indexing on (first,last,gender)
+is that this index will also work for queries which filter
+only on first name or only on first and last name.
+But if on the other hand if we knew we were going to filter for
+rows only with a given last name:
 
-SQL can ignore any trailing columns.
+```sql
+SELECT recipe_id
+  FROM people
+ WHERE last='Young'
+```
 
-The benefit of indexing on (first,last,gender) is it will
-naturally sport queries which filter only first first name
-
-For our previous query (finding the male named Alex Williams), it
-is actually not optimal to index on first name because there are many more people
-with first name Alex. That means that the binary search itself will
-take longer to 
-
-than with last name Williams. 
-If we indexed instead on last name first, it would
-be much easier to find people with a given first and last name:
+Then it would be better to index on (last,first,gender)
+so that the index would be more versatile.
 
 | person_id | last      | first | gender |
 | --------- | --------- | ----- | ------ |
@@ -202,42 +222,44 @@ be much easier to find people with a given first and last name:
 |         6 |     Young |  Alex |      f |
 |         1 |     Young |  Alex |      m |
 
-This is very similar to how a phone book is sorted first by last
-name and then by first name.
-
-The general rule here is that we want to order our columns from the
-column with the most distinct values (called 
-the [cardinality](http://en.wikipedia.org/wiki/Cardinality_(SQL_statements))
-to the columns with the least distinct values.  This allows the
-database to narrow down the list of potential matches as fast as
-possible.
+Note that there is a common belief
+that it is better to index first on the most
+selective column first (with the highest cardinality).
+This is considered to be mostly a myth. 
+See [here](http://use-the-index-luke.com/sql/myth-directory/most-selective-first)
+for a more detailed explanation.
 
 # Index-Only Scan
 
-At each point in the search, we would have to look up in the acutal
-table to see the particular last name for a given row index.
+If columns in the SQL query reference columns that do not exist in
+the index, then SQL will have to look for data in the original table
+to find the required information. On the other hand, if all the columns
+are part of the filter, then SQL can perform the query without
+referencing the original table (with what is called an Index-Only
+Scan).
 
-Before we move on, we note that it is perfectly harmless to add
-additional rows to an index which are not used in a query.  Conversely,
-a query will can only use an index if the first columns in the index
-are constrained in the query. For example, you can not index on
-(first,last) and then use that index to search for people of a given
-last name.
+For the example query from above:
 
-# Benefits and Limitations of Indexing
+```sql
+SELECT recipe_id
+  FROM people
+ WHERE first='Alex'
+   AND last='Young'
+   AND gender='f'
+```
 
-Indices have several benefits.  First, they don't store any of the
-underlying underlying data so they are fairly memory-efficient.
-Second, you can have multiple indicies on a table to improve different
-kinds of querieies.  Third, they are automatically updated whenever
-the table is updated so they don't require any additional bookkeeping.
-And finally, they are stored separately from the original table,
-which allows for a logical separation of the actual data from
-particular information about how the data will be queriied.
+The best index would also include the recipe_id column:
 
-On the other hand, indicies have to be automatically updated whenever
-tables are modified. This overhead will degrate the performance of
-modifying the database.  So indicies should only be added as necesary.
+```sql
+CREATE INDEX people_first_last_gender_recipe_id_indx
+ON people (first,last,gender,recipe_id)
+```
+
+On the other hand, adding additional columns
+to the index increases the memory required
+to store it and also the difficulty of keeping it
+up to date. So unless performance is critical, it is
+often not necessary to index on too many columns.
 
 
 # Primary Key Indices
@@ -423,67 +445,22 @@ Here are the major takeaways about indexing in SQL:
 
 1. An index is a sorted list of columns in a database.
 2. Indexing in SQL improves query efficiency at the expense
-   of table alteration efficiency.
-4. A query can use all the columns in an index until a column
-   in the index which is not part of the query.
+   of increased storage space and difficult in table modification.
+4. Indexing on all of the columns used in the `WHERE` clause
+   allow for binary searching for the required rows.
 5. When indexing on an inequality, it is most efficient to 
-   put the inequlaity expression as the last column in the index.
-6. When possible, avoid querying on functions of parameters 
-   becuase they break indexing. When necessary,
-   some databases allow function-based indexing
+   put the inequality column as the last column in the index.
+6. When indexing for a `GROUP BY` query, make the column
+   being aggregated come in the index after the columns in the
+   `WHERE` clause.
+7. When indexing for a `JOIN` query, make the column
+   being joined come in the index after the columns in the `WHERE`
+   clause.
+8. When possible, avoid querying on the functions of parameter
+   because this will break indexing.
 
 # Further resources
 
 * http://use-the-index-luke.com/
-
-<--
-
-## Query Optimization
-
-Now that we have seen several examples of the `SELECT` statement,
-I will mention one final benefit of using relational databases
-compared to programming languages.  As we saw above, a SQL query
-is a logical description of what should be done to the data, not
-a description of how or in what order to perform the operations 
-needed to get the desired data.  
-
-Because of this, SQL databases have [query
-optimizers](http://en.wikipedia.org/wiki/Query_optimization) which
-will logically inspect the query, think of different ways that the
-query could be executed, and guess at the most efficient way to
-perform the calculation. This is especially powerful because it is
-often not clear to a user the fastest way to perform a calculation.
-Furthermore, the SQL implementation has the benefit that best method
-could change over time as the size of the database evolves.
-
-## Further SQL Reading
-
-* SQL databases go through great lenghts to deal with `NULL` values
-  in a sensible way. [Here](http://dev.mysql.com/doc/refman/5.0/en/working-with-null.html)
-  is some documentation in the way MySQL handles `NULL` values.
-* [Views](http://dev.mysql.com/doc/refman/5.0/en/create-view.html) in
-  SQL act as temporary tables, able to both simplify queries in MySQL
-  as well as abstract the end user from the underlying implementation
-  of a database.
-* Beyond [MySQL](http://www.mysql.com/), there are some really great
-  high-performance parallel databases like
-  [Terradata](http://www.teradata.com/) and
-  [Vertica](http://www.vertica.com/). They allow for large data
-  sets then can traditionally be stored in MySQL.
-* For data sets of a large enough size, [hadoop](http://hadoop.apache.org/),
-  the [Hadoop Distributed File System (HDFS)](http://hadoop.apache.org/docs/r1.2.1/hdfs_design.html),
-  and [MapReduce](https://hadoop.apache.org/docs/r1.2.1/mapred_tutorial.html) 
-  are typically used to store and analyze the data. 
-  [Apache Hive](http://hive.apache.org/) is an implementation of
-  SQL on top of MapReduce capable of analyzing these exceptionally-large
-  data sets. [Apache Pig](https://pig.apache.org/) is a similar SQL-like
-  langauge which runs on top of MapReduce.
-* If you are interested in learning more about the implementaion of query
-  optimizers inf SQL, Bill Howe's coursera class 
-  [Introduction to Data Science](https://www.coursera.org/course/datasci)
-  has a great discussion of database implmeenations in his lectures on
-  "[Relational Databases, Relational Algebra](https://class.coursera.org/datasci-001/lecture/preview)".
--->
-
 
 {% include twitter_plug.html %}
