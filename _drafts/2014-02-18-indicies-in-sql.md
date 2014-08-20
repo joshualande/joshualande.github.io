@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Indexing in SQL for the Rest of Us: A Guide To Making Your SQL Queries Logarithmically Fast"
+title: "Make Your SQL Queries Logarithmically Faster with Indexing"
 comments: true
 ---
 
@@ -49,12 +49,12 @@ a simple table of `people`:
 |         6 |  Alex |     Young |      f |  19920731 |
 
 Suppose we wanted to compute, for example, all the IDs for people
-with a given last name.  The SQL query is straightforward:
+with a given first name.  The SQL query is straightforward:
 
 ```sql
 SELECT person_id
   FROM people
- WHERE last = 'Young'
+ WHERE first = 'Alex'
 ```
 
 Unfortunately, SQL tables are inherently unsorted, so SQL does not
@@ -97,29 +97,30 @@ ON table_name (column_name)
 For our exmaple, the command would be
 
 ```sql
-CREATE INDEX people_last_name_indx
+CREATE INDEX people_first_indx
 ON people (last)
 ```
 
 This creates an accompanying table
-sorted by last name:
+sorted by first name:
 
-|          index |      last |
-| -------------- | --------- |
-|              5 | Fredricks |
-|              0 | Garfunkle |
-|              2 |     Riley |
-|              4 |     Smith |
-|              3 |  Williams |
-|              1 |     Young |
-|              6 |     Young |
+| person_id | First |
+| --------- | ----- |
+|         0 |  Alex |
+|         1 |  Alex |
+|         3 |  Alex |
+|         6 |  Alex |
+|         5 |  Jane |
+|         4 | Sarah |
+|         2 | Sarah |
 
 Here, the index column refers to the row index in the original 
 table and the index also contains a copy of the column
 we are indexing on.
 
-Given this index, we could binary search for people of a given last
-name, vastly improving our query efficiency.
+Given this index, we could binary search for people of a given first
+name, and then linearly step through the index to find all following
+rows matching the query.
 
 # Multi-column Indices in SQL
 
@@ -138,25 +139,24 @@ SELECT recipe_id
    AND gender='f'
 ```
 
-For this query, our index from above (on last name) is non-optimal.
-We can use the index to quickly find all the people named 
+For this query, our index from above (on last name) would work.
+We could use it to quickly find all of the people named Alex.
+But this index isn't optimal because there is no inherent
+sorting to all of the rows in the index with first name Alex.
+So given teh index, we would have to step through all
+of the rows to find the required IDs. This could be very
+inefficinet if there were many rows with first name Alex.
 
-SQL allows for indexing on multiple columns. When you index on
-multiple columns, it first sort the rows by the first column in the
-index. In situations where there are identical values, it will then
-sort by the second column, etc.
+To avoid this, SQL allows for indexing on multiple columns. When you index on
+multiple columns, it will sort by the first column, and then
+for similar values by any successive columns.
 
-first column and then for rows with the same value by it will sort
-by the second column, etc.
-
-In order to efficiently run this query, we can build an index which
-sorts on (first, last, gender). What this means is we first sort
-on the last name.  Whenver the last name is the same, we then sort
-on first name. Whenever both are the same, we finally sort on gender.
+Therefore, we could create an index on all three columns used
+in the WHERE clause
 
 ```sql
-CREATE INDEX amount_name
-ON recipe_ingredients (first,last,gender)
+CREATE INDEX people_first_last_gender_indx
+ON people (first,last,gender)
 ```
 
 This will create a index which sorts first on first name,
@@ -172,20 +172,25 @@ then on last name, and finally on gender.
 |         2 | Sarah |     Riley |      f |
 |         4 | Sarah |     Smith |      f |
 
-As was discussed above, indicies only contain the row number and
-not any data from the table rows. But I include the data in
-this table paranthetically for clarity.
+Given this sorting, we can then directly do a binary search for
+rows with a given first name, last name, and gender.
 
-This leads to a natural question. When we define our index, in what
-order should we list the columns in the index. 
+One important question that arises is in which order we should
+list columns in the index.
 
-For our previous query (finding the male named Alex Williams), 
-it is somewhat painful to index 
-first on first name because there are a lot more people
-with first name alex than last name Williams.
+SQL can ignore any trailing columns.
 
-Since there is much more variety in last names,
-a more efficent index would be (last,first,gender):
+The benefit of indexing on (first,last,gender) is it will
+naturally sport queries which filter only first first name
+
+For our previous query (finding the male named Alex Williams), it
+is actually not optimal to index on first name because there are many more people
+with first name Alex. That means that the binary search itself will
+take longer to 
+
+than with last name Williams. 
+If we indexed instead on last name first, it would
+be much easier to find people with a given first and last name:
 
 | person_id | last      | first | gender |
 | --------- | --------- | ----- | ------ |
@@ -197,19 +202,20 @@ a more efficent index would be (last,first,gender):
 |         6 |     Young |  Alex |      f |
 |         1 |     Young |  Alex |      m |
 
-That way, finding all people will last name Williams immediately
-shrinks the list to only one person!
+This is very similar to how a phone book is sorted first by last
+name and then by first name.
 
 The general rule here is that we want to order our columns from the
-column with the most distinct values to the column with the fewest
-distinct values.  This allows the databae to narrow down the list
-of potential matches as fast as possible.
+column with the most distinct values (called 
+the [cardinality](http://en.wikipedia.org/wiki/Cardinality_(SQL_statements))
+to the columns with the least distinct values.  This allows the
+database to narrow down the list of potential matches as fast as
+possible.
 
-In SQL, we refer to the amount of distint values as the
-[cardinality](http://en.wikipedia.org/wiki/Cardinality_(SQL_statements)) of
-a table. Because last names has higher cardinality than first names,
-and first names has higher cardinality than gender, the most efficient
-index is (last,first,gender).
+# Index-Only Scan
+
+At each point in the search, we would have to look up in the acutal
+table to see the particular last name for a given row index.
 
 Before we move on, we note that it is perfectly harmless to add
 additional rows to an index which are not used in a query.  Conversely,
@@ -217,12 +223,6 @@ a query will can only use an index if the first columns in the index
 are constrained in the query. For example, you can not index on
 (first,last) and then use that index to search for people of a given
 last name.
-
-# Index-Only Scan
-
-At each point in the search, we would have to look up in the
-acutal table to see the particular last name for a given row index.
-
 
 # Benefits and Limitations of Indexing
 
@@ -424,9 +424,6 @@ Here are the major takeaways about indexing in SQL:
 1. An index is a sorted list of columns in a database.
 2. Indexing in SQL improves query efficiency at the expense
    of table alteration efficiency.
-3. When querying on multiple columns, it is most efficient to
-   make an index on all of them, sorting the columns
-   from highest to lowest cardinality.
 4. A query can use all the columns in an index until a column
    in the index which is not part of the query.
 5. When indexing on an inequality, it is most efficient to 
