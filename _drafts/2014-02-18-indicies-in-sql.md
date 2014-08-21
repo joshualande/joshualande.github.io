@@ -11,29 +11,28 @@ went over the basics of querying in SQL.*
 
 In this post, I will discuss indexing in SQL. Indexing is a caching
 mechanism in databases that is often necessary to achieve fast read
-performance on a database.
+performance.
 
 # Sorting a Table in SQL Using an Index
 
 One of the biggest benefits of relational databases is that they
-separate the layout of our data from the implementation of
-how the data should be stored. Similarly, they abstract
-away from the SQL query infomration about how the query should be performed.
+separate the design of the table from 
+internal implementation of how the data is stored. 
+In addition, SQL abstracts the logical query from implementation
+details about how it is performed.
 
 But unfortunately, often times the SQL
 [Query optimizer](http://en.wikipedia.org/wiki/Query_optimization)
-is unable to naively find an efficient algoirthm to query the data
-because tables in SQL are inherently unsorted.
-So instead, SQL has to resort to simple and innefficently algorithms like
-scanning every row.
+is unable to naively find an efficient algorithm to query a table
+because tables in SQL are inherently unsorted.  So instead, SQL has
+to resort to simple and inefficient algorithms like scanning every
+row.
 
-For a particular query, one can often significantly improve the
-efficiency of the querying using an index.  An index is a sorted
-lists of rows in the table that can be used for more efficient
-querying.  Typically, an appropriate index can convert an algorithm
-to run in logarithmic time.  What is convenient is that the index
-is stored aside from the original table since it is only a computational
-aid.  In addition, you can add as many indices as are needed.
+One can often significantly improve the efficiency of a particular
+query using an index.  An index is a sorted lists of rows in the
+table that can be used for more efficient binary searching. Often, an
+optimal index can allow the database to perform a query in
+logarithmic time.
 
 It is illustrative to consider querying from
 a simple table of `people`:
@@ -57,52 +56,31 @@ SELECT person_id
  WHERE first = 'Alex'
 ```
 
-Unfortunately, SQL tables are inherently unsorted, so SQL does not
-have any good way to know where these rows are. So the database
-would have to look through every row in the table, doing what it
-calls a [full table
+Unfortunately, SQL tables are inherently unsorted so SQL does not
+have any good way to know where these rows would be.  The database
+has to resort to looking through every row in the table, doing what
+it calls a [full table
 scan](https://dev.mysql.com/doc/refman/5.5/en/glossary.html#glos_full_table_scan).
-This has a run-time efficiency of O(n) where n is the number of rows.
-For large tables, this can be prohibatively expensive.
+This has a run-time efficiency of O(n) where n is the number of rows in the table.
+For large tables, this can be prohibitively expensive.
 
-To improve the query efficiency, we could imagine pre-sort our table based on
-the last names and then [binary
+To improve the query efficiency, we could imagine pre-sorting our
+table based on the first names and then [binary
 searching](http://en.wikipedia.org/wiki/Binary_search_algorithm) through
 the rows to find what we are looking for.  This would have a run-time
-efficiency of O(log(n)) which would be significantly faster.
+efficiency of O(log(n)) and would be significantly faster.
 
-Some databases allow for sorting the underlying tables
-(see Clustered Index in Oracle SQL or
-Index-organized table in Microsoft SQL Server).  But in particular,
-this is uncommon because a good sort order for one popular query
-might be bad for another.
-
-For the most part, sorting data in SQL is costly and impractical
-and would only speed up one kind of query.
-Instead, typically SQL tables are left unsorted and an accompanying
-index stores a sorted list of all the rows in the table.
-This allows for the original table to be unmodified while allowing
-accompanying information to allow for faster querying.
-
-For our example above, we would need a list of rows sorted by last name,
-so we would index on last name.
-
-The syntax to create an index is:
-
-```sql
-CREATE INDEX index_name
-ON table_name (column_name)
-```
-
-For our example, the command would be
+Instead of sorting the table, typically we create an index which
+create an accompanying sorted list of rows in the table.  For our
+example above, we would need to create an index on first name.  For
+our example, the syntax is
 
 ```sql
 CREATE INDEX people_first_indx
 ON people (last)
 ```
 
-This creates an accompanying table
-sorted by first name:
+This creates an accompanying index sorted by first name:
 
 | row_id | First |
 |------- | ----- |
@@ -115,43 +93,43 @@ sorted by first name:
 |      2 | Sarah |
 
 Here, the row ID column refers to the location in the original table
-where the row exists.  Note that the index also contains all of the
-columns from the table that exist in the index to allow for quick
-searching. But finding other information from the original table
-would require searching in the original table by row_id.
+where the row exists.  Note that the index also contains the column
+that is being indexed on to allow for fast searching.
 
 Given this index, we could binary search for people of a given first
-name, and then linearly step through the index to find all following
-rows matching the query.
+name. Given the matching rows, we could look up accompanying
+information in the original table.
+
+Before we move on, I will mention that some databases allow for
+sorting the underlying tables.  This is called a Clustered Index
+in Oracle SQL or Index-organized Tables in Microsoft SQL Server.
+But these are uncommon because a good sort order for one popular
+query might be bad for another. Instead, people typically use
+accompanying indices and leave the original table unsorted.
 
 # Upsides and Downsides of Indexing
 
-Indices have several benefits.  For a common type of query, they
-can make the query run much faster.  In addition, because they are
-not part of the underlying table data, multiple indices can be
-created to facilitate different kinds of queries.  Indices are
-automatically updated whenever the table is updated so they don't
-require extra book keeping by the user.  And finally, they are
-stored separately from the original table, which allows for a logical
-separation of the actual data from particular information about how
-the data will be queried.
+Indices have several benefits.  An index can make a particular query
+much faster.  Because indices are not part of the underlying table
+data, multiple indices can be created to facilitate different kinds
+of queries. Finally, indices are automatically updated whenever the
+table is updated so they don't require additional work to maintain.
 
 On the other hand, indices have to be automatically updated whenever
-tables are modified. This overhead will degrade the performance of
-modifying the database.  In addition, they can take up a lot of
-space since they have to store a copy of much of the original table.
-So the best practice is to only use indices for queries which are
-slow and which you plan to run frequently.
-
+tables are modified. This overhead harms the performance of commands
+that alter the table.  In addition, they take up additional space
+since they have to store a copy of much of the original table.  So
+the best practice is to only use indices for queries where better
+read performance is needed.
 
 # Multi-column Indices in SQL
 
-For queries with multiple conditions in the WHERE clause, SQL can
-be more efficient by indexing on multiple columns.
+
+SQL can index on multiple columns. This can be used to make queries
+with multiple columns in the WHERE clause more efficient.
 
 For example, we might be interested in the ID of all people with a
-particular first name, last name, and gender.  We could retrieve
-this using a query like:
+particular first name, last name, and gender:
 
 ```sql
 SELECT recipe_id
@@ -161,27 +139,20 @@ SELECT recipe_id
    AND gender='f'
 ```
 
-For this query, our index from above (on last name) would work.  
-But it is not  optimal because there is no inherent sorting to
-all of the rows in the index with a given first name.  So given the
-index, we would have to step through all of the rows to find the
-required IDs. This could be very inefficinet if there were many
-rows with first name Alex.
+For this query, our index from above (on first name) is not optimal
+because the rows for all users with first name 'Alex' are unsorted.
 
-To avoid this, SQL allows for indexing on multiple columns. When
-you index on multiple columns, it will sort by the first column,
-and then for similar values by successive columns.
-
-Therefore, we could create an index on all three columns used in
-the WHERE clause:
+SQL allows for indexing on multiple columns, which will sort
+by successive columns for rows that have identical values of preceding
+columns. For our example, we could index on first name, then last name,
+and then gender:
 
 ```sql
 CREATE INDEX people_first_last_gender_indx
 ON people (first,last,gender)
 ```
 
-This will create a index which sorts first on first name,
-then on last name for equal first names, and finally on gender.
+This will create the index:
 
 |     index | first |      last | gender |
 | --------- | ----- | --------- | ------ |
@@ -193,15 +164,14 @@ then on last name for equal first names, and finally on gender.
 |         2 | Sarah |     Riley |      f |
 |         4 | Sarah |     Smith |      f |
 
-Given this sorting, we can then directly do a binary search for
-rows with a given first name, last name, and gender.
+Given this sorting, we can then directly binary search for
+the rows required by the query.
 
-One important question that arises is in which order we should list
-columns in the index.  The benefit of indexing on (first,last,gender)
-is that this index will also work for queries which filter
-only on first name or only on first and last name.
-But if on the other hand if we knew we were going to filter for
-rows only with a given last name:
+One important question is in which order to list columns in an
+index.  The best index order typically depends on what other queries
+we expect to run.  The index on (first,last,gender) works well for
+queries which filter only on the first name.  On the other hand,
+if we planned to filter only for users with a given last name:
 
 ```sql
 SELECT recipe_id
@@ -210,7 +180,6 @@ SELECT recipe_id
 ```
 
 Then it would be better to index on (last,first,gender)
-so that the index would be more versatile.
 
 | person_id | last      | first | gender |
 | --------- | --------- | ----- | ------ |
@@ -222,12 +191,11 @@ so that the index would be more versatile.
 |         6 |     Young |  Alex |      f |
 |         1 |     Young |  Alex |      m |
 
-Note that there is a common belief
-that it is better to index first on the most
-selective column first (with the highest cardinality).
-This is considered to be mostly a myth. 
-See [here](http://use-the-index-luke.com/sql/myth-directory/most-selective-first)
-for a more detailed explanation.
+Note that there is a common belief that it is better to index first
+on the most selective column (with the highest cardinality).
+This is considered to be mostly a myth.  See
+[here](http://use-the-index-luke.com/sql/myth-directory/most-selective-first)
+for a detailed explanation.
 
 # Index-Only Scan
 
@@ -266,20 +234,19 @@ often not necessary to index on too many columns.
 
 In SQL, [primary
 keys](http://dev.mysql.com/doc/refman/5.5/en/optimizing-primary-keys.html)
-also perform as indicies on a table. This makes sense when you
-realize that a primary key constrains duplicate rows from being
-inserted into a row, which requires quickly looking for duplicate
-rows. Although the columns in a primary key are dictated by teh
-logical correctness of a table, it is good to think about the best
-order to place the columns based on the queries which you plan to
-run and the cardianity of the columns.
+also act as indices on a table.  The reason for this is that SQL
+needs an efficent way to tell if a new row is a duplicate. Keeping
+an index allows for this test very efficiently.
+
+The primary key should be picked based on the logical correctness
+of a table. But it is good to order columns in the index based on
+the queries which are most common.
 
 # Indexing on Inequalities
 
-Indexing on inequalities requires a somewhat different logic than
-equality indexing.  For example, supposed we wanted to find all
-people with first name Alex born after 1967.  We would run the
-query:
+Indexing on inequalities is somewhat different.  For example,
+supposed we wanted to find all people with first name Alex born
+after 1967. The query is:
 
 ```sql
 SELECT *
@@ -288,9 +255,8 @@ SELECT *
    AND birthdate > 19670000
 ```
 
-Given the rules about cardinality from above and the fact that
-birthdate has the highest cardinality, we might expect the optimal
-index for this query to be (first, birthdate).
+If our index was on (first, birthdate), we would create
+the index:
 
 | index |    birthdate |    First |
 | ----- | ------------ | -------- |
@@ -302,12 +268,11 @@ index for this query to be (first, birthdate).
 |     5 |     19920731 |     Jane |
 | **0** | **19930527** | **Alex** |
 
-As you can see from this example, this is not especially helpful.
-We can easily find all of the people who were born after 1967, but
-people with first name Alex are spread throughout the table.
+The rows which would be selected are in bold.  This index is not
+particularly efficient because the requires rows are not together in
+the table.
 
-Instead, it would be more efficient to index first on Alex, and
-second on birthdate.
+Instead, it would be more efficient to index on (first,birthdate):
 
 | index |    First |    birthdate |
 | ----- | -------- | ------------ |
@@ -319,11 +284,10 @@ second on birthdate.
 |     2 |    Sarah |     19890314 |
 |     4 |    Sarah |     19910317 |
 
-Given this index, we could easily select all people named Alex and
-then for those people their birthdates are all contiguous so we
-could easily scan through to find all the people born after 1967.
+Given this index, we could easily select all people named Alex and,
+for those people, quickly scan for people in the desired age range.
 
-The general rule here is that when you are indexing for an inequality,
+The general rule is that when you are indexing for an inequality,
 it is better to but the inequality column at the end of the index.
 
 
