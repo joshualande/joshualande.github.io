@@ -47,6 +47,11 @@ a simple table of `people`:
 |         5 |  Jane | Fredricks |      f |  19920731 |
 |         6 |  Alex |     Young |      f |  19920731 |
 
+Note that birthdate is store as intergers in YYYMMDD which makes
+them easy to compare and sort. One could alternately use a
+[DATE](http://dev.mysql.com/doc/refman/5.1/en/datetime.html) type
+to represent the date.
+
 Suppose we wanted to compute, for example, all the IDs for people
 with a given first name.  The SQL query is straightforward:
 
@@ -82,15 +87,15 @@ ON people (last)
 
 This creates an accompanying index sorted by first name:
 
-| row_id | First |
-|------- | ----- |
-|      0 |  Alex |
-|      1 |  Alex |
-|      3 |  Alex |
-|      6 |  Alex |
-|      5 |  Jane |
-|      4 | Sarah |
-|      2 | Sarah |
+| row_id |    First |
+|------- | -------- |
+|  **0** | **Alex** |
+|  **1** | **Alex** |
+|  **3** | **Alex** |
+|  **6** | **Alex** |
+|      5 |     Jane |
+|      4 |    Sarah |
+|      2 |    Sarah |
 
 Here, the row ID column refers to the location in the original table
 where the row exists.  Note that the index also contains the column
@@ -129,14 +134,13 @@ SQL can index on multiple columns. This can be used to make queries
 with multiple columns in the WHERE clause more efficient.
 
 For example, we might be interested in the ID of all people with a
-particular first name, last name, and gender:
+particular first name and last name:
 
 ```sql
 SELECT recipe_id
   FROM people
  WHERE first='Alex'
    AND last='Young'
-   AND gender='f'
 ```
 
 For this query, our index from above (on first name) is not optimal
@@ -144,32 +148,31 @@ because the rows for all users with first name 'Alex' are unsorted.
 
 SQL allows for indexing on multiple columns, which will sort
 by successive columns for rows that have identical values of preceding
-columns. For our example, we could index on first name, then last name,
-and then gender:
+columns. For our example, we could index on first name, then last name:
 
 ```sql
-CREATE INDEX people_first_last_gender_indx
-ON people (first,last,gender)
+CREATE INDEX people_first_last_indx
+ON people (first,last)
 ```
 
 This will create the index:
 
-|     index | first |      last | gender |
-| --------- | ----- | --------- | ------ |
-|         0 |  Alex | Garfunkle |      m |
-|         3 |  Alex |  Williams |      m |
-|         6 |  Alex |     Young |      f |
-|         1 |  Alex |     Young |      m |
-|         5 |  Jane | Fredricks |      f |
-|         2 | Sarah |     Riley |      f |
-|         4 | Sarah |     Smith |      f |
+|     index |    first |      last |
+| --------- | -------- | --------- |
+|         0 |     Alex | Garfunkle |
+|         3 |     Alex |  Williams |
+|         6 | **Alex** | **Young** |
+|         1 | **Alex** | **Young** |
+|         5 |     Jane | Fredricks |
+|         2 |    Sarah |     Riley |
+|         4 |    Sarah |     Smith |
 
 Given this sorting, we can then directly binary search for
 the rows required by the query.
 
 One important question is in which order to list columns in an
 index.  The best index order typically depends on what other queries
-we expect to run.  The index on (first,last,gender) works well for
+we expect to run.  The index on (first,last) works well for
 queries which filter only on the first name.  On the other hand,
 if we planned to filter only for users with a given last name:
 
@@ -179,17 +182,17 @@ SELECT recipe_id
  WHERE last='Young'
 ```
 
-Then it would be better to index on (last,first,gender)
+Then it would be better to index on (last,first)
 
-| person_id | last      | first | gender |
-| --------- | --------- | ----- | ------ |
-|         5 | Fredricks |  Jane |      f |
-|         0 | Garfunkle |  Alex |      m |
-|         2 |     Riley | Sarah |      f |
-|         4 |     Smith | Sarah |      f |
-|         3 |  Williams |  Alex |      m |
-|         6 |     Young |  Alex |      f |
-|         1 |     Young |  Alex |      m |
+| person_id | last      |    first |
+| --------- | --------- | -------- |
+|         5 | Fredricks |     Jane |
+|         0 | Garfunkle |     Alex |
+|         2 |     Riley |    Sarah |
+|         4 |     Smith |    Sarah |
+|         3 |  Williams |     Alex |
+|         6 | **Young** | **Alex** |
+|         1 | **Young** | **Alex** |
 
 Note that there is a common belief that it is better to index first
 on the most selective column (with the highest cardinality).
@@ -213,14 +216,13 @@ SELECT recipe_id
   FROM people
  WHERE first='Alex'
    AND last='Young'
-   AND gender='f'
 ```
 
 The best index would also include the recipe_id column:
 
 ```sql
-CREATE INDEX people_first_last_gender_recipe_id_indx
-ON people (first,last,gender,recipe_id)
+CREATE INDEX people_first_last_recipe_id_indx
+ON people (first,last,recipe_id)
 ```
 
 On the other hand, adding additional columns
@@ -293,115 +295,130 @@ it is better to but the inequality column at the end of the index.
 
 # Function-based Indexing
 
-Indexing when the were clause contains function of parameters can complicated.
-To SQL, it has no general way to know how the sorting of a function of a column
-relates to the sorting of the underlying column, and therefore
-the function of a column will naturally break the sorting.
-
+Indices can't be used when functions are applied to column.
 As a concrete example, we could imagine trying to find all people who are at least
-21 years old. This is easy to do by adding 21 years to the birthday and seeing if
-that is after today. In MySQL, the command would be:
-
-```
-SELECT *
-FROM people
-WHERE date(birthdate) + interval 21 YEAR < DATE()
-```
-
-Assuming we had an index which began with birthdate, you might
-expect this query to be bast. But because it computes a function of
-the column, SQL cannot use the index.
-
-The easiset way to solve this problem would be to shuffle
-the logic to the other side of the equation:
-
-
-```
-SELECT *
-FROM people
-WHERE birthdate < CAST(DATE() - interval 21 YEAR AS UNSIGNED INTEGER)
-```
-
-Although logically the same, this query can be much more efficient
-becaues the right hand side is only computed once and the index on
-birthday can properly be used.
-
-
-As a similar challenege, imagine if we wanted to find all people
-born in 1981. We could do so by running a query like:
+21 years old. A natural query to do this might be:
 
 ```sql
 SELECT *
-FROM people
-WHERE FLOOR(birthdate/10000) = 1981
+  FROM people
+ WHERE date(birthdate) + interval 21 YEAR < DATE()
 ```
 
-A few solutions in SQL:
+In addition, we would need to create an index on birthdate:
 
-* If possible, we could rebuild our table to have year as its own
-column and then index on that column.
-* We could require the query as an inequality match:
+```sql
+CREATE INDEX birthdate_indx
+ON people (birthdate)
+```
 
-  ```sql
-  SELECT *
+Unfortunately, SQL has no general way to guarantee
+that the sorting of the index is the same as the sorting of the
+fucntion of the index. So to be conservative, it will
+not use the index when running the query.
+
+The easiset way to solve this is to not apply a function
+to the index. Instead, we could run the query:
+
+```
+SELECT *
   FROM people
-  WHERE birthdate > 19810000 AND birthdate < 19820000
-  ```
-* In some databases, you can actually index on functions of
-  columns. For exmple, in PostgreSQL, the syntax would 
-  look like:
+ WHERE birthdate < CAST(DATE() - interval 21 YEAR AS UNSIGNED INTEGER)
+```
 
-  ```sql
-  CREATE INDEX birthyear_people
-  ON people FLOOR(birthdate/10000)
-  ```
+Another similar challenge might be to find all people who were born
+in 1981. We might think to try:
 
-  Function-based indexing is supported by Oracle, PostgreSQL,
-  and SQL Server, but not by MySQL. 
+```sql
+SELECT *
+  FROM people
+ WHERE FLOOR(birthdate/10000) = 1981
+```
 
-More stuff:
+But this will break the index, so it would be better
+instead to query with:
 
-* Non-deterministic Functions -> Can't index on the age of somebody...
-* Queries With Pattern Matching
-  
-  ...
-  Find people whose first name starts with the 'Al'
-  is easy. Finding people whose names end with 'Ax'
-  is hard.
+```sql
+SELECT *
+  FROM people
+ WHERE birthdate > 19810000 AND birthdate < 19820000
+```
+
+In some databases including Oracle SQL, 
+and Microsoft SQL Server (but not MySQL), you
+can create indices on functions of parameters. 
+For the last example, we could have done:
+
+```sql
+CREATE INDEX birthyear_people
+ON people FLOOR(birthdate/10000)
+```
+
+One last point is that wildcard searches can unexpectedly break
+indices.  Given an index on first name, SQL can use the index to
+run a query to find all peoples whose name begins with the letter
+A easily:
+
+```sql
+SELECT *
+  FROM people
+ WHERE first LIKE 'A%'
+```
+
+But it can't run a query to find all people whose name ends in 'x':
+
+```sql
+SELECT *
+  FROM people
+ WHERE first LIKE '%x'
+```
+
+The reason is because the first names ending in 'x' are not stored
+consecutivly when we sort by first name.
 
 # Indexing for the ORDER BY Clause
 
-SQL databases
+Suppose that we wanted to find all people with a given first name,
+but sorted by birthdate:
 
-Proper index for the `ORDER BY` clause is straightforward.
+```sql
+  SELECT first, birthdate
+    FROM people
+   WHERE first = 'Alex'
+ORDER BY birthdate
+```
+
+Here, the natural index would be on (first, birthdate).  That way,
+all of the users with a given first name are continous in the index
+and all of those rows are already sorted by birthdate. This saves
+the database from having to explicitly perform the sort.
 
 # Indexing for the GROUP BY Clause
 
+SQl databases typically have two separate algorithms for performing
+the `GROUP BY` operator, using either a sorting or a hashing
+algorithm.  Often, we can use an index to make the sort algorithm
+run efficiently.
+
+For example, if we wanted to count all of the people with a given
+first name:
+
+```sql
+  SELECT first, COUNT(*)
+    FROM people
+GROUP BY first
+```
+
+Then we could index on first name. This index would line up all the
+rows with a given first name and the aggregation algorithm could
+easily step through them, applying the aggregation to each group,
+one at a time.
+
 # Indexing for the JOIN Clause
 
+hash join: http://en.wikipedia.org/wiki/Hash_join
+loop join: http://en.wikipedia.org/wiki/Nested_loop_join
 
-
-# Database Implementation of Indicies in SQL
-
-Despite giving all the right intuition,
-the simple picture of an index being a sorted array is a bit
-idealized. It gives all the right intiution for
-building the best index for a given query. 
-
-But it is illustrative to undertsand how actually work.
-The operations requried of a binary tree are
-
-1. Being able to binary search for the desired value
-2. Being able to linearly search (for finding other keys of the same value)
-3. Fast insertion/deletion of rows when the table is modified.
-
-Storing the data in a static array would accomplish 1 and 2.
-A linked list would allow 2 and 3. And a balanced binary search
-tree would acomplish 1 and 3.
-
-To get all three benefits, SQL has to resport to a more complicated
-data structure called a balanced B-tree where each of the 
-notes is 
 
 # Indexing in SQL Cheat Sheet
 
@@ -425,6 +442,9 @@ Here are the major takeaways about indexing in SQL:
 
 # Further resources
 
-* http://use-the-index-luke.com/
+A great resource for indexing in SQL is
+[Use The Index, Luke!](http://use-the-index-luke.com).
+This reference goes into much detail about advanced indexing and
+also discusses the underlying database implementation of indicies.
 
 {% include twitter_plug.html %}
