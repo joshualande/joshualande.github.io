@@ -47,30 +47,6 @@ a simple table of `people`:
 |         5 |  Jane | Fredricks |      f |  19920731 |
 |         6 |  Alex |     Young |      f |  19920731 |
 
-You can create this table in MySQL with the command
-
-```sql
-CREATE TABLE people (
-   person_id LONG NOT NULL,
-   first VARCHAR(30) NOT NULL,
-   last VARCHAR(30) NOT NULL,
-   gender BOOLEAN NOT NULL,
-   birthdate INT NOT NULL
-);
-
-INSERT INTO people
-    (person_id, first, last, gender, birthdate)
-VALUES 
-    (0,"Alex","Garfunkle",1,19930527),
-    (1,"Alex","Young",1,19701201),
-    (2,"Sarah","Riley",0,19890314),
-    (3,"Alex","Williams",1,19400105),
-    (4,"Sarah","Smith",0,19910317),
-    (5,"Jane","Fredricks",0,19920731),
-    (6,"Alex","Young",0,19920731);
-```
-
-
 Note that birthdate is store as intergers in YYYMMDD which makes
 them easy to compare and sort. One could alternately use a
 [DATE](http://dev.mysql.com/doc/refman/5.1/en/datetime.html) type
@@ -136,7 +112,57 @@ But these are uncommon because a good sort order for one popular
 query might be bad for another. Instead, people typically use
 accompanying indices and leave the original table unsorted.
 
-# Upsides and Downsides of Indexing
+# Inside the Query Optimizer
+
+You can create this table in MySQL with the command
+
+```sql
+CREATE TABLE people (
+   person_id LONG NOT NULL,
+   first VARCHAR(30) NOT NULL,
+   last VARCHAR(30) NOT NULL,
+   gender BOOLEAN NOT NULL,
+   birthdate INT NOT NULL
+);
+
+INSERT INTO people
+    (person_id, first, last, gender, birthdate)
+VALUES 
+    (0,"Alex","Garfunkle",1,19930527),
+    (1,"Alex","Young",1,19701201),
+    (2,"Sarah","Riley",0,19890314),
+    (3,"Alex","Williams",1,19400105),
+    (4,"Sarah","Smith",0,19910317),
+    (5,"Jane","Fredricks",0,19920731),
+    (6,"Alex","Young",0,19920731);
+```
+
+```sql
+EXPLAIN
+ SELECT person_id
+   FROM people
+  WHERE first = 'Alex'
+```
+
+Test:
+
+
+| id | select\_type |  table | type | possible\_keys |  key | key\_len |  ref | rows |       Extra |
+|----|--------------|--------|------|----------------|------|----------|------|------|-------------|
+|  1 |       SIMPLE | people |  ALL |           NULL | NULL |     NULL | NULL |    7 | Using where |
+
+```sql
+CREATE INDEX people_first_indx
+ON people (first)
+```
+
+
+| id | select\_type |  table | type |      possible\_keys |  key | key\_len |  ref | rows |       Extra |
+|----|--------------|--------|------|---------------------|------|----------|------|------|-------------|
+|  1 |       SIMPLE | people |  ALL | people\_first\_indx | NULL |     NULL | NULL |    7 | Using where |
+
+
+# Pros and Cons of Indexing
 
 Indices have several benefits.  An index can make a particular query
 much faster.  Because indices are not part of the underlying table
