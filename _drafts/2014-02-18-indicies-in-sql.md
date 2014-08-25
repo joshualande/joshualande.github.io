@@ -47,6 +47,30 @@ a simple table of `people`:
 |         5 |  Jane | Fredricks |      f |  19920731 |
 |         6 |  Alex |     Young |      f |  19920731 |
 
+You can create this table in MySQL with the command
+
+```sql
+CREATE TABLE people (
+   person_id LONG NOT NULL,
+   first VARCHAR(30) NOT NULL,
+   last VARCHAR(30) NOT NULL,
+   gender BOOLEAN NOT NULL,
+   birthdate INT NOT NULL
+);
+
+INSERT INTO people
+    (person_id, first, last, gender, birthdate)
+VALUES 
+    (0,"Alex","Garfunkle",1,19930527),
+    (1,"Alex","Young",1,19701201),
+    (2,"Sarah","Riley",0,19890314),
+    (3,"Alex","Williams",1,19400105),
+    (4,"Sarah","Smith",0,19910317),
+    (5,"Jane","Fredricks",0,19920731),
+    (6,"Alex","Young",0,19920731);
+```
+
+
 Note that birthdate is store as intergers in YYYMMDD which makes
 them easy to compare and sort. One could alternately use a
 [DATE](http://dev.mysql.com/doc/refman/5.1/en/datetime.html) type
@@ -82,7 +106,7 @@ our example, the syntax is
 
 ```sql
 CREATE INDEX people_first_indx
-ON people (last)
+ON people (first)
 ```
 
 This creates an accompanying index sorted by first name:
@@ -137,7 +161,7 @@ For example, we might be interested in the ID of all people with a
 particular first name and last name:
 
 ```sql
-SELECT recipe_id
+SELECT person_id
   FROM people
  WHERE first='Alex'
    AND last='Young'
@@ -177,7 +201,7 @@ queries which filter only on the first name.  On the other hand,
 if we planned to filter only for users with a given last name:
 
 ```sql
-SELECT recipe_id
+SELECT person_id
   FROM people
  WHERE last='Young'
 ```
@@ -212,17 +236,17 @@ Scan).
 For the example query from above:
 
 ```sql
-SELECT recipe_id
+SELECT person_id
   FROM people
  WHERE first='Alex'
    AND last='Young'
 ```
 
-The best index would also include the recipe_id column:
+The best index would also include the person_id column:
 
 ```sql
-CREATE INDEX people_first_last_recipe_id_indx
-ON people (first,last,recipe_id)
+CREATE INDEX people_first_last_person_id_indx
+ON people (first,last,person_id)
 ```
 
 On the other hand, adding additional columns
