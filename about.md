@@ -16,7 +16,7 @@ Recently, I have written about
 Before working at Twitter, I was a Data Science Fellow at the
 [Insight Data Science Fellowship](http://insightdatascience.com).
 Before that, I got a PhD in physics from [Stanford
-Univeristy](http://stanford.edu) studying [pulsar wind
+University](http://stanford.edu) studying [pulsar wind
 Nebulae](http://en.wikipedia.org/wiki/Pulsar_wind_nebula).  I have
 written about my PhD research experince 
 [here]({% post_url 2013-02-14-searching-pulsar-wind-nebulae-kiapc %}), and software I helped
