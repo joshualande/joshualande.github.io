@@ -152,7 +152,8 @@ blog. To do that, I modified the file [_layouts/default.html](https://github.com
 
 I then created a file [_includes/comments.html](https://github.com/joshualande/joshualande.github.io/blob/64d03b883b64dd8aedf30b903ecaae92a282955a/_includes/comments.html) which includes the code given to me by Disqus:
 {% highlight html %}
-{{ "{% if page.comments " }}%}
+{% raw %}
+{% if page.comments %}
 <!-- Add Disqus comments. -->
 <div id="disqus_thread"></div>
 <script type="text/javascript">
@@ -169,7 +170,8 @@ I then created a file [_includes/comments.html](https://github.com/joshualande/j
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-{{ "{% endif " }}%}
+{% endif %}
+{% endraw %}
 {% endhighlight %}
 By setting up the code this way, I can enabled commenting on a page-by-page basis. All I have to do is set "comments: True" in the YAML header of the post.
 
