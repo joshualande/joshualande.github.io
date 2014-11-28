@@ -47,7 +47,7 @@ in the YAML metadata of each post. For this post, I set:
 permalink: short-urls-jekyll
 ```
 
-It is unfortunately that you have to explicitly set this at the top
+It is unfortunate that you have to explicitly set this at the top
 of each blog post. But this does work, giving me beautiful URLs
 like
 [{{ site.shorturl }}/short-urls-jekyll]({{ site.url }}/short-urls-jekyll).
