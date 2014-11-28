@@ -18,9 +18,9 @@ Before working at Twitter, I was a Data Science Fellow at the
 Before that, I got a PhD in physics from [Stanford
 University](http://stanford.edu) studying [pulsar wind
 Nebulae](http://en.wikipedia.org/wiki/Pulsar_wind_nebula).  I have
-written about my PhD research experince 
+written about my PhD research experience 
 [here]({% post_url 2013-02-14-searching-pulsar-wind-nebulae-kiapc %}), and software I helped
-develope during my PhD [here]({% post_url 2013-02-01-pointlike-fitting-package %}).
+develop during my PhD [here]({% post_url 2013-02-01-pointlike-fitting-package %}).
 
 Before that, I was an undergraduate at [Marlboro
 College](http://www.marlboro.edu/) in Vermont.  I wrote about my
