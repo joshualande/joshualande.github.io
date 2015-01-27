@@ -47,7 +47,7 @@ plugin.  To get these URLs to redirect, all you have to do is:
   jekyll-redirect-from is further documented [here](https://help.github.com/articles/redirects-on-github-pages).
 
 * Finally, if you use [DISQUS](http://disqus.com/) to host comments
-  on your blog, you will have to explicitly tell Jekyll that you
+  on your blog, you will have to explicitly tell DISQUS that you
   changed the URLs for your blog posts.  DISQUS provide an easy URL
   Mapper which is documented
   [here](http://help.disqus.com/customer/portal/articles/912757-url-mapper).
