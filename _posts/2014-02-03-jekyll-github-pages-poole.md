@@ -173,7 +173,7 @@ I then created a file [_includes/comments.html](https://github.com/joshualande/j
 {% endif %}
 {% endraw %}
 {% endhighlight %}
-By setting up the code this way, I can enabled commenting on a page-by-page basis. All I have to do is set "comments: True" in the YAML header of the post.
+By setting up the code this way, I can enable commenting on a page-by-page basis. All I have to do is set "comments: True" in the YAML header of the post.
 
 ## Google Analytics
 
