@@ -3,7 +3,7 @@ layout: post
 title: Searching for Pulsar Wind Nebulae at the Kavli Institute for Particle Astrophysics and Cosmology
 comments: true
 redirect_from: "/2013/02/14/stanford-university-research/"
-permalink: searching-pulsar-wind-nebulae-kiapc
+permalink: searching-pulsar-wind-nebulae-kipac
 ---
 
 ![The Crab Nebula observed by Hubble.](/assets/crab_nebula_hubble-940x940.jpg)
