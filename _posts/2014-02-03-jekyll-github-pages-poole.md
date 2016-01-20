@@ -262,7 +262,7 @@ Whenever I want to include the Twitter plug on a post, I just add the liquid tag
 ## Futher Reading
 
 In [this post]({% post_url 2014-04-03-short-urls-jekyll %}),
-I describe how to set short and minimil URLs for your blog posts
+I describe how to set short and minimal URLs for your blog posts
 (like how the URL for this post is
 [{{ site.shorturl }}/jekyll-github-pages-poole]({{ site.url }}/jekyll-github-pages-poole)
 instead of
