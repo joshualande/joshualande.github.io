@@ -15,7 +15,7 @@ in this series.*
 
 In this post, I will use the example recipes database from the
 [first post]({% post_url 2014-04-18-database-normalization %}) to
-go over the basics of quering in SQL with the `SELECT` statement.
+go over the basics of querying in SQL with the `SELECT` statement.
 I will start with the basic operators of filtering, joining, and
 aggregating. Then I will show how these simple commands can be
 combined to create powerful queries.  By the end of this post, you
@@ -84,7 +84,7 @@ This returns:
 
 ## The JOIN Operator in SQL
 
-Because our data is spread across three tables, it is cubmersome
+Because our data is spread across three tables, it is cumbersome
 and error-prone to have to run multiple queries to find the information
 we want.  We can avoid this by joining the tables together.
 

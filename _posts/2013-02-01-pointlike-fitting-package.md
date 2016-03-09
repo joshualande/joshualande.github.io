@@ -21,7 +21,7 @@ Pointlike was designed from the ground up with flexibility in mind:
 
 ## Interface
 
-The objects and functions described below have a variety of parameters that modify their behavior. The easist way to explore pointlike's features is interactivly in ipython using the [question mark functionality](http://ipython.org/ipython-doc/dev/interactive/tutorial.html#exploring-your-objects):
+The objects and functions described below have a variety of parameters that modify their behavior. The easiest way to explore pointlike's features is interactively in ipython using the [question mark functionality](http://ipython.org/ipython-doc/dev/interactive/tutorial.html#exploring-your-objects):
 
 {% highlight python %}
 $ ipython
@@ -231,7 +231,7 @@ roi = sa.roi(
     latextdir='gll_psc_v05_templates',
     free_radius=2),
 
-  # add additonal point sources
+  # add additional point sources
   point_sources=[...],
 )
 {% endhighlight %}

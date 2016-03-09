@@ -27,7 +27,7 @@ in gamma-rays.
 
 ## The Fermi Gamma-ray Space Telescope
 
-During my thesis, I observed pular wind nebulae with the [Large Area Telescope (LAT)](http://fermi.gsfc.nasa.gov/science/instruments/lat.html), the main scientific instrument on board the [Fermi Gamma-ray Space Telescope (Fermi)](http://fermi.gsfc.nasa.gov). Fermi, pictured on the right, is a pair-conversion gamma-ray telescope. Cosmic gamma-rays are interesting to study because they originate in the most extreme and energetic astrophysical environments. [Here](http://www-glast.stanford.edu/instrument.html) is a good description of the design of the instrument. Fermi was launched in June of 2008 with a designed mission length of 5 years and a goal of operating for 10 years. [Here](http://fermi.sonoma.edu/multimedia/GLASTPromoVideo.mp4) is an artist rendering of the mission launch.
+During my thesis, I observed pulsar wind nebulae with the [Large Area Telescope (LAT)](http://fermi.gsfc.nasa.gov/science/instruments/lat.html), the main scientific instrument on board the [Fermi Gamma-ray Space Telescope (Fermi)](http://fermi.gsfc.nasa.gov). Fermi, pictured on the right, is a pair-conversion gamma-ray telescope. Cosmic gamma-rays are interesting to study because they originate in the most extreme and energetic astrophysical environments. [Here](http://www-glast.stanford.edu/instrument.html) is a good description of the design of the instrument. Fermi was launched in June of 2008 with a designed mission length of 5 years and a goal of operating for 10 years. [Here](http://fermi.sonoma.edu/multimedia/GLASTPromoVideo.mp4) is an artist rendering of the mission launch.
 
 ## ["Fermi-LAT Search for Pulsar Wind Nebulae around gamma-ray Pulsars"](http://iopscience.iop.org/0004-637X/726/1/35)
 

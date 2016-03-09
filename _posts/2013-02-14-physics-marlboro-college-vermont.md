@@ -47,7 +47,7 @@ internship [here]({% post_url 2013-02-14-calibrating-powder-diffraction-data-ss
 
 Marlboro students are required to write a senior thesis during their
 senior year. My senior thesis involved continuing research I began
-during the SULI internship and an experimental investivation of
+during the SULI internship and an experimental investigation of
 [microwave
 diffraction](http://www.pasco.com/prodCatalog/WA/WA-9316_advanced-microwave-optics-system).
 You can view my senior thesis below.  You can read my senior thesis

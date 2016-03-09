@@ -80,7 +80,7 @@ The posts in this series are:
   SQL act as temporary tables able to simplify queries 
   as well as abstract a user from the underlying table implementations. 
   [Here](http://dev.mysql.com/doc/refman/5.0/en/create-view.html) 
-  is some documenation about how they are handled by MySQL.
+  is some documentation about how they are handled by MySQL.
 * Beyond [MySQL](http://www.mysql.com/), there are several
   high-performance parallel databases designed to deal with large data sets.
   Two popular ones are [Terradata](http://www.teradata.com/) and
