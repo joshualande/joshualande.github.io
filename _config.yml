@@ -3,7 +3,7 @@ markdown:         redcarpet
 redcarpet:
   extensions: ["tables"]
 
-pygments:         true
+highlighter:         true
 
 # Permalinks
 permalink:        pretty
@@ -36,3 +36,4 @@ pages_list:
 #  * https://help.github.com/articles/redirects-on-github-pages
 gems:
   - jekyll-redirect-from
+  - jekyll-paginate
