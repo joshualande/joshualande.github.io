@@ -173,6 +173,6 @@ the tables:
 *In the [next post]({% post_url 2014-08-14-filters-joins-aggregations %})
 in this 
 [series of posts]({% post_url 2014-04-17-data-science-sql %}), 
-I will go over the basics of quering for data in a SQL database.*
+I will go over the basics of querying for data in a SQL database.*
 
 {% include twitter_plug.html %}

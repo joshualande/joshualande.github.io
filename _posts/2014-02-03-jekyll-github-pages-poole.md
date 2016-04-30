@@ -99,7 +99,7 @@ I will describe next some tweaks I made to the base website.
 
 To get my blog to its current form, I made a few modifications to the base poole layout. 
 
-FIrst, I wanted to create an [Archive](/archive/) page which listed all of my blog posts.
+First, I wanted to create an [Archive](/archive/) page which listed all of my blog posts.
 To do this, I created the file [archive.md](https://github.com/joshualande/joshualande.github.io/blob/5e5ca6389fbc66be06488b9b7803e0278ee1b89f/archive.md) which shows a dynamic list of all of 
 my blog posts:
 {% highlight html %}
@@ -259,7 +259,7 @@ Whenever I want to include the Twitter plug on a post, I just add the liquid tag
 {% endraw %}
 ```
 
-## Futher Reading
+## Further Reading
 
 In [this post]({% post_url 2014-04-03-short-urls-jekyll %}),
 I describe how to set short and minimal URLs for your blog posts

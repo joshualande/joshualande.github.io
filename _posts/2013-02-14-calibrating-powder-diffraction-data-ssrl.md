@@ -29,7 +29,7 @@ Machine.](/assets/diffraction-data-window.jpeg)
 X-ray powder diffraction is a method of imagining crystals with
 x-rays. The diffraction pattern that comes from the crystal are
 concentric rings and the ring spacing can be used to infer the
-crystalin strucutre of the material.
+crystalline structure of the material.
 
 In order to analyze the diffraction data, you have to convert from
 the CCD image of the diffraction pattern to physical scattering

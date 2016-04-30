@@ -123,7 +123,7 @@ This would be a denormalized table.
 But although it is easier to read, it is very fragile.  For example,
 at some point in the future somebody might decide that they wanted
 the tacos to be made of Chicken instead of beef. In the process of
-updating the table, they might accidently change the name `Tacos`
+updating the table, they might accidentally change the name `Tacos`
 to `Taco` in only one of the rows:
 
 | recipe_name | ingredient_name | amount | price |
